@@ -121,6 +121,20 @@
       "notes": null,
       "createdAt": "2026-09-29T03:16:57.618Z",
       "updatedAt": "2026-09-29T03:16:57.618Z"
+    },
+    {
+      "id": "78b837ca-a399-48b1-97d7-9defe0a2ea16",
+      "title": "E2E Concierto 1790651909987",
+      "date": "2099-12-01",
+      "time": null,
+      "city": "Madrid",
+      "venue": "Sala Test",
+      "ticketUrl": null,
+      "ticketStatus": "tba",
+      "published": true,
+      "notes": null,
+      "createdAt": "2026-09-29T03:18:30.293Z",
+      "updatedAt": "2026-09-29T03:18:30.293Z"
     }
   ],
   "gallery": [
