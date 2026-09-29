@@ -33,13 +33,17 @@ export function MediaReveal({
   return (
     <motion.div
       ref={ref}
-      className={clsx("relative overflow-hidden bg-beige", className)}
+      className={clsx(
+        "overflow-hidden bg-beige",
+        !className?.includes("absolute") && "relative",
+        className
+      )}
       initial={reduce ? false : { clipPath: "inset(8% 8% 8% 8%)", opacity: 0.6 }}
       whileInView={reduce ? undefined : { clipPath: "inset(0% 0% 0% 0%)", opacity: 1 }}
-      viewport={{ once: true, amount: 0.25 }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
     >
-      <motion.div style={{ y }} className="relative h-full w-full scale-[1.04]">
+      <motion.div style={{ y }} className="absolute inset-0 scale-[1.04]">
         <Image
           src={src}
           alt={alt}

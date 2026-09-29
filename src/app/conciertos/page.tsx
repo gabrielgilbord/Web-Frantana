@@ -31,15 +31,15 @@ export default async function ConciertosPage() {
         </div>
       </section>
 
-      <section className="relative min-h-[42svh] md:min-h-[52svh]">
+      <section className="relative">
         <MediaReveal
           src="/media/gallery/stage-lights-01.jpg"
           alt="Escenario iluminado — fotografía editorial de archivo (placeholder, no representa a Frantana)"
-          className="absolute inset-0 h-full w-full"
+          className="min-h-[42svh] w-full md:min-h-[52svh]"
           sizes="100vw"
           parallax
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_40%,rgba(23,20,17,0.55))]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_40%,rgba(23,20,17,0.55))]" />
       </section>
 
       <section className="section-pad surface-ivory">

@@ -94,15 +94,15 @@ export default async function HomePage() {
       <ConcertPreview concerts={upcoming} />
 
       {editorial && (
-        <section className="relative min-h-[70svh] md:min-h-[80svh]">
+        <section className="relative">
           <MediaReveal
             src={editorial.src}
             alt={editorial.alt}
-            className="absolute inset-0 h-full w-full"
+            className="min-h-[70svh] w-full md:min-h-[80svh]"
             sizes="100vw"
             parallax
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(23,20,17,0.78))]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(23,20,17,0.78))]" />
           <div className="absolute inset-x-0 bottom-0 z-10">
             <div className="container-editorial pb-10 pt-24 md:pb-14">
               <Reveal>

@@ -38,15 +38,16 @@ export default async function MusicaPage() {
         </div>
       </section>
 
-      <section className="relative min-h-[48svh] md:min-h-[62svh]">
+      <section className="relative">
         <MediaReveal
           src="/media/editorial/vinyl-close.jpg"
           alt="Detalle de vinilo — fotografía editorial de archivo (placeholder, no representa a Frantana)"
-          className="absolute inset-0 h-full w-full"
+          className="min-h-[48svh] w-full md:min-h-[62svh]"
           sizes="100vw"
           parallax
+          priority
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,20,17,0.15)_0%,rgba(23,20,17,0.55)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(23,20,17,0.15)_0%,rgba(23,20,17,0.55)_100%)]" />
       </section>
 
       <section className="section-pad surface-beige">

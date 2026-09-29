@@ -34,11 +34,11 @@ export default async function SobrePage() {
         </div>
       </section>
 
-      <section className="relative min-h-[55svh] md:min-h-[75svh]">
+      <section className="relative">
         <MediaReveal
           src="/media/editorial/microphone.jpg"
           alt="Micrófono en estudio — fotografía editorial de archivo (placeholder, no representa a Frantana)"
-          className="absolute inset-0 h-full w-full"
+          className="min-h-[55svh] w-full md:min-h-[75svh]"
           sizes="100vw"
           parallax
         />

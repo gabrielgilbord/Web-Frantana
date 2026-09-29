@@ -88,11 +88,11 @@ export default async function ContactoPage() {
         </div>
       </section>
 
-      <section className="relative min-h-[45svh] md:min-h-[58svh]">
+      <section className="relative">
         <MediaReveal
           src="/media/editorial/crowd-hands.jpg"
           alt="Público en concierto — fotografía editorial de archivo (placeholder, no representa a Frantana)"
-          className="absolute inset-0 h-full w-full"
+          className="min-h-[45svh] w-full md:min-h-[58svh]"
           sizes="100vw"
           parallax
         />
