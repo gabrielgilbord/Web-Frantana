@@ -62,15 +62,6 @@ html {
   html {
     scroll-behavior: auto;
   }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }
 
 body {
@@ -174,11 +165,53 @@ video {
   }
 }
 
+@keyframes heroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(1.15rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-enter {
+  animation: heroEnter 0.9s var(--ease-out-expo) both;
+}
+
+.hero-enter--1 {
+  animation-delay: 0.08s;
+}
+.hero-enter--2 {
+  animation-delay: 0.2s;
+}
+.hero-enter--3 {
+  animation-delay: 0.36s;
+}
+.hero-enter--4 {
+  animation-delay: 0.5s;
+}
+
 .scroll-indicator__bar {
   animation: scrollPulse 1.8s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-enter,
+  .hero-enter--1,
+  .hero-enter--2,
+  .hero-enter--3,
+  .hero-enter--4 {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
   .scroll-indicator__bar {
     animation: none;
   }

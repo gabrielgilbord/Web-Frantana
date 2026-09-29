@@ -22,7 +22,7 @@ Fecha: 2026-09-29
 
 ## Manual / visual
 
-Pendiente de captura con navegador (hero desktop/móvil) en esta entrega; se adjunta evidencia walkthrough si el entorno lo permite.
+Capturas en `/opt/cursor/artifacts/screenshots/`: hero desktop 1440, hero móvil 390, galería. Opacity del título FRANTANA verificada = 1 tras corregir CSS reduced-motion global.
 
 ## Notas
 

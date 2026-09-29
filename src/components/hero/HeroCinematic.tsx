@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/Button";
 
@@ -18,10 +17,32 @@ function getMobileServerSnapshot() {
   return false;
 }
 
+function subscribeReducedMotion(cb: () => void) {
+  const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+
+function getReducedMotionSnapshot() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function getReducedMotionServerSnapshot() {
+  return false;
+}
+
 function prefersSaveData() {
   if (typeof navigator === "undefined") return false;
-  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-  return Boolean(conn?.saveData) || conn?.effectiveType === "2g" || conn?.effectiveType === "slow-2g";
+  const conn = (
+    navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }
+  ).connection;
+  return (
+    Boolean(conn?.saveData) ||
+    conn?.effectiveType === "2g" ||
+    conn?.effectiveType === "slow-2g"
+  );
 }
 
 type HeroProps = {
@@ -30,12 +51,20 @@ type HeroProps = {
 
 export function HeroCinematic({ subtitle }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const reduce = useReducedMotion();
-  const isMobile = useSyncExternalStore(subscribeMobile, getMobileSnapshot, getMobileServerSnapshot);
+  const reduce = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot
+  );
+  const isMobile = useSyncExternalStore(
+    subscribeMobile,
+    getMobileSnapshot,
+    getMobileServerSnapshot
+  );
   const [paused, setPaused] = useState(false);
   const [playbackFailed, setPlaybackFailed] = useState(false);
 
-  const useImageFallback = Boolean(reduce) || isMobile || prefersSaveData() || playbackFailed;
+  const useImageFallback = reduce || isMobile || prefersSaveData() || playbackFailed;
 
   useEffect(() => {
     const video = videoRef.current;
@@ -96,46 +125,26 @@ export function HeroCinematic({ subtitle }: HeroProps) {
       />
 
       <div className="relative z-10 w-full container-editorial pb-16 pt-[calc(var(--header-h)+3rem)] md:pb-20">
-        <motion.p
-          className="text-[0.72rem] font-medium tracking-[0.22em] uppercase text-taupe-mid"
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <p className="hero-enter hero-enter--1 text-[0.72rem] font-medium tracking-[0.22em] uppercase text-taupe-mid">
           Web oficial
-        </motion.p>
+        </p>
 
-        <motion.h1
-          className="display-title mt-4 max-w-[11ch] text-[clamp(4.2rem,16vw,11rem)] text-ivory"
-          initial={reduce ? false : { opacity: 0, y: 36 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <h1 className="hero-enter hero-enter--2 display-title mt-4 max-w-[11ch] text-[clamp(4.2rem,16vw,11rem)] text-ivory">
           FRANTANA
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          className="mt-6 max-w-xl text-base text-ivory/85 md:text-lg"
-          initial={reduce ? false : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <p className="hero-enter hero-enter--3 mt-6 max-w-xl text-base text-ivory/85 md:text-lg">
           {subtitle}
-        </motion.p>
+        </p>
 
-        <motion.div
-          className="mt-10 flex flex-wrap gap-3"
-          initial={reduce ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.58, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <div className="hero-enter hero-enter--4 mt-10 flex flex-wrap gap-3">
           <Button href="/musica" variant="inverse">
             Escuchar
           </Button>
           <Button href="/conciertos" variant="secondary">
             Conciertos
           </Button>
-        </motion.div>
+        </div>
 
         {!useImageFallback && (
           <button
@@ -150,7 +159,10 @@ export function HeroCinematic({ subtitle }: HeroProps) {
 
       <div className="absolute bottom-6 right-[var(--space-gutter)] z-10 hidden md:flex flex-col items-center gap-2 text-ivory/70">
         <span className="text-[0.62rem] tracking-[0.22em] uppercase">Scroll</span>
-        <span className="scroll-indicator block h-10 w-px overflow-hidden bg-ivory/25" aria-hidden>
+        <span
+          className="scroll-indicator block h-10 w-px overflow-hidden bg-ivory/25"
+          aria-hidden
+        >
           <span className="scroll-indicator__bar block h-full w-full bg-ivory/80" />
         </span>
       </div>

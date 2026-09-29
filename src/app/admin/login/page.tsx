@@ -1,35 +1,33 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/Button";
+import { useState } from "react";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function login() {
     setLoading(true);
     setError(null);
-    const form = new FormData(e.currentTarget);
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: form.get("email"),
-        password: form.get("password"),
-      }),
-    });
-    setLoading(false);
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      setError(data.error ?? "No se pudo iniciar sesión");
-      return;
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error ?? "No se pudo iniciar sesión");
+        setLoading(false);
+        return;
+      }
+      window.location.assign("/admin");
+    } catch {
+      setError("Error de red. Inténtalo de nuevo.");
+      setLoading(false);
     }
-    router.push("/admin");
-    router.refresh();
   }
 
   return (
@@ -38,7 +36,7 @@ export default function AdminLoginPage() {
       <p className="mt-2 text-sm text-taupe-dark">
         Panel privado de Frantana. Solo administradores autorizados.
       </p>
-      <form onSubmit={onSubmit} className="mt-8 space-y-4">
+      <div className="mt-8 space-y-4">
         <label className="block text-sm">
           Email
           <input
@@ -46,6 +44,8 @@ export default function AdminLoginPage() {
             type="email"
             required
             autoComplete="username"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="mt-1 w-full border border-line bg-transparent px-3 py-2"
           />
         </label>
@@ -57,6 +57,8 @@ export default function AdminLoginPage() {
             required
             minLength={8}
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="mt-1 w-full border border-line bg-transparent px-3 py-2"
           />
         </label>
@@ -65,10 +67,15 @@ export default function AdminLoginPage() {
             {error}
           </p>
         )}
-        <Button type="submit" disabled={loading} className="w-full">
+        <button
+          type="button"
+          disabled={loading || email.length < 3 || password.length < 8}
+          onClick={() => void login()}
+          className="inline-flex w-full items-center justify-center bg-ink px-6 py-3 text-[0.72rem] font-medium tracking-[0.18em] uppercase text-ivory disabled:opacity-50"
+        >
           {loading ? "Entrando…" : "Entrar"}
-        </Button>
-      </form>
+        </button>
+      </div>
     </div>
   );
 }
