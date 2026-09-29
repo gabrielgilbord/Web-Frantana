@@ -1,0 +1,32 @@
+import { getGallery } from "@/lib/content/store";
+import { GalleryGrid } from "@/components/gallery/GalleryGrid";
+import { Reveal } from "@/components/motion/Reveal";
+import { buildMetadata } from "@/lib/seo/metadata";
+
+export const metadata = buildMetadata({
+  title: "Galería",
+  description: "Galería fotográfica editorial de Frantana.",
+});
+
+export default async function GaleriaPage() {
+  const images = await getGallery();
+
+  return (
+    <div className="pt-[var(--header-h)]">
+      <section className="section-pad">
+        <div className="container-editorial">
+          <Reveal>
+            <h1 className="display-title text-6xl md:text-8xl">Galería</h1>
+            <p className="provisional mt-6 max-w-xl">
+              [PROVISIONAL] Imágenes de archivo musical. No representan a Frantana;
+              serán sustituidas por fotografías oficiales del artista.
+            </p>
+          </Reveal>
+          <div className="mt-12">
+            <GalleryGrid images={images} />
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

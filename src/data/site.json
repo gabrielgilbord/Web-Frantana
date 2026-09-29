@@ -1,0 +1,168 @@
+{
+  "content": {
+    "heroSubtitle": "[TEXTO PROVISIONAL] Subtítulo editable — pendiente de definición artística.",
+    "homeIntroTitle": "Presencia",
+    "homeIntroBody": "[TEXTO PROVISIONAL] Breve presentación de Frantana. Sustituir por la biografía y mensaje oficiales cuando estén disponibles.",
+    "aboutTitle": "Sobre Frantana",
+    "aboutBody": "[TEXTO PROVISIONAL] Biografía editable. Esta sección está preparada para el storytelling oficial del artista. No se inventa género ni trayectoria.",
+    "aboutStoryTitle": "En escena",
+    "aboutStoryBody": "[TEXTO PROVISIONAL] Espacio para un relato visual y narrativo. Completar desde el panel de administración.",
+    "musicIntro": "[TEXTO PROVISIONAL] Escucha la música de Frantana en las plataformas oficiales. Los embeds y enlaces se configuran desde el panel.",
+    "spotifyEmbedUrl": null,
+    "spotifyArtistUrl": null,
+    "contactEmail": null,
+    "contactPhone": null,
+    "social": {
+      "instagram": null,
+      "facebook": null,
+      "spotify": null,
+      "youtube": null,
+      "tiktok": null,
+      "appleMusic": null
+    },
+    "seoDescription": "Web oficial de Frantana — música, conciertos y novedades.",
+    "updatedAt": "2026-09-29T00:00:00.000Z"
+  },
+  "concerts": [
+    {
+      "id": "3e5402f7-b8c7-47e5-9d16-83603daf114c",
+      "title": "E2E Concierto 1790649666073",
+      "date": "2099-12-01",
+      "time": null,
+      "city": "Madrid",
+      "venue": "Sala Test",
+      "ticketUrl": null,
+      "ticketStatus": "tba",
+      "published": true,
+      "notes": null,
+      "createdAt": "2026-09-29T02:41:06.241Z",
+      "updatedAt": "2026-09-29T02:41:06.241Z"
+    },
+    {
+      "id": "97f46a02-12dc-4e0a-b088-3da6c1fb62dd",
+      "title": "E2E Concierto 1790649680396",
+      "date": "2099-12-01",
+      "time": null,
+      "city": "Madrid",
+      "venue": "Sala Test",
+      "ticketUrl": null,
+      "ticketStatus": "tba",
+      "published": true,
+      "notes": null,
+      "createdAt": "2026-09-29T02:41:20.641Z",
+      "updatedAt": "2026-09-29T02:41:20.641Z"
+    },
+    {
+      "id": "3c684875-f922-4e32-b0c4-22d0a8109bee",
+      "title": "E2E Concierto 1790649683201",
+      "date": "2099-12-01",
+      "time": null,
+      "city": "Madrid",
+      "venue": "Sala Test",
+      "ticketUrl": null,
+      "ticketStatus": "tba",
+      "published": true,
+      "notes": null,
+      "createdAt": "2026-09-29T02:41:23.440Z",
+      "updatedAt": "2026-09-29T02:41:23.440Z"
+    },
+    {
+      "id": "939f4039-8348-4b7d-90d9-c36bee784eb2",
+      "title": "E2E Concierto 1790649686793",
+      "date": "2099-12-01",
+      "time": null,
+      "city": "Madrid",
+      "venue": "Sala Test",
+      "ticketUrl": null,
+      "ticketStatus": "tba",
+      "published": true,
+      "notes": null,
+      "createdAt": "2026-09-29T02:41:26.989Z",
+      "updatedAt": "2026-09-29T02:41:26.989Z"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "g1",
+      "src": "/media/gallery/stage-lights-01.jpg",
+      "alt": "Escenario iluminado — fotografía editorial de archivo (placeholder)",
+      "width": 1600,
+      "height": 1067,
+      "published": true,
+      "sortOrder": 1,
+      "credit": "Matheus Bertelli / Pexels"
+    },
+    {
+      "id": "g2",
+      "src": "/media/gallery/festival-crowd-02.jpg",
+      "alt": "Público en festival — fotografía editorial de archivo (placeholder)",
+      "width": 1600,
+      "height": 1067,
+      "published": true,
+      "sortOrder": 2,
+      "credit": "Pexels"
+    },
+    {
+      "id": "g3",
+      "src": "/media/gallery/band-silhouette-03.jpg",
+      "alt": "Silueta en escenario — fotografía editorial de archivo (placeholder)",
+      "width": 1600,
+      "height": 1067,
+      "published": true,
+      "sortOrder": 3,
+      "credit": "Harimadhav S / Pexels"
+    },
+    {
+      "id": "g4",
+      "src": "/media/gallery/stage-silhouette-04.jpg",
+      "alt": "Silueta musical — fotografía editorial de archivo (placeholder)",
+      "width": 1600,
+      "height": 1067,
+      "published": true,
+      "sortOrder": 4,
+      "credit": "Josh Sorenson / Pexels"
+    },
+    {
+      "id": "g5",
+      "src": "/media/gallery/bw-stage-05.jpg",
+      "alt": "Escenario en blanco y negro — fotografía editorial de archivo (placeholder)",
+      "width": 1600,
+      "height": 1067,
+      "published": true,
+      "sortOrder": 5,
+      "credit": "Akshar Dave / Pexels"
+    },
+    {
+      "id": "g6",
+      "src": "/media/gallery/concert-smoke-06.jpg",
+      "alt": "Concierto con humo y luces — fotografía editorial de archivo (placeholder)",
+      "width": 1600,
+      "height": 1067,
+      "published": true,
+      "sortOrder": 6,
+      "credit": "Pexels"
+    },
+    {
+      "id": "g7",
+      "src": "/media/gallery/crowd-lights-07.jpg",
+      "alt": "Público bajo luces — fotografía editorial de archivo (placeholder)",
+      "width": 1600,
+      "height": 1067,
+      "published": true,
+      "sortOrder": 7,
+      "credit": "Pexels"
+    },
+    {
+      "id": "g8",
+      "src": "/media/gallery/guitar-stage-08.jpg",
+      "alt": "Guitarra en escenario — fotografía editorial de archivo (placeholder)",
+      "width": 1600,
+      "height": 1067,
+      "published": true,
+      "sortOrder": 8,
+      "credit": "Pexels"
+    }
+  ],
+  "products": [],
+  "orders": []
+}
