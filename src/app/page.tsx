@@ -12,11 +12,7 @@ const HeroCinematic = dynamic(
   {
     ssr: true,
     loading: () => (
-      <div
-        className="min-h-[100svh] bg-ink"
-        aria-busy="true"
-        aria-label="Cargando presentación"
-      />
+      <div className="hero-plane" aria-busy="true" aria-label="Cargando presentación" />
     ),
   }
 );
@@ -39,25 +35,25 @@ export default async function HomePage() {
     <>
       <HeroCinematic subtitle={content.heroSubtitle} />
 
-      <section className="section-pad">
-        <div className="container-editorial grid gap-12 md:grid-cols-12 md:gap-8">
+      <section className="section-pad surface-ivory">
+        <div className="container-editorial grid gap-10 md:grid-cols-12 md:items-end md:gap-8">
           <Reveal className="md:col-span-5">
-            <h2 className="display-title text-5xl md:text-6xl lg:text-7xl">
+            <h2 className="display-title text-[clamp(2.75rem,8vw,5.5rem)]">
               {content.homeIntroTitle}
             </h2>
           </Reveal>
-          <Reveal className="md:col-span-6 md:col-start-7" delay={0.12}>
+          <Reveal className="md:col-span-6 md:col-start-7" delay={0.08}>
             <p
               className={
                 content.homeIntroBody.includes("[TEXTO PROVISIONAL]")
-                  ? "provisional prose-editorial"
+                  ? "provisional"
                   : "prose-editorial"
               }
             >
               {content.homeIntroBody}
             </p>
-            <div className="mt-8">
-              <Button href="/sobre" variant="ghost">
+            <div className="mt-7">
+              <Button href="/sobre" variant="outline" size="sm">
                 Conocer más
               </Button>
             </div>
@@ -65,10 +61,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-line bg-beige/35 section-pad">
-        <div className="container-editorial grid items-end gap-10 md:grid-cols-12">
-          <Reveal className="md:col-span-5">
-            <h2 className="display-title text-5xl md:text-6xl">Música</h2>
+      <section className="section-pad surface-beige">
+        <div className="container-editorial grid gap-10 md:grid-cols-12 md:items-center">
+          <Reveal className="order-2 md:order-1 md:col-span-6">
+            <MediaReveal
+              src="/media/editorial/vinyl-close.jpg"
+              alt="Detalle editorial de vinilo — fotografía de archivo (placeholder)"
+              className="aspect-[4/5] w-full"
+              parallax
+            />
+          </Reveal>
+          <Reveal className="order-1 md:order-2 md:col-span-5 md:col-start-8" delay={0.08}>
+            <h2 className="display-title text-[clamp(2.75rem,8vw,5rem)]">Música</h2>
             <p
               className={
                 content.musicIntro.includes("[TEXTO PROVISIONAL]")
@@ -78,19 +82,11 @@ export default async function HomePage() {
             >
               {content.musicIntro}
             </p>
-            <div className="mt-8">
-              <Button href="/musica" variant="primary">
-                Escuchar
+            <div className="mt-7">
+              <Button href="/musica" variant="solid" size="sm">
+                Escuchar música
               </Button>
             </div>
-          </Reveal>
-          <Reveal className="md:col-span-6 md:col-start-7" delay={0.1}>
-            <MediaReveal
-              src="/media/editorial/vinyl-close.jpg"
-              alt="Detalle editorial de vinilo — fotografía de archivo (placeholder)"
-              className="aspect-[4/5] w-full"
-              parallax
-            />
           </Reveal>
         </div>
       </section>
@@ -98,39 +94,42 @@ export default async function HomePage() {
       <ConcertPreview concerts={upcoming} />
 
       {editorial && (
-        <section className="relative">
+        <section className="relative min-h-[70svh] md:min-h-[80svh]">
           <MediaReveal
             src={editorial.src}
             alt={editorial.alt}
-            className="aspect-[16/9] w-full md:aspect-[21/9]"
+            className="absolute inset-0 h-full w-full"
             sizes="100vw"
             parallax
           />
-          <div className="container-editorial absolute inset-x-0 bottom-0 z-10 pb-10 pt-24 bg-[linear-gradient(180deg,transparent,rgba(23,20,17,0.72))]">
-            <Reveal>
-              <p className="max-w-md text-sm text-ivory/85">
-                Fotografía editorial de archivo. Las imágenes oficiales del artista
-                sustituirán estos placeholders.
-              </p>
-              <div className="mt-4">
-                <Button href="/galeria" variant="secondary">
-                  Galería
-                </Button>
-              </div>
-            </Reveal>
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(23,20,17,0.78))]" />
+          <div className="absolute inset-x-0 bottom-0 z-10">
+            <div className="container-editorial pb-10 pt-24 md:pb-14">
+              <Reveal>
+                <p className="max-w-md text-sm text-ivory/85">
+                  Fotografía editorial de archivo. Las imágenes oficiales del artista
+                  sustituirán estos placeholders.
+                </p>
+                <div className="mt-5">
+                  <Button href="/galeria" variant="on-dark-outline" size="sm">
+                    Ver galería
+                  </Button>
+                </div>
+              </Reveal>
+            </div>
           </div>
         </section>
       )}
 
-      <section className="section-pad">
-        <div className="container-editorial flex flex-col items-start gap-8 md:flex-row md:items-end md:justify-between">
+      <section className="section-pad surface-ivory">
+        <div className="container-editorial flex flex-col items-start gap-7 md:flex-row md:items-end md:justify-between">
           <Reveal>
-            <h2 className="display-title max-w-xl text-5xl md:text-7xl">
-              Síguelo en escena y en estudio
+            <h2 className="display-title max-w-xl text-[clamp(2.75rem,8vw,5.5rem)]">
+              En escena y en estudio
             </h2>
           </Reveal>
-          <Reveal delay={0.1}>
-            <Button href="/contacto" variant="primary">
+          <Reveal delay={0.08}>
+            <Button href="/contacto" variant="solid" size="sm">
               Contacto
             </Button>
           </Reveal>

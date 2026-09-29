@@ -11,12 +11,16 @@ Todos los recursos multimedia listados se descargaron desde Pexels (CDN verifica
 | Cormorant Garamond | Titulares editoriales | SIL Open Font License 1.1 | [Google Fonts](https://fonts.google.com/specimen/Cormorant+Garamond) |
 | Manrope | Texto UI / cuerpo | SIL Open Font License 1.1 | [Google Fonts](https://fonts.google.com/specimen/Manrope) |
 
-## Vídeo hero
+## Vídeo hero (rediseño 2026-09-29)
 
 | Archivo local | Origen | Autor | ID | Licencia | Notas |
 |---------------|--------|-------|----|----------|-------|
-| `public/media/hero/hero-cinematic.mp4` | [Pexels — pianist live audience](https://www.pexels.com/video/a-pianist-playing-in-front-of-a-live-audience-8513524/) | Big Bag Films | 8513524 | Pexels License | HD 1920×1080, 25 fps. Temática musical cinematográfica (piano en vivo). CDN: `videos.pexels.com/video-files/8513524/8513524-hd_1920_1080_25fps.mp4` (HTTP 200, 2026-09-29). |
-| `public/media/hero/hero-poster.jpg` | Frame extraído del vídeo anterior vía ffmpeg | Derivado del asset anterior | — | Misma licencia | Poster horizontal 1920×1080. |
+| `public/media/hero/hero-cinematic.mp4` | [Pexels video 1093662](https://www.pexels.com/video/1093662/) | Pexels | 1093662 | Pexels License | Costa rocosa a la hora dorada — iluminación cálida, atmósfera cinematográfica orgánica. CDN verificado HTTP 200. **No representa a Frantana**; es atmósfera editorial. |
+| `public/media/hero/hero-cinematic-720.mp4` | Mismo origen (HD 1280×720) | Pexels | 1093662 | Pexels License | Fuente móvil / ahorrar datos. |
+| `public/media/hero/hero-poster.jpg` | Frame ffmpeg del vídeo | Derivado | — | Misma | Poster horizontal 1920×1080. |
+| `public/media/hero/hero-poster-mobile.jpg` | Crop vertical ffmpeg | Derivado | — | Misma | Poster 1080×1920 para encuadre móvil. |
+
+Asset anterior descartado por identidad visual (teclado con luces frías/moradas): Pexels 8513524.
 
 ## Fotografía editorial / galería
 

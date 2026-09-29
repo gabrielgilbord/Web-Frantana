@@ -3,20 +3,6 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/Button";
 
-function subscribeMobile(cb: () => void) {
-  const mq = window.matchMedia("(max-width: 767px)");
-  mq.addEventListener("change", cb);
-  return () => mq.removeEventListener("change", cb);
-}
-
-function getMobileSnapshot() {
-  return window.matchMedia("(max-width: 767px)").matches;
-}
-
-function getMobileServerSnapshot() {
-  return false;
-}
-
 function subscribeReducedMotion(cb: () => void) {
   const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
   mq.addEventListener("change", cb);
@@ -31,8 +17,21 @@ function getReducedMotionServerSnapshot() {
   return false;
 }
 
-function prefersSaveData() {
-  if (typeof navigator === "undefined") return false;
+function subscribeSaveData(cb: () => void) {
+  const conn = (
+    navigator as Navigator & {
+      connection?: EventTarget & {
+        saveData?: boolean;
+        effectiveType?: string;
+      };
+    }
+  ).connection;
+  if (!conn) return () => {};
+  conn.addEventListener("change", cb);
+  return () => conn.removeEventListener("change", cb);
+}
+
+function getSaveDataSnapshot() {
   const conn = (
     navigator as Navigator & {
       connection?: { saveData?: boolean; effectiveType?: string };
@@ -43,6 +42,10 @@ function prefersSaveData() {
     conn?.effectiveType === "2g" ||
     conn?.effectiveType === "slow-2g"
   );
+}
+
+function getSaveDataServerSnapshot() {
+  return false;
 }
 
 type HeroProps = {
@@ -56,19 +59,19 @@ export function HeroCinematic({ subtitle }: HeroProps) {
     getReducedMotionSnapshot,
     getReducedMotionServerSnapshot
   );
-  const isMobile = useSyncExternalStore(
-    subscribeMobile,
-    getMobileSnapshot,
-    getMobileServerSnapshot
+  const saveData = useSyncExternalStore(
+    subscribeSaveData,
+    getSaveDataSnapshot,
+    getSaveDataServerSnapshot
   );
   const [paused, setPaused] = useState(false);
   const [playbackFailed, setPlaybackFailed] = useState(false);
 
-  const useImageFallback = reduce || isMobile || prefersSaveData() || playbackFailed;
+  const usePoster = reduce || saveData || playbackFailed;
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || useImageFallback) return;
+    if (!video || usePoster) return;
     let cancelled = false;
     video.play().catch(() => {
       if (!cancelled) setPlaybackFailed(true);
@@ -76,13 +79,13 @@ export function HeroCinematic({ subtitle }: HeroProps) {
     return () => {
       cancelled = true;
     };
-  }, [useImageFallback]);
+  }, [usePoster]);
 
   const togglePlayback = () => {
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      video.play();
+      void video.play();
       setPaused(false);
     } else {
       video.pause();
@@ -91,80 +94,67 @@ export function HeroCinematic({ subtitle }: HeroProps) {
   };
 
   return (
-    <section
-      className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-ink text-ivory"
-      aria-label="Presentación Frantana"
-    >
-      {!useImageFallback ? (
-        <video
-          ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/media/hero/hero-poster.jpg"
-          aria-hidden
-        >
-          <source src="/media/hero/hero-cinematic.mp4" type="video/mp4" />
-        </video>
-      ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src="/media/hero/hero-poster.jpg"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-          aria-hidden
-        />
-      )}
-
-      <div
-        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,20,17,0.35)_0%,rgba(23,20,17,0.25)_40%,rgba(23,20,17,0.78)_100%)]"
-        aria-hidden
-      />
-
-      <div className="relative z-10 w-full container-editorial pb-16 pt-[calc(var(--header-h)+3rem)] md:pb-20">
-        <p className="hero-enter hero-enter--1 text-[0.72rem] font-medium tracking-[0.22em] uppercase text-taupe-mid">
-          Web oficial
-        </p>
-
-        <h1 className="hero-enter hero-enter--2 display-title mt-4 max-w-[11ch] text-[clamp(4.2rem,16vw,11rem)] text-ivory">
-          FRANTANA
-        </h1>
-
-        <p className="hero-enter hero-enter--3 mt-6 max-w-xl text-base text-ivory/85 md:text-lg">
-          {subtitle}
-        </p>
-
-        <div className="hero-enter hero-enter--4 mt-10 flex flex-wrap gap-3">
-          <Button href="/musica" variant="inverse">
-            Escuchar
-          </Button>
-          <Button href="/conciertos" variant="secondary">
-            Conciertos
-          </Button>
-        </div>
-
-        {!useImageFallback && (
-          <button
-            type="button"
-            onClick={togglePlayback}
-            className="mt-8 min-h-11 text-[0.68rem] tracking-[0.18em] uppercase text-ivory/75 underline-offset-4 hover:text-ivory"
+    <section className="hero-plane" aria-label="Presentación Frantana">
+      <div className="hero-plane__media">
+        {!usePoster ? (
+          <video
+            ref={videoRef}
+            className="media-fill"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/media/hero/hero-poster.jpg"
+            aria-hidden
           >
-            {paused ? "Reproducir vídeo" : "Pausar vídeo"}
-          </button>
+            <source
+              src="/media/hero/hero-cinematic-720.mp4"
+              type="video/mp4"
+              media="(max-width: 768px)"
+            />
+            <source src="/media/hero/hero-cinematic.mp4" type="video/mp4" />
+          </video>
+        ) : (
+          <picture>
+            <source
+              media="(max-width: 768px)"
+              srcSet="/media/hero/hero-poster-mobile.jpg"
+            />
+            <img
+              src="/media/hero/hero-poster.jpg"
+              alt=""
+              className="media-fill"
+              aria-hidden
+            />
+          </picture>
         )}
       </div>
 
-      <div className="absolute bottom-6 right-[var(--space-gutter)] z-10 hidden md:flex flex-col items-center gap-2 text-ivory/70">
-        <span className="text-[0.62rem] tracking-[0.22em] uppercase">Scroll</span>
-        <span
-          className="scroll-indicator block h-10 w-px overflow-hidden bg-ivory/25"
-          aria-hidden
-        >
-          <span className="scroll-indicator__bar block h-full w-full bg-ivory/80" />
-        </span>
+      <div className="hero-plane__overlay" aria-hidden />
+
+      <div className="hero-plane__content">
+        <div className="mx-auto w-full max-w-[78rem]">
+          <h1 className="hero-brand hero-anim hero-anim-2">FRANTANA</h1>
+          <p className="hero-sub hero-anim hero-anim-3">{subtitle}</p>
+          <div className="hero-actions hero-anim hero-anim-4">
+            <Button href="/musica" variant="on-dark" size="sm">
+              Escuchar música
+            </Button>
+            <Button href="/conciertos" variant="on-dark-outline" size="sm">
+              Próximos conciertos
+            </Button>
+          </div>
+          {!usePoster && (
+            <button
+              type="button"
+              onClick={togglePlayback}
+              className="mt-5 min-h-10 text-[0.65rem] tracking-[0.16em] uppercase text-ivory/75 hover:text-ivory"
+            >
+              {paused ? "Reproducir vídeo" : "Pausar vídeo"}
+            </button>
+          )}
+        </div>
       </div>
     </section>
   );

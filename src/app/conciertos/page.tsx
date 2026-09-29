@@ -1,6 +1,7 @@
 import { getConcerts, splitConcerts } from "@/lib/content/store";
 import { ConcertList } from "@/components/concerts/ConcertList";
 import { Reveal } from "@/components/motion/Reveal";
+import { MediaReveal } from "@/components/motion/MediaReveal";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
@@ -14,31 +15,50 @@ export default async function ConciertosPage() {
 
   return (
     <div className="pt-[var(--header-h)]">
-      <section className="section-pad">
-        <div className="container-editorial">
-          <Reveal>
-            <h1 className="display-title text-6xl md:text-8xl">Conciertos</h1>
-            <p className="prose-editorial mt-6">
+      <section className="section-pad surface-ivory">
+        <div className="container-editorial grid gap-8 md:grid-cols-12 md:items-end">
+          <Reveal className="md:col-span-7">
+            <h1 className="display-title text-[clamp(3rem,12vw,7rem)]">
+              Conciertos
+            </h1>
+          </Reveal>
+          <Reveal className="md:col-span-5" delay={0.06}>
+            <p className="prose-editorial">
               Agenda dinámica gestionada desde el panel. Fechas, recintos y
               estados de entradas se actualizan sin desplegar código.
             </p>
           </Reveal>
+        </div>
+      </section>
 
-          <div className="mt-16">
-            <h2 className="font-display text-3xl md:text-4xl">Próximos</h2>
-            <ConcertList
-              concerts={upcoming}
-              emptyMessage="[PROVISIONAL] No hay conciertos próximos publicados."
-            />
-          </div>
+      <section className="relative min-h-[42svh] md:min-h-[52svh]">
+        <MediaReveal
+          src="/media/gallery/stage-lights-01.jpg"
+          alt="Escenario iluminado — fotografía editorial de archivo (placeholder, no representa a Frantana)"
+          className="absolute inset-0 h-full w-full"
+          sizes="100vw"
+          parallax
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_40%,rgba(23,20,17,0.55))]" />
+      </section>
 
-          <div className="mt-20">
-            <h2 className="font-display text-3xl md:text-4xl">Anteriores</h2>
-            <ConcertList
-              concerts={past}
-              emptyMessage="[PROVISIONAL] Todavía no hay conciertos anteriores registrados."
-            />
-          </div>
+      <section className="section-pad surface-ivory">
+        <div className="container-editorial">
+          <h2 className="font-display text-3xl md:text-4xl">Próximos</h2>
+          <ConcertList
+            concerts={upcoming}
+            emptyMessage="[PROVISIONAL] No hay conciertos próximos publicados."
+          />
+        </div>
+      </section>
+
+      <section className="section-pad surface-beige">
+        <div className="container-editorial">
+          <h2 className="font-display text-3xl md:text-4xl">Anteriores</h2>
+          <ConcertList
+            concerts={past}
+            emptyMessage="[PROVISIONAL] Todavía no hay conciertos anteriores registrados."
+          />
         </div>
       </section>
     </div>

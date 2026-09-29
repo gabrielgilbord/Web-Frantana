@@ -1,46 +1,47 @@
 @import "tailwindcss";
 
 :root {
-  /* FRANTANA design tokens — palette strictly from brand reference */
-  --color-ivory: #fffff0;
-  --color-beige: #f3e5dc;
-  --color-taupe: #b29884;
-  --color-taupe-dark: #7c6758;
-  --color-taupe-mid: #cbb5a0;
-  --color-ink: #171411;
+  /* FRANTANA — brand palette (raw values; avoid circular @theme refs) */
+  --fr-ivory: #fffff0;
+  --fr-beige: #f3e5dc;
+  --fr-taupe: #b29884;
+  --fr-taupe-dark: #7c6758;
+  --fr-taupe-mid: #cbb5a0;
+  --fr-ink: #171411;
 
-  --background: var(--color-ivory);
-  --foreground: var(--color-ink);
-  --muted: var(--color-taupe-dark);
-  --muted-soft: var(--color-taupe);
-  --surface: var(--color-beige);
-  --line: color-mix(in srgb, var(--color-taupe-mid) 55%, transparent);
-  --overlay: color-mix(in srgb, var(--color-ink) 58%, transparent);
-  --overlay-strong: color-mix(in srgb, var(--color-ink) 72%, transparent);
+  --color-ivory: var(--fr-ivory);
+  --color-beige: var(--fr-beige);
+  --color-taupe: var(--fr-taupe);
+  --color-taupe-dark: var(--fr-taupe-dark);
+  --color-taupe-mid: var(--fr-taupe-mid);
+  --color-ink: var(--fr-ink);
+
+  --background: var(--fr-ivory);
+  --foreground: var(--fr-ink);
+  --muted: var(--fr-taupe-dark);
+  --surface: var(--fr-beige);
+  --line: color-mix(in srgb, var(--fr-taupe-mid) 50%, transparent);
 
   --font-display: var(--font-cormorant), "Times New Roman", serif;
   --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 
-  --space-section: clamp(4.5rem, 10vw, 9rem);
-  --space-gutter: clamp(1.25rem, 4vw, 3.5rem);
-  --max-width: 88rem;
-  --header-h: 4.5rem;
+  --space-section: clamp(4rem, 9vw, 8rem);
+  --space-gutter: clamp(1.25rem, 4.5vw, 3rem);
+  --max-width: 78rem;
+  --header-h: 3.75rem;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration-fast: 180ms;
-  --duration: 520ms;
-  --duration-slow: 900ms;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-ivory: var(--color-ivory);
-  --color-beige: var(--color-beige);
-  --color-taupe: var(--color-taupe);
-  --color-taupe-dark: var(--color-taupe-dark);
-  --color-taupe-mid: var(--color-taupe-mid);
-  --color-ink: var(--color-ink);
+  --color-ivory: var(--fr-ivory);
+  --color-beige: var(--fr-beige);
+  --color-taupe: var(--fr-taupe);
+  --color-taupe-dark: var(--fr-taupe-dark);
+  --color-taupe-mid: var(--fr-taupe-mid);
+  --color-ink: var(--fr-ink);
   --color-surface: var(--surface);
   --color-muted: var(--muted);
   --color-line: var(--line);
@@ -74,6 +75,7 @@ body {
   line-height: 1.65;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 ::selection {
@@ -81,17 +83,35 @@ body {
   color: var(--color-ink);
 }
 
-a {
-  color: inherit;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
+/* Keep link chrome in @layer base so Tailwind color utilities can override.
+   An unlayered `a { color: inherit }` beats @layer utilities and blanked hero CTAs. */
+@layer base {
+  a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
 }
 
+/* Critical: do NOT force height:auto on all media — breaks absolute hero fills */
 img,
 video {
   max-width: 100%;
-  height: auto;
   display: block;
+}
+
+img:not(.media-fill),
+video:not(.media-fill) {
+  height: auto;
+}
+
+.media-fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
 }
 
 :focus-visible {
@@ -121,22 +141,8 @@ video {
 .display-title {
   font-family: var(--font-display);
   font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 0.92;
-}
-
-.eyebrow {
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-taupe-dark);
-}
-
-.hairline {
-  border: 0;
-  border-top: 1px solid var(--line);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
 }
 
 .section-pad {
@@ -144,9 +150,10 @@ video {
 }
 
 .prose-editorial {
-  max-width: 38rem;
-  color: color-mix(in srgb, var(--color-ink) 88%, var(--color-taupe-dark));
-  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  max-width: 36rem;
+  color: color-mix(in srgb, var(--color-ink) 86%, var(--color-taupe-dark));
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  line-height: 1.75;
 }
 
 .provisional {
@@ -154,67 +161,13 @@ video {
   padding-left: 1rem;
   color: var(--color-taupe-dark);
   font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
-@keyframes scrollPulse {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-@keyframes heroEnter {
-  from {
-    opacity: 0;
-    transform: translateY(1.15rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hero-enter {
-  animation: heroEnter 0.9s var(--ease-out-expo) both;
-}
-
-.hero-enter--1 {
-  animation-delay: 0.08s;
-}
-.hero-enter--2 {
-  animation-delay: 0.2s;
-}
-.hero-enter--3 {
-  animation-delay: 0.36s;
-}
-.hero-enter--4 {
-  animation-delay: 0.5s;
-}
-
-.scroll-indicator__bar {
-  animation: scrollPulse 1.8s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .hero-enter,
-  .hero-enter--1,
-  .hero-enter--2,
-  .hero-enter--3,
-  .hero-enter--4 {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-
-  .scroll-indicator__bar {
-    animation: none;
-  }
+.hairline {
+  border: 0;
+  border-top: 1px solid var(--line);
 }
 
 .sr-only {
@@ -228,3 +181,112 @@ video {
   white-space: nowrap;
   border: 0;
 }
+
+/* Hero — single composition */
+.hero-plane {
+  position: relative;
+  isolation: isolate;
+  height: 100svh;
+  height: 100dvh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--color-ink);
+  color: var(--color-ivory);
+}
+
+.hero-plane__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-plane__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(23, 20, 17, 0.45) 0%,
+      rgba(23, 20, 17, 0.2) 35%,
+      rgba(23, 20, 17, 0.55) 70%,
+      rgba(23, 20, 17, 0.82) 100%
+    );
+}
+
+.hero-plane__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding:
+    calc(var(--header-h) + 1.25rem)
+    var(--space-gutter)
+    clamp(1.75rem, 5vh, 3.5rem);
+}
+
+.hero-brand {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.88;
+  font-size: clamp(3.25rem, 18vw, 9.5rem);
+  max-width: 100%;
+  margin: 0;
+  color: var(--color-ivory);
+  word-break: keep-all;
+}
+
+.hero-sub {
+  margin: 0.85rem 0 0;
+  max-width: 28rem;
+  font-size: clamp(0.92rem, 2.6vw, 1.05rem);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-ivory) 88%, transparent);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.35rem;
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(0.85rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-anim {
+  animation: heroFadeUp 0.85s var(--ease-out-expo) both;
+}
+
+.hero-anim-1 { animation-delay: 0.05s; }
+.hero-anim-2 { animation-delay: 0.16s; }
+.hero-anim-3 { animation-delay: 0.28s; }
+.hero-anim-4 { animation-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-anim,
+  .hero-anim-1,
+  .hero-anim-2,
+  .hero-anim-3,
+  .hero-anim-4 {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.surface-ivory { background: var(--color-ivory); }
+.surface-beige { background: var(--color-beige); }
+.surface-ink { background: var(--color-ink); color: var(--color-ivory); }

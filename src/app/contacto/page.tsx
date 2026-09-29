@@ -1,5 +1,6 @@
 import { getContent } from "@/lib/content/store";
 import { Reveal } from "@/components/motion/Reveal";
+import { MediaReveal } from "@/components/motion/MediaReveal";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -21,12 +22,18 @@ export default async function ContactoPage() {
 
   return (
     <div className="pt-[var(--header-h)]">
-      <section className="section-pad">
+      <section className="section-pad surface-ivory">
         <div className="container-editorial grid gap-12 md:grid-cols-12">
           <Reveal className="md:col-span-5">
-            <h1 className="display-title text-6xl md:text-8xl">Contacto</h1>
+            <h1 className="display-title text-[clamp(3rem,12vw,7rem)]">
+              Contacto
+            </h1>
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-taupe-dark">
+              Gestión, prensa y colaboraciones. Los datos se editan desde el panel
+              administrativo.
+            </p>
           </Reveal>
-          <Reveal className="md:col-span-6 md:col-start-7 space-y-8" delay={0.08}>
+          <Reveal className="md:col-span-6 md:col-start-7 space-y-10" delay={0.06}>
             <div>
               <h2 className="font-display text-2xl">Correo</h2>
               {content.contactEmail ? (
@@ -62,10 +69,10 @@ export default async function ContactoPage() {
             <div>
               <h2 className="font-display text-2xl">Redes</h2>
               {socials.length ? (
-                <ul className="mt-3 flex flex-wrap gap-3">
+                <ul className="mt-3 flex flex-wrap gap-2">
                   {socials.map((s) => (
                     <li key={s.label}>
-                      <Button href={s.href!} variant="ghost">
+                      <Button href={s.href!} variant="outline" size="sm">
                         {s.label}
                       </Button>
                     </li>
@@ -79,6 +86,16 @@ export default async function ContactoPage() {
             </div>
           </Reveal>
         </div>
+      </section>
+
+      <section className="relative min-h-[45svh] md:min-h-[58svh]">
+        <MediaReveal
+          src="/media/editorial/crowd-hands.jpg"
+          alt="Público en concierto — fotografía editorial de archivo (placeholder, no representa a Frantana)"
+          className="absolute inset-0 h-full w-full"
+          sizes="100vw"
+          parallax
+        />
       </section>
     </div>
   );

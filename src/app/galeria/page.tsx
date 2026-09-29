@@ -13,16 +13,16 @@ export default async function GaleriaPage() {
 
   return (
     <div className="pt-[var(--header-h)]">
-      <section className="section-pad">
+      <section className="section-pad surface-ivory">
         <div className="container-editorial">
           <Reveal>
-            <h1 className="display-title text-6xl md:text-8xl">Galería</h1>
+            <h1 className="display-title text-[clamp(3rem,12vw,7rem)]">Galería</h1>
             <p className="provisional mt-6 max-w-xl">
               [PROVISIONAL] Imágenes de archivo musical. No representan a Frantana;
               serán sustituidas por fotografías oficiales del artista.
             </p>
           </Reveal>
-          <div className="mt-12">
+          <div className="mt-10">
             <GalleryGrid images={images} />
           </div>
         </div>

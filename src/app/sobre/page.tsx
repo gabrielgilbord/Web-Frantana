@@ -13,18 +13,18 @@ export default async function SobrePage() {
 
   return (
     <div className="pt-[var(--header-h)]">
-      <section className="section-pad">
-        <div className="container-editorial grid gap-12 md:grid-cols-12">
+      <section className="section-pad surface-ivory">
+        <div className="container-editorial grid gap-10 md:grid-cols-12">
           <Reveal className="md:col-span-5">
-            <h1 className="display-title text-6xl md:text-7xl lg:text-8xl">
+            <h1 className="display-title text-[clamp(3rem,10vw,6.5rem)]">
               {content.aboutTitle}
             </h1>
           </Reveal>
-          <Reveal className="md:col-span-6 md:col-start-7" delay={0.1}>
+          <Reveal className="md:col-span-6 md:col-start-7" delay={0.08}>
             <p
               className={
                 content.aboutBody.includes("[TEXTO PROVISIONAL]")
-                  ? "provisional prose-editorial text-lg"
+                  ? "provisional"
                   : "prose-editorial text-lg"
               }
             >
@@ -34,28 +34,28 @@ export default async function SobrePage() {
         </div>
       </section>
 
-      <section>
+      <section className="relative min-h-[55svh] md:min-h-[75svh]">
         <MediaReveal
           src="/media/editorial/microphone.jpg"
           alt="Micrófono en estudio — fotografía editorial de archivo (placeholder, no representa a Frantana)"
-          className="aspect-[16/9] w-full md:aspect-[2.2/1]"
+          className="absolute inset-0 h-full w-full"
           sizes="100vw"
           parallax
         />
       </section>
 
-      <section className="section-pad bg-beige/40">
-        <div className="container-editorial grid gap-10 md:grid-cols-12 md:gap-8">
+      <section className="section-pad surface-beige">
+        <div className="container-editorial grid gap-8 md:grid-cols-12">
           <Reveal className="md:col-span-4">
-            <h2 className="display-title text-4xl md:text-5xl">
+            <h2 className="display-title text-[clamp(2.25rem,6vw,3.75rem)]">
               {content.aboutStoryTitle}
             </h2>
           </Reveal>
-          <Reveal className="md:col-span-7 md:col-start-6" delay={0.08}>
+          <Reveal className="md:col-span-7 md:col-start-6" delay={0.06}>
             <p
               className={
                 content.aboutStoryBody.includes("[TEXTO PROVISIONAL]")
-                  ? "provisional prose-editorial"
+                  ? "provisional"
                   : "prose-editorial"
               }
             >
@@ -65,8 +65,8 @@ export default async function SobrePage() {
         </div>
       </section>
 
-      <section className="section-pad">
-        <div className="container-editorial grid gap-6 md:grid-cols-2">
+      <section className="section-pad surface-ivory">
+        <div className="container-editorial grid gap-5 md:grid-cols-2">
           <MediaReveal
             src="/media/editorial/piano-keys.jpg"
             alt="Teclas de piano — fotografía editorial de archivo (placeholder)"

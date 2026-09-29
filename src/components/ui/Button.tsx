@@ -2,17 +2,19 @@ import clsx from "clsx";
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "ghost" | "inverse";
+type Variant = "solid" | "outline" | "ghost" | "on-dark" | "on-dark-outline";
 
 const styles: Record<Variant, string> = {
-  primary:
-    "bg-ink text-ivory hover:bg-taupe-dark border border-ink",
-  secondary:
-    "bg-transparent text-ivory border border-ivory/55 hover:bg-ivory/10",
+  solid:
+    "bg-ink text-ivory border border-ink hover:bg-taupe-dark hover:border-taupe-dark",
+  outline:
+    "bg-transparent text-ink border border-taupe-dark/45 hover:border-ink hover:bg-beige/60",
   ghost:
-    "bg-transparent text-ink border border-taupe-mid/70 hover:border-taupe-dark hover:bg-beige/50",
-  inverse:
+    "bg-transparent text-ink border border-transparent hover:border-taupe-mid/60",
+  "on-dark":
     "bg-ivory text-ink border border-ivory hover:bg-beige",
+  "on-dark-outline":
+    "bg-transparent text-ivory border border-ivory/70 hover:bg-ivory/10",
 };
 
 type ButtonProps = {
@@ -20,26 +22,41 @@ type ButtonProps = {
   variant?: Variant;
   className?: string;
   href?: string;
+  size?: "sm" | "md";
 } & Omit<ComponentProps<"button">, "className">;
 
 export function Button({
   children,
-  variant = "primary",
+  variant = "solid",
   className,
   href,
+  size = "md",
+  type = "button",
   ...props
 }: ButtonProps) {
   const classes = clsx(
-    "inline-flex items-center justify-center gap-2 px-6 py-3 text-[0.72rem] font-medium tracking-[0.18em] uppercase transition-[transform,background-color,border-color,color,opacity] duration-300 ease-[var(--ease-soft)] will-change-transform hover:-translate-y-px active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-none font-medium transition-[background-color,border-color,color,transform,opacity] duration-300 ease-[var(--ease-soft)] hover:-translate-y-px active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none",
+    size === "sm"
+      ? "min-h-10 px-4 text-[0.68rem] tracking-[0.14em] uppercase"
+      : "min-h-11 px-5 text-[0.7rem] tracking-[0.14em] uppercase md:min-h-12 md:px-6",
     styles[variant],
     className
   );
 
   if (href) {
-    const external = href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:");
+    const external =
+      href.startsWith("http") ||
+      href.startsWith("mailto:") ||
+      href.startsWith("tel:");
     if (external) {
       return (
-        <a href={href} className={classes} {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+        <a
+          href={href}
+          className={classes}
+          {...(href.startsWith("http")
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
+        >
           {children}
         </a>
       );
@@ -52,7 +69,7 @@ export function Button({
   }
 
   return (
-    <button className={classes} {...props}>
+    <button type={type} className={classes} {...props}>
       {children}
     </button>
   );
