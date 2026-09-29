@@ -1,0 +1,230 @@
+@import "tailwindcss";
+
+:root {
+  /* FRANTANA design tokens — palette strictly from brand reference */
+  --color-ivory: #fffff0;
+  --color-beige: #f3e5dc;
+  --color-taupe: #b29884;
+  --color-taupe-dark: #7c6758;
+  --color-taupe-mid: #cbb5a0;
+  --color-ink: #171411;
+
+  --background: var(--color-ivory);
+  --foreground: var(--color-ink);
+  --muted: var(--color-taupe-dark);
+  --muted-soft: var(--color-taupe);
+  --surface: var(--color-beige);
+  --line: color-mix(in srgb, var(--color-taupe-mid) 55%, transparent);
+  --overlay: color-mix(in srgb, var(--color-ink) 58%, transparent);
+  --overlay-strong: color-mix(in srgb, var(--color-ink) 72%, transparent);
+
+  --font-display: var(--font-cormorant), "Times New Roman", serif;
+  --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  --space-section: clamp(4.5rem, 10vw, 9rem);
+  --space-gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --max-width: 88rem;
+  --header-h: 4.5rem;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --duration: 520ms;
+  --duration-slow: 900ms;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ivory: var(--color-ivory);
+  --color-beige: var(--color-beige);
+  --color-taupe: var(--color-taupe);
+  --color-taupe-dark: var(--color-taupe-dark);
+  --color-taupe-mid: var(--color-taupe-mid);
+  --color-ink: var(--color-ink);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-taupe-mid);
+  color: var(--color-ink);
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-taupe-dark);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-gutter);
+  top: -100%;
+  z-index: 100;
+  background: var(--color-ink);
+  color: var(--color-ivory);
+  padding: 0.75rem 1rem;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+.container-editorial {
+  width: min(100% - (var(--space-gutter) * 2), var(--max-width));
+  margin-inline: auto;
+}
+
+.display-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-taupe-dark);
+}
+
+.hairline {
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.section-pad {
+  padding-block: var(--space-section);
+}
+
+.prose-editorial {
+  max-width: 38rem;
+  color: color-mix(in srgb, var(--color-ink) 88%, var(--color-taupe-dark));
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+}
+
+.provisional {
+  border-left: 1px solid var(--color-taupe-mid);
+  padding-left: 1rem;
+  color: var(--color-taupe-dark);
+  font-style: italic;
+}
+
+@keyframes scrollPulse {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes heroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(1.15rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-enter {
+  animation: heroEnter 0.9s var(--ease-out-expo) both;
+}
+
+.hero-enter--1 {
+  animation-delay: 0.08s;
+}
+.hero-enter--2 {
+  animation-delay: 0.2s;
+}
+.hero-enter--3 {
+  animation-delay: 0.36s;
+}
+.hero-enter--4 {
+  animation-delay: 0.5s;
+}
+
+.scroll-indicator__bar {
+  animation: scrollPulse 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-enter,
+  .hero-enter--1,
+  .hero-enter--2,
+  .hero-enter--3,
+  .hero-enter--4 {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .scroll-indicator__bar {
+    animation: none;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
