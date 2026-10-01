@@ -1,0 +1,16 @@
+# Keep Vercel upload lean (source + public assets only)
+.agents
+.claude
+.playwright
+.playwright-cli
+qa-screenshots
+test-results
+playwright-report
+docs
+scripts
+supabase/.temp
+*.pst
+*.bin
+.git
+.next
+node_modules
