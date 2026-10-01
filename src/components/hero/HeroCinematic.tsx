@@ -64,7 +64,6 @@ export function HeroCinematic({ subtitle }: HeroProps) {
     getSaveDataSnapshot,
     getSaveDataServerSnapshot
   );
-  const [paused, setPaused] = useState(false);
   const [playbackFailed, setPlaybackFailed] = useState(false);
 
   const usePoster = reduce || saveData || playbackFailed;
@@ -80,18 +79,6 @@ export function HeroCinematic({ subtitle }: HeroProps) {
       cancelled = true;
     };
   }, [usePoster]);
-
-  const togglePlayback = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (video.paused) {
-      void video.play();
-      setPaused(false);
-    } else {
-      video.pause();
-      setPaused(true);
-    }
-  };
 
   return (
     <section className="hero-plane" aria-label="Presentación Frantana">
@@ -145,15 +132,6 @@ export function HeroCinematic({ subtitle }: HeroProps) {
               Próximos conciertos
             </Button>
           </div>
-          {!usePoster && (
-            <button
-              type="button"
-              onClick={togglePlayback}
-              className="mt-5 min-h-10 text-[0.65rem] tracking-[0.16em] uppercase text-ivory/75 hover:text-ivory"
-            >
-              {paused ? "Reproducir vídeo" : "Pausar vídeo"}
-            </button>
-          )}
         </div>
       </div>
     </section>

@@ -2,7 +2,6 @@
 
 import { FormEvent, useState } from "react";
 import type { GalleryImage } from "@/types";
-import { Button } from "@/components/ui/Button";
 
 export function GalleryAdminClient({
   initialImages,
@@ -15,6 +14,7 @@ export function GalleryAdminClient({
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   async function refresh() {
     const res = await fetch("/api/gallery");
@@ -66,80 +66,183 @@ export function GalleryAdminClient({
   }
 
   async function toggle(image: GalleryImage) {
-    await fetch("/api/gallery", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...image, published: !image.published }),
-    });
-    await refresh();
+    setBusyId(image.id);
+    try {
+      await fetch("/api/gallery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...image, published: !image.published }),
+      });
+      await refresh();
+    } finally {
+      setBusyId(null);
+    }
   }
 
   async function remove(id: string) {
     if (!confirm("¿Eliminar esta imagen del catálogo?")) return;
-    await fetch(`/api/gallery?id=${id}`, { method: "DELETE" });
-    await refresh();
+    setBusyId(id);
+    try {
+      await fetch(`/api/gallery?id=${id}`, { method: "DELETE" });
+      await refresh();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function move(index: number, direction: -1 | 1) {
+    const target = index + direction;
+    if (target < 0 || target >= images.length) return;
+    const next = [...images];
+    [next[index], next[target]] = [next[target], next[index]];
+    const a = { ...next[index], sortOrder: index + 1 };
+    const b = { ...next[target], sortOrder: target + 1 };
+    setBusyId(images[index].id);
+    try {
+      await Promise.all([
+        fetch("/api/gallery", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(a),
+        }),
+        fetch("/api/gallery", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(b),
+        }),
+      ]);
+      await refresh();
+    } finally {
+      setBusyId(null);
+    }
   }
 
   return (
-    <div>
-      <h1 className="font-display text-4xl">Galería</h1>
-      <form
-        onSubmit={onUpload}
-        className="mt-6 max-w-xl space-y-3 border border-line bg-ivory p-5"
-      >
-        <label className="block text-sm">
-          Archivo
-          <input
-            name="file"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/avif"
-            className="mt-1 block w-full"
-          />
-        </label>
-        <label className="block text-sm">
-          Texto alternativo
-          <input
-            value={alt}
-            onChange={(e) => setAlt(e.target.value)}
-            className="mt-1 w-full border border-line px-3 py-2"
-            required
-          />
-        </label>
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            checked={published}
-            onChange={(e) => setPublished(e.target.checked)}
-          />
-          Publicada
-        </label>
-        {error && <p role="alert">{error}</p>}
-        {message && <p role="status">{message}</p>}
-        <Button type="submit" disabled={uploading}>
-          {uploading ? "Subiendo…" : "Subir"}
-        </Button>
-      </form>
+    <div className="admin-page">
+      <div className="admin-page__header">
+        <div>
+          <h1 className="admin-page__title">Galería</h1>
+          <p className="admin-page__lede">
+            {images.length} fotos · usa ↑ ↓ para reordenar
+          </p>
+        </div>
+      </div>
 
-      <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {images.map((img) => (
-          <li key={img.id} className="border border-line bg-ivory p-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img.src} alt={img.alt} className="aspect-[4/3] w-full object-cover" />
-            <p className="mt-2 text-sm">{img.alt}</p>
-            <p className="text-xs text-taupe-dark">
-              {img.published ? "Publicada" : "Oculta"}
+      <section className="admin-section">
+        <h2 className="admin-section__title">Subir foto</h2>
+        <form onSubmit={onUpload} className="admin-section__body">
+          <label className="admin-upload admin-upload--lg">
+            <span>{uploading ? "Subiendo…" : "Elige o suelta una imagen"}</span>
+            <span className="admin-upload__hint">
+              JPEG, PNG, WebP o AVIF · zona táctil grande
+            </span>
+            <input
+              name="file"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/avif"
+              disabled={uploading}
+            />
+          </label>
+          <label className="admin-field">
+            <span className="admin-field__label">Texto alternativo</span>
+            <input
+              value={alt}
+              onChange={(e) => setAlt(e.target.value)}
+              className="admin-field__input"
+              required
+              placeholder="Describe la foto"
+            />
+          </label>
+          <label className="admin-field admin-field--row">
+            <input
+              type="checkbox"
+              checked={published}
+              onChange={(e) => setPublished(e.target.checked)}
+            />
+            <span className="admin-field__label">Publicada al subir</span>
+          </label>
+          {error && (
+            <p role="alert" className="admin-feedback admin-feedback--error">
+              {error}
             </p>
-            <div className="mt-2 flex gap-2">
-              <Button type="button" variant="ghost" onClick={() => toggle(img)}>
-                {img.published ? "Ocultar" : "Publicar"}
-              </Button>
-              <Button type="button" variant="ghost" onClick={() => remove(img.id)}>
-                Eliminar
-              </Button>
-            </div>
-          </li>
-        ))}
-      </ul>
+          )}
+          {message && (
+            <p role="status" className="admin-feedback admin-feedback--ok">
+              {message}
+            </p>
+          )}
+          <button
+            type="submit"
+            className="admin-btn admin-btn--ember"
+            disabled={uploading}
+          >
+            {uploading ? "Subiendo…" : "Subir"}
+          </button>
+        </form>
+      </section>
+
+      {!images.length ? (
+        <p className="admin-empty">La galería está vacía.</p>
+      ) : (
+        <div className="admin-gallery-grid">
+          {images.map((img, index) => (
+            <article key={img.id} className="admin-gallery-card">
+              <div className="admin-gallery-card__preview">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={img.src} alt={img.alt} />
+              </div>
+              <div className="admin-gallery-card__meta">
+                <p className="admin-gallery-card__alt">{img.alt}</p>
+                <span
+                  className={`admin-status ${
+                    img.published
+                      ? "admin-status--published"
+                      : "admin-status--draft"
+                  }`}
+                >
+                  {img.published ? "Publicada" : "Oculta"}
+                </span>
+              </div>
+              <div className="admin-gallery-card__actions">
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--ghost admin-btn--sm"
+                  onClick={() => toggle(img)}
+                  disabled={busyId === img.id}
+                >
+                  {img.published ? "Ocultar" : "Publicar"}
+                </button>
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--ghost admin-btn--icon admin-btn--sm"
+                  onClick={() => move(index, -1)}
+                  disabled={index === 0 || busyId === img.id}
+                  aria-label="Subir en el orden"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--ghost admin-btn--icon admin-btn--sm"
+                  onClick={() => move(index, 1)}
+                  disabled={index === images.length - 1 || busyId === img.id}
+                  aria-label="Bajar en el orden"
+                >
+                  ↓
+                </button>
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--danger admin-btn--sm"
+                  onClick={() => remove(img.id)}
+                  disabled={busyId === img.id}
+                >
+                  Eliminar
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

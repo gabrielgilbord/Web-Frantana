@@ -13,12 +13,29 @@ export type Concert = {
   time: string | null; // HH:mm
   city: string;
   venue: string;
+  /** Optional map pin for embeds (WGS84). */
+  lat: number | null;
+  lng: number | null;
+  /** Primary show image. Fallback to gallery when null. */
+  image: string | null;
   ticketUrl: string | null;
   ticketStatus: TicketStatus;
   published: boolean;
+  /**
+   * If true and not published, the date still shows as occupied on the
+   * public booking calendar (private parties, holds) without revealing the title.
+   * Published concerts always occupy the calendar.
+   */
+  blocksCalendar: boolean;
   notes: string | null;
   createdAt: string;
   updatedAt: string;
+};
+
+/** Public occupancy cell — never exposes private event titles. */
+export type OccupancyDay = {
+  date: string;
+  status: "public" | "private";
 };
 
 export type GalleryImage = {
@@ -99,13 +116,50 @@ export type Order = {
   email: string;
   items: Array<{
     productId: string;
+    productName: string;
     variantId: string;
+    variantName: string;
     quantity: number;
     unitPriceCents: number;
   }>;
   totalCents: number;
   currency: string;
+  stripeCheckoutSessionId: string | null;
   stripePaymentIntentId: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type BookingStatus = "new" | "read" | "replied" | "archived";
+
+export type BookingEventType =
+  | "privado"
+  | "boda"
+  | "corporativo"
+  | "fiesta"
+  | "otro";
+
+export type BookingMessage = {
+  id: string;
+  from: "client" | "admin";
+  body: string;
+  createdAt: string;
+};
+
+export type BookingRequest = {
+  id: string;
+  accessToken: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  eventType: BookingEventType;
+  preferredDate: string | null; // YYYY-MM-DD
+  preferredTime: string | null; // HH:mm
+  city: string;
+  venue: string | null;
+  message: string;
+  messages: BookingMessage[];
+  status: BookingStatus;
   createdAt: string;
   updatedAt: string;
 };
@@ -116,4 +170,5 @@ export type SiteData = {
   gallery: GalleryImage[];
   products: Product[];
   orders: Order[];
+  bookings?: BookingRequest[];
 };

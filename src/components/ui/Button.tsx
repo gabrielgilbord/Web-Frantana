@@ -2,19 +2,22 @@ import clsx from "clsx";
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
-type Variant = "solid" | "outline" | "ghost" | "on-dark" | "on-dark-outline";
+type Variant = "solid" | "outline" | "ghost" | "on-dark" | "on-dark-outline" | "ink" | "ink-outline";
 
 const styles: Record<Variant, string> = {
   solid:
-    "bg-ink text-ivory border border-ink hover:bg-taupe-dark hover:border-taupe-dark",
+    "bg-ivory text-ink border border-ivory hover:bg-ember hover:border-ember",
   outline:
-    "bg-transparent text-ink border border-taupe-dark/45 hover:border-ink hover:bg-beige/60",
+    "bg-transparent text-ivory border border-ivory/35 hover:border-ember hover:text-ember",
   ghost:
-    "bg-transparent text-ink border border-transparent hover:border-taupe-mid/60",
+    "bg-transparent text-ivory border border-transparent hover:border-ivory/25",
   "on-dark":
-    "bg-ivory text-ink border border-ivory hover:bg-beige",
+    "bg-ivory text-ink border border-ivory hover:bg-ember hover:border-ember",
   "on-dark-outline":
-    "bg-transparent text-ivory border border-ivory/70 hover:bg-ivory/10",
+    "bg-transparent text-ivory border border-ivory/55 hover:border-ember hover:text-ember",
+  ink: "bg-ink text-mist border border-ink hover:bg-ember hover:border-ember",
+  "ink-outline":
+    "bg-transparent text-ink border border-ink/25 hover:border-ember hover:text-ember",
 };
 
 type ButtonProps = {
@@ -35,7 +38,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const classes = clsx(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-none font-medium transition-[background-color,border-color,color,transform,opacity] duration-300 ease-[var(--ease-soft)] hover:-translate-y-px active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none",
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-none font-medium transition-[background-color,border-color,color,transform,opacity] duration-300 ease-[var(--ease-soft)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none",
     size === "sm"
       ? "min-h-10 px-4 text-[0.68rem] tracking-[0.14em] uppercase"
       : "min-h-11 px-5 text-[0.7rem] tracking-[0.14em] uppercase md:min-h-12 md:px-6",

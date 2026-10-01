@@ -1,33 +1,32 @@
 # Skills utilizadas — proyecto Frantana
 
-Fecha: 2026-09-29.
+Fecha: 2026-10-01.
 
-## Descubrimiento
+## Instaladas en esta pasada
 
-- Skills nativas del entorno Cloud (`~/.cursor/skills-cursor/`): `canvas`, `walkthrough-artifacts`, `env-setup`, `migrate-to-builds`, `subscribe`.
-- **No** había skills de frontend design / motion / a11y preinstaladas.
-- Se usó el CLI `npx skills` (skills.sh) para buscar e instalar skills compatibles en `.agents/skills/`.
+| Skill | Origen | Uso |
+|-------|--------|-----|
+| `frontend-design` | anthropics/skills | Brief anti-slop, tipografía, dirección estética |
+| `design` (UI/UX Pro Max) | nextlevelbuilder | Design system / estilo por industria |
+| `hallmark` | nutlope/hallmark | Anti-slop estructural |
+| `impeccable` | pbakaus/impeccable | PRODUCT/DESIGN, detector |
+| `design-taste-frontend` + redesign + high-end + minimalist | Leonxlnx/taste-skill | Ecualizador visual / audit |
+| `interface-design` | Dammyjay93 | Persistencia de sistema (admin) |
+| `web-design-guidelines` + react-best-practices | vercel-labs | A11y / perf |
+| `brand-guidelines` + `theme-factory` | anthropics/skills | Identidad |
+| `refactoring-ui` + `ux-heuristics` + `microinteractions` + `top-design` + `web-typography` | wondelai/skills | Auditoría visual/usabilidad |
+| `ui-designer` + `brand-guardian` + `whimsy-injector` + `visual-storyteller` | leandroomargarcia/cursor-skills | Diseño / marca |
+| `playwright-cli` | @playwright/cli | Extracción IG + verificación UI |
 
-## Skills instaladas y aplicadas
+## No instaladas a propósito
 
-| Skill | Origen | Uso en Frantana |
-|-------|--------|-----------------|
-| `frontend-design` | `anthropics/skills` | Dirección artística editorial: hero como momento memorable, tipografía deliberada, tokens, evitar estética genérica AI, restraint alrededor del vídeo |
-| `design` | `nextlevelbuilder/ui-ux-pro-max-skill` | Sistema de tokens, identidad y routing de trabajo de diseño |
-| `gsap` | `mengto/skills` | Principios de motion (stagger, timelines, transforms, cleanup, reduced-motion); implementado con Framer Motion (ya en stack) siguiendo esos patrones |
-| `better-accessibility` | `jakubkrehel/skills` | Focus visible, skip link, lightbox teclado, pause de vídeo, labels, reduced-motion |
-| `web-design-guidelines` | `vercel-labs/agent-skills` | Criterios de UI/a11y/UX para revisión de interfaces |
-| `vercel-react-best-practices` | `vercel-labs/agent-skills` | `Promise.all` en páginas, `next/dynamic` para hero, evitar waterfalls |
-| `seo-audit` | `anthropics/knowledge-work-plugins` | Metadatos, robots, sitemap, JSON-LD MusicGroup, noindex admin |
+| Skill | Motivo |
+|-------|--------|
+| scroll-world / scroll-craft | Coste de vídeo / fuera de alcance actual |
+| img2threejs | Tokens altos; no es objeto 3D |
+| iOS HIG | No es app iOS |
 
-## Skills nativas usadas en entrega
+## Fuentes de contenido
 
-| Skill | Uso |
-|-------|-----|
-| `walkthrough-artifacts` | Evidencia visual (screenshots/vídeo) tras pruebas manuales |
-| `subscribe` | Disponible para CI/PR si se necesita espera de eventos |
-
-## No instaladas / fallidas
-
-- `uizze.sh@ui-taste`: el instalador no pudo clonar el repositorio (`repository does not exist` con ese identificador).
-- Skills específicas GSAP vs Motion: se priorizó Motion en runtime por dependencia ya instalada; la skill `gsap` guió los patrones de animación.
+- Instagram [@frantana](https://www.instagram.com/frantana/) — bio, email, fotos (export canvas)
+- Soundcharts — biografía pública / temas

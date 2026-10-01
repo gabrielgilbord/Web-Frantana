@@ -36,8 +36,8 @@ export default async function SobrePage() {
 
       <section className="relative">
         <MediaReveal
-          src="/media/editorial/microphone.jpg"
-          alt="Micrófono en estudio — fotografía editorial de archivo (placeholder, no representa a Frantana)"
+          src="/media/gallery/frantana/03.jpg"
+          alt="Frantana — fotografía oficial"
           className="min-h-[55svh] w-full md:min-h-[75svh]"
           sizes="100vw"
           parallax
@@ -68,13 +68,13 @@ export default async function SobrePage() {
       <section className="section-pad surface-ivory">
         <div className="container-editorial grid gap-5 md:grid-cols-2">
           <MediaReveal
-            src="/media/editorial/piano-keys.jpg"
-            alt="Teclas de piano — fotografía editorial de archivo (placeholder)"
+            src="/media/gallery/frantana/07.jpg"
+            alt="Frantana — imagen oficial"
             className="aspect-[4/5]"
           />
           <MediaReveal
-            src="/media/editorial/studio-headphones.jpg"
-            alt="Auriculares de estudio — fotografía editorial de archivo (placeholder)"
+            src="/media/gallery/frantana/08.jpg"
+            alt="Frantana — captura oficial"
             className="aspect-[4/5] md:mt-16"
           />
         </div>

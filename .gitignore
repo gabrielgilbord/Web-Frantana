@@ -48,3 +48,10 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 supabase/.temp/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+/qa-screenshots/
+/.playwright/
+/.claude/
+scripts/extract_*.bin
+scripts/part_*.txt

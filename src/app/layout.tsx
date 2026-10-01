@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Cormorant_Garamond, Outfit } from "next/font/google";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { CartProvider } from "@/components/shop/CartProvider";
+import { CartMiniModal } from "@/components/shop/CartMiniModal";
 import { buildMetadata, musicGroupJsonLd } from "@/lib/seo/metadata";
 import { getContent } from "@/lib/content/store";
 import "./globals.css";
@@ -13,8 +15,8 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin", "latin-ext"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
@@ -33,6 +35,7 @@ export default async function RootLayout({
     social: [
       content.social.instagram,
       content.social.facebook,
+      content.social.spotify ?? content.spotifyArtistUrl,
       content.social.youtube,
       content.social.tiktok,
       content.social.appleMusic,
@@ -43,21 +46,25 @@ export default async function RootLayout({
     <html
       lang="es"
       data-scroll-behavior="smooth"
-      className={`${cormorant.variable} ${manrope.variable} h-full`}
+      className={`${cormorant.variable} ${outfit.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground antialiased">
         <a href="#contenido" className="skip-link">
           Saltar al contenido
         </a>
+        <div id="fr-portal-root" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <SiteHeader />
-        <main id="contenido" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter content={content} />
+        <CartProvider>
+          <SiteHeader />
+          <CartMiniModal />
+          <main id="contenido" className="flex-1">
+            {children}
+          </main>
+          <SiteFooter content={content} />
+        </CartProvider>
       </body>
     </html>
   );

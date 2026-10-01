@@ -1,224 +1,445 @@
 {
   "content": {
-    "heroSubtitle": "[TEXTO PROVISIONAL] Subtítulo editable — pendiente de definición artística.",
-    "homeIntroTitle": "Presencia",
-    "homeIntroBody": "[TEXTO PROVISIONAL] Breve presentación de Frantana. Sustituir por la biografía y mensaje oficiales cuando estén disponibles.",
+    "heroSubtitle": "Cantante y compositor canario. Escenarios, canciones y presencia en vivo.",
+    "homeIntroTitle": "Desde Gran Canaria",
+    "homeIntroBody": "Frantana es cantante y compositor canario. Creció en la música desde muy joven, forjó oficio en agrupaciones y ha llevado su voz por escenarios del archipiélago y del norte de la península, siempre ligado a la música popular de Canarias.",
     "aboutTitle": "Sobre Frantana",
-    "aboutBody": "[TEXTO PROVISIONAL] Biografía editable. Esta sección está preparada para el storytelling oficial del artista. No se inventa género ni trayectoria.",
+    "aboutBody": "Artista y compositor natural de Gran Canaria. Sus comienzos en varias agrupaciones le dieron tablas en el oficio: años de escenario, ensayo y público real. Ha recorrido salas y fiestas canarias y también el norte de la península, manteniendo el compromiso con la música popular del archipiélago.",
     "aboutStoryTitle": "En escena",
-    "aboutStoryBody": "[TEXTO PROVISIONAL] Espacio para un relato visual y narrativo. Completar desde el panel de administración.",
-    "musicIntro": "[TEXTO PROVISIONAL] Escucha la música de Frantana en las plataformas oficiales. Los embeds y enlaces se configuran desde el panel.",
-    "spotifyEmbedUrl": null,
-    "spotifyArtistUrl": null,
-    "contactEmail": null,
+    "aboutStoryBody": "La escena es el centro: directo, show y conexión con el público. Colabora y actúa junto a proyectos como Armonía Show y Cuenta Atrás. Sigue compartiendo música, letras y momentos en Instagram (@frantana).",
+    "musicIntro": "Escucha la música de Frantana. Temas como «Como te quiero yo» y «Estamos bien» forman parte de su catálogo. Síguelo en las plataformas y en Instagram para novedades, letras y directos.",
+    "spotifyEmbedUrl": "https://open.spotify.com/embed/artist/6RcC4X6S7nvTvj0d31VVCw?utm_source=generator&theme=0",
+    "spotifyArtistUrl": "https://open.spotify.com/artist/6RcC4X6S7nvTvj0d31VVCw",
+    "contactEmail": "Frantanaoriginal@gmail.com",
     "contactPhone": null,
     "social": {
-      "instagram": null,
-      "facebook": null,
-      "spotify": null,
+      "instagram": "https://www.instagram.com/frantana/",
+      "facebook": "https://www.facebook.com/share/1Wn4FBbQaV/",
+      "spotify": "https://open.spotify.com/artist/6RcC4X6S7nvTvj0d31VVCw",
       "youtube": null,
       "tiktok": null,
       "appleMusic": null
     },
-    "seoDescription": "Web oficial de Frantana — música, conciertos y novedades.",
-    "updatedAt": "2026-09-29T00:00:00.000Z"
+    "seoDescription": "Frantana — cantante y compositor canario. Música, conciertos y novedades. Web oficial.",
+    "updatedAt": "2026-10-01T08:00:00.000Z"
   },
   "concerts": [
     {
-      "id": "3e5402f7-b8c7-47e5-9d16-83603daf114c",
-      "title": "E2E Concierto 1790649666073",
-      "date": "2099-12-01",
-      "time": null,
-      "city": "Madrid",
-      "venue": "Sala Test",
+      "id": "demo-past-2025-06-14-tfe",
+      "title": "[DEMO] Ensayo público — histórico",
+      "date": "2025-06-14",
+      "time": "20:30",
+      "city": "Santa Cruz de Tenerife",
+      "venue": "Sala demo (fixture)",
+      "lat": 28.4636,
+      "lng": -16.2518,
+      "image": "/media/gallery/frantana/04.jpg",
       "ticketUrl": null,
       "ticketStatus": "tba",
       "published": true,
-      "notes": null,
-      "createdAt": "2026-09-29T02:41:06.241Z",
-      "updatedAt": "2026-09-29T02:41:06.241Z"
+      "notes": "FIXTURE DEMO — actuación pasada para probar que la home solo muestra fechas futuras. Eliminar cuando ya no haga falta.",
+      "createdAt": "2026-10-01T15:00:00.000Z",
+      "updatedAt": "2026-10-01T15:00:00.000Z",
+      "blocksCalendar": true
     },
     {
-      "id": "97f46a02-12dc-4e0a-b088-3da6c1fb62dd",
-      "title": "E2E Concierto 1790649680396",
-      "date": "2099-12-01",
-      "time": null,
-      "city": "Madrid",
-      "venue": "Sala Test",
+      "id": "evt-2026-11-15-lpa",
+      "title": "Frantana en vivo",
+      "date": "2026-11-15",
+      "time": "22:00",
+      "city": "Las Palmas de Gran Canaria",
+      "venue": "Teatro Pérez Galdós",
+      "lat": 28.10055,
+      "lng": -15.41555,
+      "image": "/media/gallery/frantana/06.jpg",
       "ticketUrl": null,
-      "ticketStatus": "tba",
+      "ticketStatus": "free",
       "published": true,
-      "notes": null,
-      "createdAt": "2026-09-29T02:41:20.641Z",
-      "updatedAt": "2026-09-29T02:41:20.641Z"
+      "notes": "Fecha demo en el Teatro Pérez Galdós (Las Palmas). Ubicación de mapa de prueba.",
+      "createdAt": "2026-10-01T12:00:00.000Z",
+      "updatedAt": "2026-10-01T14:24:44.477Z",
+      "blocksCalendar": true
     },
     {
-      "id": "3c684875-f922-4e32-b0c4-22d0a8109bee",
-      "title": "E2E Concierto 1790649683201",
-      "date": "2099-12-01",
-      "time": null,
-      "city": "Madrid",
-      "venue": "Sala Test",
+      "id": "demo-future-2026-12-12-gc",
+      "title": "[DEMO] Noche de diciembre",
+      "date": "2026-12-12",
+      "time": "21:30",
+      "city": "Telde",
+      "venue": "Espacio demo (fixture)",
+      "lat": 27.9985,
+      "lng": -15.4187,
+      "image": "/media/gallery/frantana/02.jpg",
       "ticketUrl": null,
       "ticketStatus": "tba",
       "published": true,
-      "notes": null,
-      "createdAt": "2026-09-29T02:41:23.440Z",
-      "updatedAt": "2026-09-29T02:41:23.440Z"
+      "notes": "FIXTURE DEMO — futura #1 para composición de agenda. Eliminar cuando ya no haga falta.",
+      "createdAt": "2026-10-01T15:00:00.000Z",
+      "updatedAt": "2026-10-01T15:00:00.000Z",
+      "blocksCalendar": true
     },
     {
-      "id": "939f4039-8348-4b7d-90d9-c36bee784eb2",
-      "title": "E2E Concierto 1790649686793",
-      "date": "2099-12-01",
-      "time": null,
-      "city": "Madrid",
-      "venue": "Sala Test",
+      "id": "demo-future-2027-02-21-lpa",
+      "title": "[DEMO] Febrero en escena",
+      "date": "2027-02-21",
+      "time": "20:00",
+      "city": "Las Palmas de Gran Canaria",
+      "venue": "Auditorio demo (fixture)",
+      "lat": 28.1335,
+      "lng": -15.4382,
+      "image": "/media/gallery/frantana/07.jpg",
       "ticketUrl": null,
       "ticketStatus": "tba",
       "published": true,
-      "notes": null,
-      "createdAt": "2026-09-29T02:41:26.989Z",
-      "updatedAt": "2026-09-29T02:41:26.989Z"
+      "notes": "FIXTURE DEMO — futura #2 para composición de agenda. Eliminar cuando ya no haga falta.",
+      "createdAt": "2026-10-01T15:00:00.000Z",
+      "updatedAt": "2026-10-01T15:00:00.000Z",
+      "blocksCalendar": true
     },
     {
-      "id": "6f49be27-c8d1-44e9-a856-bf036fb5cdee",
-      "title": "E2E Concierto 1790651810053",
-      "date": "2099-12-01",
-      "time": null,
-      "city": "Madrid",
-      "venue": "Sala Test",
+      "id": "demo-future-2027-05-08-tf",
+      "title": "[DEMO] Primavera en Tenerife",
+      "date": "2027-05-08",
+      "time": "22:00",
+      "city": "Puerto de la Cruz",
+      "venue": "Plaza demo (fixture)",
+      "lat": 28.4134,
+      "lng": -16.5486,
+      "image": "/media/gallery/frantana/08.jpg",
       "ticketUrl": null,
       "ticketStatus": "tba",
       "published": true,
-      "notes": null,
-      "createdAt": "2026-09-29T03:16:50.369Z",
-      "updatedAt": "2026-09-29T03:16:50.369Z"
+      "notes": "FIXTURE DEMO — futura #3 para composición de agenda. Eliminar cuando ya no haga falta.",
+      "createdAt": "2026-10-01T15:00:00.000Z",
+      "updatedAt": "2026-10-01T15:00:00.000Z",
+      "blocksCalendar": true
     },
     {
-      "id": "057b95d7-cb8b-49e9-9ef3-12f91c86a6e4",
-      "title": "E2E Concierto 1790651813584",
-      "date": "2099-12-01",
-      "time": null,
-      "city": "Madrid",
-      "venue": "Sala Test",
+      "id": "hold-2026-10-25-privada",
+      "title": "[PRIVADO] Fiesta familiar",
+      "date": "2026-10-25",
+      "time": "21:00",
+      "city": "Las Palmas de Gran Canaria",
+      "venue": "Domicilio privado",
+      "lat": null,
+      "lng": null,
+      "image": null,
       "ticketUrl": null,
       "ticketStatus": "tba",
-      "published": true,
-      "notes": null,
-      "createdAt": "2026-09-29T03:16:53.894Z",
-      "updatedAt": "2026-09-29T03:16:53.894Z"
+      "published": false,
+      "blocksCalendar": true,
+      "notes": "Hold privado — no publicar. Ocupa calendario.",
+      "createdAt": "2026-10-01T16:00:00.000Z",
+      "updatedAt": "2026-10-01T16:00:00.000Z"
     },
     {
-      "id": "3f753d48-5d65-4b81-ab39-22193586713e",
-      "title": "E2E Concierto 1790651817434",
-      "date": "2099-12-01",
-      "time": null,
-      "city": "Madrid",
-      "venue": "Sala Test",
+      "id": "hold-2026-12-05-boda",
+      "title": "[PRIVADO] Boda",
+      "date": "2026-12-05",
+      "time": "19:00",
+      "city": "Maspalomas",
+      "venue": "Finca privada",
+      "lat": null,
+      "lng": null,
+      "image": null,
       "ticketUrl": null,
       "ticketStatus": "tba",
-      "published": true,
-      "notes": null,
-      "createdAt": "2026-09-29T03:16:57.618Z",
-      "updatedAt": "2026-09-29T03:16:57.618Z"
+      "published": false,
+      "blocksCalendar": true,
+      "notes": "Hold privado boda — no publicar.",
+      "createdAt": "2026-10-01T16:00:00.000Z",
+      "updatedAt": "2026-10-01T16:00:00.000Z"
     },
     {
-      "id": "78b837ca-a399-48b1-97d7-9defe0a2ea16",
-      "title": "E2E Concierto 1790651909987",
-      "date": "2099-12-01",
-      "time": null,
-      "city": "Madrid",
-      "venue": "Sala Test",
+      "id": "hold-2027-01-17-corp",
+      "title": "[PRIVADO] Corporativo",
+      "date": "2027-01-17",
+      "time": "20:30",
+      "city": "Telde",
+      "venue": "Hotel (privado)",
+      "lat": null,
+      "lng": null,
+      "image": null,
       "ticketUrl": null,
       "ticketStatus": "tba",
-      "published": true,
-      "notes": null,
-      "createdAt": "2026-09-29T03:18:30.293Z",
-      "updatedAt": "2026-09-29T03:18:30.293Z"
+      "published": false,
+      "blocksCalendar": true,
+      "notes": "Hold corporativo — no publicar.",
+      "createdAt": "2026-10-01T16:00:00.000Z",
+      "updatedAt": "2026-10-01T16:00:00.000Z"
+    },
+    {
+      "id": "draft-2027-03-01-idea",
+      "title": "Borrador sin bloquear",
+      "date": "2027-03-01",
+      "time": null,
+      "city": "Las Palmas de Gran Canaria",
+      "venue": "Por definir",
+      "lat": null,
+      "lng": null,
+      "image": null,
+      "ticketUrl": null,
+      "ticketStatus": "tba",
+      "published": false,
+      "blocksCalendar": false,
+      "notes": "Borrador: no ocupa calendario hasta confirmar.",
+      "createdAt": "2026-10-01T16:00:00.000Z",
+      "updatedAt": "2026-10-01T16:00:00.000Z"
     }
   ],
   "gallery": [
     {
-      "id": "g1",
-      "src": "/media/gallery/stage-lights-01.jpg",
-      "alt": "Escenario iluminado — fotografía editorial de archivo (placeholder)",
-      "width": 1600,
-      "height": 1067,
+      "id": "ig-01",
+      "src": "/media/gallery/frantana/01.jpg",
+      "alt": "Frantana — fotografía oficial desde Instagram",
+      "width": 512,
+      "height": 640,
       "published": true,
       "sortOrder": 1,
-      "credit": "Matheus Bertelli / Pexels"
+      "credit": "@frantana / Instagram"
     },
     {
-      "id": "g2",
-      "src": "/media/gallery/festival-crowd-02.jpg",
-      "alt": "Público en festival — fotografía editorial de archivo (placeholder)",
-      "width": 1600,
-      "height": 1067,
+      "id": "ig-02",
+      "src": "/media/gallery/frantana/02.jpg",
+      "alt": "Frantana — fotografía oficial desde Instagram",
+      "width": 512,
+      "height": 640,
       "published": true,
       "sortOrder": 2,
-      "credit": "Pexels"
+      "credit": "@frantana / Instagram"
     },
     {
-      "id": "g3",
-      "src": "/media/gallery/band-silhouette-03.jpg",
-      "alt": "Silueta en escenario — fotografía editorial de archivo (placeholder)",
-      "width": 1600,
-      "height": 1067,
+      "id": "ig-03",
+      "src": "/media/gallery/frantana/03.jpg",
+      "alt": "Frantana — fotografía oficial desde Instagram",
+      "width": 512,
+      "height": 640,
       "published": true,
       "sortOrder": 3,
-      "credit": "Harimadhav S / Pexels"
+      "credit": "@frantana / Instagram"
     },
     {
-      "id": "g4",
-      "src": "/media/gallery/stage-silhouette-04.jpg",
-      "alt": "Silueta musical — fotografía editorial de archivo (placeholder)",
-      "width": 1600,
-      "height": 1067,
+      "id": "ig-04",
+      "src": "/media/gallery/frantana/04.jpg",
+      "alt": "Frantana en escena — captura desde Instagram",
+      "width": 360,
+      "height": 640,
       "published": true,
       "sortOrder": 4,
-      "credit": "Josh Sorenson / Pexels"
+      "credit": "@frantana / Instagram"
     },
     {
-      "id": "g5",
-      "src": "/media/gallery/bw-stage-05.jpg",
-      "alt": "Escenario en blanco y negro — fotografía editorial de archivo (placeholder)",
-      "width": 1600,
-      "height": 1067,
+      "id": "ig-05",
+      "src": "/media/gallery/frantana/05.jpg",
+      "alt": "Frantana — fotografía oficial desde Instagram",
+      "width": 608,
+      "height": 640,
       "published": true,
       "sortOrder": 5,
-      "credit": "Akshar Dave / Pexels"
+      "credit": "@frantana / Instagram"
     },
     {
-      "id": "g6",
-      "src": "/media/gallery/concert-smoke-06.jpg",
-      "alt": "Concierto con humo y luces — fotografía editorial de archivo (placeholder)",
-      "width": 1600,
-      "height": 1067,
+      "id": "ig-06",
+      "src": "/media/gallery/frantana/06.jpg",
+      "alt": "Frantana en concierto — captura desde Instagram",
+      "width": 360,
+      "height": 640,
       "published": true,
       "sortOrder": 6,
-      "credit": "Pexels"
+      "credit": "@frantana / Instagram"
     },
     {
-      "id": "g7",
-      "src": "/media/gallery/crowd-lights-07.jpg",
-      "alt": "Público bajo luces — fotografía editorial de archivo (placeholder)",
-      "width": 1600,
-      "height": 1067,
+      "id": "ig-07",
+      "src": "/media/gallery/frantana/07.jpg",
+      "alt": "Frantana — cartel / imagen oficial desde Instagram",
+      "width": 640,
+      "height": 640,
       "published": true,
       "sortOrder": 7,
-      "credit": "Pexels"
+      "credit": "@frantana / Instagram"
     },
     {
-      "id": "g8",
-      "src": "/media/gallery/guitar-stage-08.jpg",
-      "alt": "Guitarra en escenario — fotografía editorial de archivo (placeholder)",
-      "width": 1600,
-      "height": 1067,
+      "id": "ig-08",
+      "src": "/media/gallery/frantana/08.jpg",
+      "alt": "Frantana — captura desde Instagram",
+      "width": 360,
+      "height": 640,
       "published": true,
       "sortOrder": 8,
-      "credit": "Pexels"
+      "credit": "@frantana / Instagram"
     }
   ],
-  "products": [],
-  "orders": []
+  "products": [
+    {
+      "id": "prod-camiseta-noche",
+      "name": "Camiseta Noche Frantana",
+      "slug": "camiseta-noche-frantana",
+      "description": "Camiseta demo de merchandising. Diseño nocturno con tipografía FRANTANA. Producto de demostración — compra aún no activa.",
+      "category": "merch",
+      "images": [
+        "/media/gallery/frantana/01.jpg",
+        "/media/gallery/frantana/02.jpg"
+      ],
+      "published": true,
+      "featured": true,
+      "variants": [
+        {
+          "id": "var-cam-s",
+          "name": "S",
+          "sku": "FRT-TEE-S",
+          "priceCents": 2500,
+          "currency": "EUR",
+          "stock": 12,
+          "attributes": {
+            "size": "S"
+          }
+        },
+        {
+          "id": "var-cam-m",
+          "name": "M",
+          "sku": "FRT-TEE-M",
+          "priceCents": 2500,
+          "currency": "EUR",
+          "stock": 20,
+          "attributes": {
+            "size": "M"
+          }
+        },
+        {
+          "id": "var-cam-l",
+          "name": "L",
+          "sku": "FRT-TEE-L",
+          "priceCents": 2500,
+          "currency": "EUR",
+          "stock": 15,
+          "attributes": {
+            "size": "L"
+          }
+        }
+      ],
+      "createdAt": "2026-10-01T12:00:00.000Z",
+      "updatedAt": "2026-10-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-hoodie-isla",
+      "name": "Hoodie Isla",
+      "slug": "hoodie-isla",
+      "description": "Sudadera demo con identidad de isla. Pieza de catálogo para revisar la tienda visualmente.",
+      "category": "merch",
+      "images": [
+        "/media/gallery/frantana/03.jpg",
+        "/media/gallery/frantana/05.jpg"
+      ],
+      "published": true,
+      "featured": true,
+      "variants": [
+        {
+          "id": "var-hood-m",
+          "name": "M",
+          "sku": "FRT-HOOD-M",
+          "priceCents": 4900,
+          "currency": "EUR",
+          "stock": 8,
+          "attributes": {
+            "size": "M"
+          }
+        },
+        {
+          "id": "var-hood-l",
+          "name": "L",
+          "sku": "FRT-HOOD-L",
+          "priceCents": 4900,
+          "currency": "EUR",
+          "stock": 6,
+          "attributes": {
+            "size": "L"
+          }
+        }
+      ],
+      "createdAt": "2026-10-01T12:00:00.000Z",
+      "updatedAt": "2026-10-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-digital-como",
+      "name": "Como te quiero yo — Digital",
+      "slug": "como-te-quiero-yo-digital",
+      "description": "Descarga digital demo del tema. En producción enlazaría a entrega digital tras pago.",
+      "category": "digital",
+      "images": [
+        "/media/gallery/frantana/06.jpg"
+      ],
+      "published": true,
+      "featured": false,
+      "variants": [
+        {
+          "id": "var-dig-como",
+          "name": "MP3 / FLAC",
+          "sku": "FRT-DIG-CTQY",
+          "priceCents": 99,
+          "currency": "EUR",
+          "stock": 999,
+          "attributes": {
+            "format": "digital"
+          }
+        }
+      ],
+      "createdAt": "2026-10-01T12:00:00.000Z",
+      "updatedAt": "2026-10-01T12:00:00.000Z"
+    },
+    {
+      "id": "prod-poster-vivo",
+      "name": "Póster En Vivo",
+      "slug": "poster-en-vivo",
+      "description": "Póster editorial demo. Impresión de escena — catálogo de prueba sin checkout.",
+      "category": "merch",
+      "images": [
+        "/media/gallery/frantana/04.jpg",
+        "/media/gallery/frantana/07.jpg"
+      ],
+      "published": true,
+      "featured": false,
+      "variants": [
+        {
+          "id": "var-poster-a2",
+          "name": "A2",
+          "sku": "FRT-POST-A2",
+          "priceCents": 1800,
+          "currency": "EUR",
+          "stock": 30,
+          "attributes": {
+            "size": "A2"
+          }
+        }
+      ],
+      "createdAt": "2026-10-01T12:00:00.000Z",
+      "updatedAt": "2026-10-01T12:00:00.000Z"
+    }
+  ],
+  "orders": [],
+  "bookings": [
+    {
+      "id": "book-demo-seed",
+      "accessToken": "tok-demo-seed-frantana",
+      "name": "María Demo",
+      "email": "maria.demo@example.com",
+      "phone": "+34 600 000 000",
+      "eventType": "boda",
+      "preferredDate": "2026-11-22",
+      "preferredTime": "20:00",
+      "city": "Las Palmas de Gran Canaria",
+      "venue": "Salón Costa",
+      "message": "Boda íntima, formato acústico ~90 min.",
+      "messages": [
+        {
+          "id": "msg-demo-0",
+          "from": "client",
+          "body": "Boda íntima, formato acústico ~90 min.",
+          "createdAt": "2026-10-01T16:00:00.000Z"
+        }
+      ],
+      "status": "new",
+      "createdAt": "2026-10-01T16:00:00.000Z",
+      "updatedAt": "2026-10-01T16:00:00.000Z"
+    }
+  ]
 }

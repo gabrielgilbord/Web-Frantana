@@ -25,11 +25,11 @@ export function Reveal({
   return (
     <Comp
       className={clsx(className)}
-      initial={reduce ? false : { opacity: 0, y }}
-      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+      initial={reduce ? false : { opacity: 0, y, filter: "blur(6px)" }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.2, margin: "0px 0px -8% 0px" }}
       transition={{
-        duration: 0.85,
+        duration: 0.9,
         delay,
         ease: [0.16, 1, 0.3, 1],
       }}

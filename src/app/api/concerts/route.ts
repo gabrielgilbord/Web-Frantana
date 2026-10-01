@@ -21,6 +21,9 @@ const concertSchema = z.object({
   time: z.string().nullable().optional(),
   city: z.string().min(1).max(120),
   venue: z.string().min(1).max(160),
+  lat: z.number().nullable().optional(),
+  lng: z.number().nullable().optional(),
+  image: z.string().nullable().optional(),
   ticketUrl: z.string().url().nullable().optional().or(z.literal("")),
   ticketStatus: z.enum([
     "available",
@@ -31,6 +34,7 @@ const concertSchema = z.object({
     "tba",
   ]),
   published: z.boolean(),
+  blocksCalendar: z.boolean().optional(),
   notes: z.string().nullable().optional(),
 });
 
@@ -57,9 +61,13 @@ export async function POST(request: Request) {
       time: parsed.time ?? null,
       city: parsed.city,
       venue: parsed.venue,
+      lat: parsed.lat ?? null,
+      lng: parsed.lng ?? null,
+      image: parsed.image ?? null,
       ticketUrl: parsed.ticketUrl || null,
       ticketStatus: parsed.ticketStatus,
       published: parsed.published,
+      blocksCalendar: parsed.blocksCalendar ?? true,
       notes: parsed.notes ?? null,
     });
     return NextResponse.json({ concert });

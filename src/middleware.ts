@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { updateSession } from "@/lib/supabase/middleware";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Block any accidental public shop surface while disabled
@@ -14,9 +14,24 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // Keep Supabase Auth cookies fresh on admin / shop routes
+  if (
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/tienda") ||
+    pathname.startsWith("/api/auth")
+  ) {
+    const { response } = await updateSession(request);
+    return response;
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/tienda", "/tienda/:path*", "/admin/:path*"],
+  matcher: [
+    "/tienda",
+    "/tienda/:path*",
+    "/admin/:path*",
+    "/api/auth/:path*",
+  ],
 };

@@ -3,6 +3,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { MediaReveal } from "@/components/motion/MediaReveal";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata } from "@/lib/seo/metadata";
+import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Contacto",
@@ -28,10 +29,13 @@ export default async function ContactoPage() {
             <h1 className="display-title text-[clamp(3rem,12vw,7rem)]">
               Contacto
             </h1>
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-taupe-dark">
-              Gestión, prensa y colaboraciones. Los datos se editan desde el panel
-              administrativo.
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-fog">
+              Prensa, redes y colaboraciones. Si quieres contratar a Frantana
+              para un evento, ve a la página de reservas.
             </p>
+            <Link href="/reservas" className="contacto-hire-link">
+              ¿Nos vemos en tu evento? →
+            </Link>
           </Reveal>
           <Reveal className="md:col-span-6 md:col-start-7 space-y-10" delay={0.06}>
             <div>
@@ -72,7 +76,7 @@ export default async function ContactoPage() {
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {socials.map((s) => (
                     <li key={s.label}>
-                      <Button href={s.href!} variant="outline" size="sm">
+                      <Button href={s.href!} variant="ink-outline" size="sm">
                         {s.label}
                       </Button>
                     </li>
@@ -90,8 +94,8 @@ export default async function ContactoPage() {
 
       <section className="relative">
         <MediaReveal
-          src="/media/editorial/crowd-hands.jpg"
-          alt="Público en concierto — fotografía editorial de archivo (placeholder, no representa a Frantana)"
+          src="/media/gallery/frantana/02.jpg"
+          alt="Frantana — fotografía oficial"
           className="min-h-[45svh] w-full md:min-h-[58svh]"
           sizes="100vw"
           parallax

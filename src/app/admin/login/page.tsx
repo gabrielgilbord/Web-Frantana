@@ -34,50 +34,59 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md border border-line bg-ivory p-8">
-      <h1 className="font-display text-4xl">Acceso</h1>
-      <p className="mt-2 text-sm text-taupe-dark">
-        Panel privado de Frantana. Solo administradores autorizados.
-      </p>
-      <div className="mt-8 space-y-4">
-        <label className="block text-sm">
-          Email
-          <input
-            name="email"
-            type="email"
-            required
-            autoComplete="username"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full border border-line bg-transparent px-3 py-2"
-          />
-        </label>
-        <label className="block text-sm">
-          Contraseña
-          <input
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full border border-line bg-transparent px-3 py-2"
-          />
-        </label>
-        {error && (
-          <p role="alert" className="text-sm text-taupe-dark">
-            {error}
-          </p>
-        )}
-        <button
-          type="button"
-          disabled={loading || email.length < 3 || password.length < 8}
-          onClick={() => void login()}
-          className="inline-flex w-full items-center justify-center bg-ink px-6 py-3 text-[0.72rem] font-medium tracking-[0.18em] uppercase text-ivory disabled:opacity-50"
+    <div className="admin-login">
+      <div className="admin-login__card">
+        <p className="admin-login__brand">FRANTANA</p>
+        <h1 className="admin-login__title">Acceso</h1>
+        <p className="admin-login__lede">
+          Panel privado. Solo administradores autorizados.
+        </p>
+
+        <form
+          className="admin-login__form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void login();
+          }}
         >
-          {loading ? "Entrando…" : "Entrar"}
-        </button>
+          <label className="admin-field">
+            <span className="admin-field__label">Email</span>
+            <input
+              name="email"
+              type="email"
+              required
+              autoComplete="username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="admin-field__input admin-field__input--lg"
+            />
+          </label>
+          <label className="admin-field">
+            <span className="admin-field__label">Contraseña</span>
+            <input
+              name="password"
+              type="password"
+              required
+              minLength={8}
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="admin-field__input admin-field__input--lg"
+            />
+          </label>
+          {error && (
+            <p role="alert" className="admin-feedback admin-feedback--error">
+              {error}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={loading || email.length < 3 || password.length < 8}
+            className="admin-btn admin-btn--primary admin-btn--block"
+          >
+            {loading ? "Entrando…" : "Entrar"}
+          </button>
+        </form>
       </div>
     </div>
   );

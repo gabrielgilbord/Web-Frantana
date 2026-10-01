@@ -3,6 +3,8 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { Reveal } from "@/components/motion/Reveal";
 import { MediaReveal } from "@/components/motion/MediaReveal";
 import { Button } from "@/components/ui/Button";
+import { SpotifyEmbed } from "@/components/ui/SpotifyEmbed";
+import { FaSpotify } from "react-icons/fa6";
 
 export const metadata = buildMetadata({
   title: "Música",
@@ -12,9 +14,13 @@ export const metadata = buildMetadata({
 export default async function MusicaPage() {
   const content = await getContent();
   const platforms = [
-    { label: "Spotify", href: content.social.spotify ?? content.spotifyArtistUrl },
-    { label: "Apple Music", href: content.social.appleMusic },
-    { label: "YouTube", href: content.social.youtube },
+    {
+      label: "Spotify",
+      href: content.social.spotify ?? content.spotifyArtistUrl,
+      icon: true,
+    },
+    { label: "Apple Music", href: content.social.appleMusic, icon: false },
+    { label: "YouTube", href: content.social.youtube, icon: false },
   ].filter((p) => Boolean(p.href));
 
   return (
@@ -40,8 +46,8 @@ export default async function MusicaPage() {
 
       <section className="relative">
         <MediaReveal
-          src="/media/editorial/vinyl-close.jpg"
-          alt="Detalle de vinilo — fotografía editorial de archivo (placeholder, no representa a Frantana)"
+          src="/media/gallery/frantana/06.jpg"
+          alt="Frantana en concierto"
           className="min-h-[48svh] w-full md:min-h-[62svh]"
           sizes="100vw"
           parallax
@@ -54,19 +60,13 @@ export default async function MusicaPage() {
         <div className="container-editorial grid gap-10 md:grid-cols-12">
           <Reveal className="md:col-span-7">
             {content.spotifyEmbedUrl ? (
-              <div className="overflow-hidden bg-ivory">
-                <iframe
-                  title="Reproductor de Spotify de Frantana"
-                  src={content.spotifyEmbedUrl}
-                  width="100%"
-                  height="352"
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                  loading="lazy"
-                  className="w-full border-0"
-                />
-              </div>
+              <SpotifyEmbed
+                embedUrl={content.spotifyEmbedUrl}
+                className="spotify-embed"
+                height={352}
+              />
             ) : (
-              <div className="bg-ivory px-6 py-14 md:px-10">
+              <div className="bg-stage px-6 py-14 ring-1 ring-line md:px-10">
                 <p className="font-display text-[clamp(1.75rem,4vw,2.75rem)] leading-tight">
                   Escuchar
                 </p>
@@ -83,10 +83,20 @@ export default async function MusicaPage() {
             <h2 className="font-display text-[1.75rem] leading-tight md:text-[2rem]">
               Plataformas
             </h2>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-fog">
+              Escúchalo donde quieras. Enlaces oficiales al perfil.
+            </p>
             <div className="mt-6 flex flex-col items-start gap-3">
               {platforms.length ? (
                 platforms.map((p) => (
-                  <Button key={p.label} href={p.href!} variant="outline" size="sm">
+                  <Button
+                    key={p.label}
+                    href={p.href!}
+                    variant="ink-outline"
+                    size="sm"
+                    className="min-w-[11rem] justify-start"
+                  >
+                    {p.icon ? <FaSpotify aria-hidden size={16} /> : null}
                     {p.label}
                   </Button>
                 ))
@@ -103,13 +113,13 @@ export default async function MusicaPage() {
       <section className="section-pad surface-ivory">
         <div className="container-editorial grid gap-5 md:grid-cols-12">
           <MediaReveal
-            src="/media/editorial/studio-headphones.jpg"
-            alt="Auriculares de estudio — fotografía editorial de archivo (placeholder)"
+            src="/media/gallery/frantana/02.jpg"
+            alt="Frantana — fotografía oficial"
             className="aspect-[5/4] md:col-span-7"
           />
           <MediaReveal
-            src="/media/editorial/piano-keys.jpg"
-            alt="Teclas de piano — fotografía editorial de archivo (placeholder)"
+            src="/media/gallery/frantana/05.jpg"
+            alt="Frantana — fotografía oficial"
             className="aspect-[4/5] md:col-span-4 md:col-start-9 md:mt-20"
           />
         </div>

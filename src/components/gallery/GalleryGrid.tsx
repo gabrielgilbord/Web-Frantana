@@ -62,7 +62,7 @@ export function GalleryGrid({ images }: { images: GalleryImage[] }) {
             <Reveal key={image.id} className={clsx("col-span-1", span)} delay={(index % 4) * 0.06}>
               <button
                 type="button"
-                className="group relative h-full w-full overflow-hidden bg-beige text-left"
+                className="group relative h-full w-full overflow-hidden bg-stage text-left"
                 onClick={() => setActive(index)}
                 aria-label={`Ampliar: ${image.alt}`}
               >

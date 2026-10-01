@@ -1,46 +1,26 @@
-export function isSupabaseConfigured() {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+import { createBrowserClient } from "@supabase/ssr";
+
+function getPublishableKey() {
+  return (
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    ""
   );
 }
 
-/**
- * Supabase clients are created lazily when env vars are present.
- * Local JSON store remains the default until the project is connected.
- */
-export async function createSupabaseBrowserClient() {
-  if (!isSupabaseConfigured()) return null;
-  const { createBrowserClient } = await import("@supabase/ssr");
+export function isSupabaseConfigured() {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && getPublishableKey());
+}
+
+export function createClient() {
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    getPublishableKey()
   );
 }
 
-export async function createSupabaseServerClient() {
+/** @deprecated Prefer createClient() */
+export async function createSupabaseBrowserClient() {
   if (!isSupabaseConfigured()) return null;
-  const { createServerClient } = await import("@supabase/ssr");
-  const { cookies } = await import("next/headers");
-  const cookieStore = await cookies();
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            );
-          } catch {
-            /* called from Server Component */
-          }
-        },
-      },
-    }
-  );
+  return createClient();
 }

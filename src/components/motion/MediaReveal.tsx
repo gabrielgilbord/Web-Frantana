@@ -34,7 +34,7 @@ export function MediaReveal({
     <motion.div
       ref={ref}
       className={clsx(
-        "overflow-hidden bg-beige",
+        "overflow-hidden bg-stage",
         !className?.includes("absolute") && "relative",
         className
       )}

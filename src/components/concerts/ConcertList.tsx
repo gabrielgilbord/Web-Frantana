@@ -29,33 +29,42 @@ export function ConcertRow({ concert }: { concert: Concert }) {
       concert.ticketStatus === "free");
 
   return (
-    <article className="grid gap-3 border-t border-line py-6 md:grid-cols-[6.5rem_1fr_auto] md:items-center md:gap-6">
-      <time
-        dateTime={concert.date}
-        className="text-[0.8rem] tracking-wide text-taupe-dark"
+    <article className="concert-row border-t border-line px-2 py-7 md:px-3">
+      <Link
+        href={`/conciertos/${concert.id}`}
+        className="concert-row__main no-underline text-inherit"
       >
-        {formatDate(concert.date)}
-      </time>
-      <div>
-        <h3 className="font-display text-[1.65rem] leading-tight md:text-3xl">
-          {concert.title}
-        </h3>
-        <p className="mt-1 text-sm text-taupe-dark">
-          {concert.city} · {concert.venue}
-          {concert.time ? ` · ${concert.time}` : ""}
-        </p>
-      </div>
-      <div>
-        {canBuy ? (
+        <time
+          dateTime={concert.date}
+          className="font-variant-numeric tabular-nums text-[0.8rem] tracking-wide text-fog"
+        >
+          {formatDate(concert.date)}
+        </time>
+        <div>
+          <h3 className="font-display text-[1.75rem] leading-tight md:text-[2rem]">
+            {concert.title}
+          </h3>
+          <p className="mt-1.5 text-sm text-fog">
+            {concert.city} · {concert.venue}
+            {concert.time ? ` · ${concert.time}` : ""}
+          </p>
+        </div>
+        <span className="text-[0.65rem] uppercase tracking-[0.14em] text-fog">
+          Ver fecha →
+        </span>
+      </Link>
+      {canBuy && (
+        <div className="mt-3 md:pl-[7rem]">
           <Button href={concert.ticketUrl!} variant="outline" size="sm">
             {STATUS_LABEL[concert.ticketStatus]}
           </Button>
-        ) : (
-          <span className="text-[0.65rem] uppercase tracking-[0.14em] text-taupe">
-            {STATUS_LABEL[concert.ticketStatus]}
-          </span>
-        )}
-      </div>
+        </div>
+      )}
+      {!canBuy && (
+        <p className="mt-2 text-[0.65rem] uppercase tracking-[0.14em] text-taupe md:pl-[7rem]">
+          {STATUS_LABEL[concert.ticketStatus]}
+        </p>
+      )}
     </article>
   );
 }
@@ -83,7 +92,7 @@ export function ConcertPreview({ concerts }: { concerts: Concert[] }) {
   return (
     <section className="section-pad surface-ivory">
       <div className="container-editorial">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <Reveal>
             <h2 className="display-title text-[clamp(2.75rem,8vw,5rem)]">
               Próximos conciertos
@@ -91,14 +100,14 @@ export function ConcertPreview({ concerts }: { concerts: Concert[] }) {
           </Reveal>
           <Link
             href="/conciertos"
-            className="text-[0.68rem] tracking-[0.14em] uppercase no-underline hover:opacity-70"
+            className="text-[0.68rem] tracking-[0.14em] uppercase no-underline transition-colors duration-300 hover:text-ember"
           >
             Agenda completa
           </Link>
         </div>
         <ConcertList
           concerts={concerts.slice(0, 4)}
-          emptyMessage="[PROVISIONAL] Todavía no hay conciertos publicados. Se gestionarán desde el panel."
+          emptyMessage="Todavía no hay conciertos publicados. La agenda se actualiza desde el panel — sígueme en Instagram para fechas."
         />
       </div>
     </section>
