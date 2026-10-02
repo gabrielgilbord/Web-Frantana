@@ -10,6 +10,7 @@ const NAV = [
   { href: "/sobre", label: "Sobre mí" },
   { href: "/musica", label: "Música" },
   { href: "/conciertos", label: "Conciertos" },
+  { href: "/reservas", label: "Reservas" },
   { href: "/tienda", label: "Tienda" },
   { href: "/galeria", label: "Galería" },
   { href: "/contacto", label: "Contacto" },
@@ -86,9 +87,16 @@ export function SiteHeader() {
   const isAdmin = pathname.startsWith("/admin");
   const isHome = pathname === "/";
   const scrollLockY = useRef(0);
+  /** When navigating from the menu, unlock without restoring the previous Y. */
+  const navigateFromMenu = useRef(false);
 
   useEffect(() => {
     setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    // Always land at the top of the new page (mobile menu + desktop links).
+    window.scrollTo(0, 0);
   }, [pathname]);
 
   useEffect(() => {
@@ -119,6 +127,8 @@ export function SiteHeader() {
 
     return () => {
       const y = scrollLockY.current;
+      const goTop = navigateFromMenu.current;
+      navigateFromMenu.current = false;
       delete body.dataset.scrollLocked;
       body.style.position = "";
       body.style.top = "";
@@ -126,7 +136,7 @@ export function SiteHeader() {
       body.style.right = "";
       body.style.width = "";
       body.style.paddingRight = "";
-      window.scrollTo(0, y);
+      window.scrollTo(0, goTop ? 0 : y);
     };
   }, [menuOpen]);
 
@@ -138,6 +148,11 @@ export function SiteHeader() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen]);
+
+  function closeMenuForNav() {
+    navigateFromMenu.current = true;
+    setMenuOpen(false);
+  }
 
   if (isAdmin) return null;
 
@@ -159,7 +174,10 @@ export function SiteHeader() {
           )}
           aria-label="Frantana — inicio"
           tabIndex={isHome && !menuOpen ? -1 : 0}
-          onClick={() => setMenuOpen(false)}
+          onClick={() => {
+            navigateFromMenu.current = true;
+            setMenuOpen(false);
+          }}
         >
           FRANTANA
         </Link>
@@ -172,12 +190,12 @@ export function SiteHeader() {
                 href={item.href}
                 className="site-header__link"
                 aria-current={pathname === item.href ? "page" : undefined}
+                onClick={closeMenuForNav}
               >
                 {item.label}
               </Link>
             ))}
           </nav>
-
           {SHOP_PUBLIC && (
             <BagButton className={clsx(menuOpen && "site-header__bag--hidden-when-menu")} />
           )}
@@ -233,7 +251,7 @@ export function SiteHeader() {
               style={{ "--nav-i": index } as CSSProperties}
               tabIndex={menuOpen ? 0 : -1}
               aria-current={pathname === item.href ? "page" : undefined}
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenuForNav}
             >
               {item.label}
             </Link>
