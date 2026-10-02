@@ -75,8 +75,8 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
           y={48}
         >
           <MediaReveal
-            src={gallery[0]?.src ?? "/media/brand/profile.jpg"}
-            alt={gallery[0]?.alt ?? "Frantana"}
+            src={gallery[4]?.src ?? gallery[0]?.src ?? "/media/brand/profile.jpg"}
+            alt={gallery[4]?.alt ?? gallery[0]?.alt ?? "Frantana"}
             className="absolute inset-0 h-full w-full"
             sizes="(max-width: 900px) 100vw, 42vw"
             parallax
@@ -96,8 +96,9 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
             En escena
           </h2>
           <p className="chapter__body">
-            Años de escenario, agrupaciones y público real. La escena es el
-            centro: show, voz y conexión.
+            Años de escenario y público real. Ha recorrido varios grupos y
+            colabora con varias agrupaciones. La escena es el centro: show, voz
+            y conexión.
           </p>
         </Reveal>
         {presencia.length > 0 && (

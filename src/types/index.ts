@@ -164,6 +164,16 @@ export type BookingRequest = {
   updatedAt: string;
 };
 
+export type ContactInquiry = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  subject: "contratacion" | "prensa" | "otro";
+  message: string;
+  createdAt: string;
+};
+
 export type SiteData = {
   content: SiteContent;
   concerts: Concert[];
@@ -171,4 +181,5 @@ export type SiteData = {
   products: Product[];
   orders: Order[];
   bookings?: BookingRequest[];
+  contactInquiries?: ContactInquiry[];
 };

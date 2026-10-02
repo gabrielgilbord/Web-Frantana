@@ -3,6 +3,7 @@ import path from "path";
 import type {
   BookingRequest,
   Concert,
+  ContactInquiry,
   GalleryImage,
   OccupancyDay,
   Order,
@@ -497,4 +498,19 @@ export async function addBookingMessage(options: {
     if (saved) return normalizeBooking(saved);
   }
   return next;
+}
+
+export async function createContactInquiry(
+  input: Omit<ContactInquiry, "id" | "createdAt">
+): Promise<ContactInquiry> {
+  const data = await readRaw();
+  if (!data.contactInquiries) data.contactInquiries = [];
+  const inquiry: ContactInquiry = {
+    ...input,
+    id: `contact-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
+    createdAt: new Date().toISOString(),
+  };
+  data.contactInquiries.unshift(inquiry);
+  await writeRaw(data);
+  return inquiry;
 }

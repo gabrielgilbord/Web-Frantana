@@ -6,6 +6,15 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MOTION } from "@/lib/motion/tokens";
 
+/**
+ * Hero media — sustituye estos paths cuando tengas vídeo/foto de show propios.
+ * Deja el poster y el mp4 en /public/media/hero/
+ */
+const HERO_POSTER = "/media/hero/hero-poster.jpg";
+const HERO_POSTER_MOBILE = "/media/hero/hero-poster-mobile.jpg";
+const HERO_VIDEO_720 = "/media/hero/hero-cinematic-720.mp4";
+const HERO_VIDEO = "/media/hero/hero-cinematic.mp4";
+
 gsap.registerPlugin(ScrollTrigger);
 
 function subscribeReducedMotion(cb: () => void) {
@@ -518,10 +527,10 @@ export function HeroExperience() {
               <picture>
                 <source
                   media="(max-width: 768px)"
-                  srcSet="/media/hero/hero-poster-mobile.jpg"
+                  srcSet={HERO_POSTER_MOBILE}
                 />
                 <img
-                  src="/media/hero/hero-poster.jpg"
+                  src={HERO_POSTER}
                   alt=""
                   className="media-fill"
                   aria-hidden
@@ -536,15 +545,15 @@ export function HeroExperience() {
                 loop
                 playsInline
                 preload="metadata"
-                poster="/media/hero/hero-poster.jpg"
+                poster={HERO_POSTER}
                 aria-hidden
               >
                 <source
-                  src="/media/hero/hero-cinematic-720.mp4"
+                  src={HERO_VIDEO_720}
                   type="video/mp4"
                   media="(max-width: 768px)"
                 />
-                <source src="/media/hero/hero-cinematic.mp4" type="video/mp4" />
+                <source src={HERO_VIDEO} type="video/mp4" />
               </video>
             )}
           </div>

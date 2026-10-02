@@ -36,7 +36,7 @@ export default async function SobrePage() {
 
       <section className="relative">
         <MediaReveal
-          src="/media/gallery/frantana/03.jpg"
+          src="/media/gallery/frantana/06.jpg"
           alt="Frantana — fotografía oficial"
           className="min-h-[55svh] w-full md:min-h-[75svh]"
           sizes="100vw"

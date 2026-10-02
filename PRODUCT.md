@@ -45,5 +45,5 @@ Presencia oficial del artista — no un blog genérico ni un marketplace. El her
 
 ## Evidence sources (2026-10-01)
 
-- Instagram bio @frantana (cantante/compositor canario; email; Armonía Show; Cuenta Atrás)
+- Instagram bio @frantana (cantante/compositor canario; email)
 - Soundcharts artist overview (trayectoria canaria / península; temas públicos)

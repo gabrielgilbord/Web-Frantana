@@ -1,13 +1,14 @@
 import { getContent } from "@/lib/content/store";
 import { Reveal } from "@/components/motion/Reveal";
-import { MediaReveal } from "@/components/motion/MediaReveal";
+import { ContactForm } from "@/components/contact/ContactForm";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata } from "@/lib/seo/metadata";
 import Link from "next/link";
 
 export const metadata = buildMetadata({
   title: "Contacto",
-  description: "Contacto y redes de Frantana.",
+  description:
+    "Contacto y contrataciones de Frantana. Teléfono, correo y mensaje directo.",
 });
 
 export default async function ContactoPage() {
@@ -21,59 +22,81 @@ export default async function ContactoPage() {
     { label: "Apple Music", href: content.social.appleMusic },
   ].filter((s) => Boolean(s.href));
 
-  return (
-    <div className="pt-[var(--header-h)]">
-      <section className="section-pad surface-ivory">
-        <div className="container-editorial grid gap-12 md:grid-cols-12">
-          <Reveal className="md:col-span-5">
-            <h1 className="display-title text-[clamp(3rem,12vw,7rem)]">
-              Contacto
-            </h1>
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-fog">
-              Prensa, redes y colaboraciones. Si quieres contratar a Frantana
-              para un evento, ve a la página de reservas.
-            </p>
-            <Link href="/reservas" className="contacto-hire-link">
-              ¿Nos vemos en tu evento? →
-            </Link>
-          </Reveal>
-          <Reveal className="md:col-span-6 md:col-start-7 space-y-10" delay={0.06}>
-            <div>
-              <h2 className="font-display text-2xl">Correo</h2>
-              {content.contactEmail ? (
-                <a
-                  href={`mailto:${content.contactEmail}`}
-                  className="mt-2 inline-block text-lg no-underline hover:opacity-70"
-                >
-                  {content.contactEmail}
-                </a>
-              ) : (
-                <p className="provisional mt-2">
-                  [PROVISIONAL] Correo pendiente de configurar en el panel.
-                </p>
-              )}
-            </div>
+  const phoneTel = content.contactPhone
+    ? content.contactPhone.replace(/[^\d+]/g, "")
+    : null;
 
-            <div>
-              <h2 className="font-display text-2xl">Teléfono</h2>
-              {content.contactPhone ? (
+  return (
+    <div className="pt-[var(--header-h)] contact-page">
+      <section className="section-pad surface-ivory">
+        <div className="container-editorial contact-page__intro">
+          <Reveal>
+            <p className="contact-page__eyebrow">Contacto</p>
+            <h1 className="contact-page__title">Hablemos</h1>
+            <p className="contact-page__lede">
+              Para contratación directa, escríbenos o deja un mensaje. Si ya
+              tienes fecha en mente, mira también el calendario de reservas.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="contact-page__board section-pad">
+        <div className="container-editorial contact-page__board-grid">
+          <Reveal className="contact-page__direct">
+            <p className="contact-page__kicker">Oficina del artista</p>
+            <p className="contact-page__direct-line">
+              Para contratación directa, comunícate con:
+            </p>
+
+            {content.contactPhone ? (
+              <div className="contact-page__person">
+                <p className="contact-page__person-role">Teléfono</p>
                 <a
-                  href={`tel:${content.contactPhone.replace(/\s+/g, "")}`}
-                  className="mt-2 inline-block text-lg no-underline hover:opacity-70"
+                  className="contact-page__phone"
+                  href={`tel:${phoneTel}`}
                 >
                   {content.contactPhone}
                 </a>
-              ) : (
-                <p className="provisional mt-2">
-                  [PROVISIONAL] Teléfono pendiente de configurar en el panel.
-                </p>
-              )}
+              </div>
+            ) : null}
+
+            {content.contactEmail ? (
+              <div className="contact-page__person">
+                <p className="contact-page__person-role">Correo</p>
+                <a
+                  className="contact-page__email"
+                  href={`mailto:${content.contactEmail}`}
+                >
+                  {content.contactEmail}
+                </a>
+              </div>
+            ) : (
+              <p className="provisional">
+                [PROVISIONAL] Correo pendiente en el panel admin.
+              </p>
+            )}
+
+            {!content.contactPhone ? (
+              <p className="contact-page__hint">
+                El teléfono se puede añadir en Admin → Contenido.
+              </p>
+            ) : null}
+
+            <div className="contact-page__cta-block">
+              <p className="contact-page__cta-kicker">Reservas con calendario</p>
+              <p className="contact-page__cta-text">
+                Mira días libres u ocupados y solicita una fecha desde la web.
+              </p>
+              <Link href="/reservas" className="contact-page__cta">
+                Ir a reservas →
+              </Link>
             </div>
 
-            <div>
-              <h2 className="font-display text-2xl">Redes</h2>
-              {socials.length ? (
-                <ul className="mt-3 flex flex-wrap gap-2">
+            {socials.length ? (
+              <div className="contact-page__socials">
+                <p className="contact-page__person-role">Redes</p>
+                <ul>
                   {socials.map((s) => (
                     <li key={s.label}>
                       <Button href={s.href!} variant="ink-outline" size="sm">
@@ -82,24 +105,14 @@ export default async function ContactoPage() {
                     </li>
                   ))}
                 </ul>
-              ) : (
-                <p className="provisional mt-2">
-                  [PROVISIONAL] Redes sociales pendientes de configurar.
-                </p>
-              )}
-            </div>
+              </div>
+            ) : null}
+          </Reveal>
+
+          <Reveal className="contact-page__form-wrap" delay={0.06}>
+            <ContactForm />
           </Reveal>
         </div>
-      </section>
-
-      <section className="relative">
-        <MediaReveal
-          src="/media/gallery/frantana/02.jpg"
-          alt="Frantana — fotografía oficial"
-          className="min-h-[45svh] w-full md:min-h-[58svh]"
-          sizes="100vw"
-          parallax
-        />
       </section>
     </div>
   );
