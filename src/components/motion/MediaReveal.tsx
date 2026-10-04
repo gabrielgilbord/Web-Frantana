@@ -12,6 +12,8 @@ type Props = {
   priority?: boolean;
   sizes?: string;
   parallax?: boolean;
+  /** CSS object-position — use "top" / "50% 10%" for full-body portraits */
+  objectPosition?: string;
 };
 
 export function MediaReveal({
@@ -21,6 +23,7 @@ export function MediaReveal({
   priority,
   sizes = "(max-width: 768px) 100vw, 70vw",
   parallax = false,
+  objectPosition = "50% 12%",
 }: Props) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
@@ -51,6 +54,7 @@ export function MediaReveal({
           sizes={sizes}
           priority={priority}
           className="object-cover"
+          style={{ objectPosition }}
         />
       </motion.div>
     </motion.div>

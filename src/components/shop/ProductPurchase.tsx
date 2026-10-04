@@ -21,7 +21,7 @@ export function ProductPurchase({ product }: { product: Product }) {
   const { addLine } = useCart();
   const images = product.images.length
     ? product.images
-    : ["/media/gallery/frantana/01.jpg"];
+    : ["/media/gallery/frantana/shot-01.jpg"];
   const [activeImage, setActiveImage] = useState(0);
   const [variantId, setVariantId] = useState<string>(
     product.variants[0]?.id ?? ""
@@ -69,6 +69,7 @@ export function ProductPurchase({ product }: { product: Product }) {
             fill
             sizes="(max-width: 900px) 100vw, 50vw"
             className="object-cover"
+            style={{ objectPosition: "50% 12%" }}
             priority
           />
         </div>
@@ -87,7 +88,14 @@ export function ProductPurchase({ product }: { product: Product }) {
                 }
                 onClick={() => setActiveImage(i)}
               >
-                <Image src={src} alt="" fill sizes="96px" className="object-cover" />
+                <Image
+                  src={src}
+                  alt=""
+                  fill
+                  sizes="96px"
+                  className="object-cover"
+                  style={{ objectPosition: "50% 12%" }}
+                />
               </button>
             ))}
           </div>

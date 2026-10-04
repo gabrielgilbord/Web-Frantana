@@ -180,7 +180,7 @@ export function MusicaChapter({ content }: Props) {
     <section className="chapter chapter--musica" aria-labelledby="ch-03">
       <div className="musica-scene__atmosphere" aria-hidden>
         <Image
-          src="/media/editorial/music-atmosphere.jpg"
+          src="/media/editorial/music-atmosphere-v2.jpg"
           alt=""
           fill
           sizes="100vw"

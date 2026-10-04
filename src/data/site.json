@@ -33,7 +33,7 @@
       "venue": "Sala demo (fixture)",
       "lat": 28.4636,
       "lng": -16.2518,
-      "image": "/media/gallery/frantana/04.jpg",
+      "image": "/media/gallery/frantana/shot-04.jpg",
       "ticketUrl": null,
       "ticketStatus": "tba",
       "published": true,
@@ -51,7 +51,7 @@
       "venue": "Teatro Pérez Galdós",
       "lat": 28.10055,
       "lng": -15.41555,
-      "image": "/media/gallery/frantana/06.jpg",
+      "image": "/media/gallery/frantana/shot-01.jpg",
       "ticketUrl": null,
       "ticketStatus": "free",
       "published": true,
@@ -69,7 +69,7 @@
       "venue": "Espacio demo (fixture)",
       "lat": 27.9985,
       "lng": -15.4187,
-      "image": "/media/gallery/frantana/02.jpg",
+      "image": "/media/gallery/frantana/shot-02.jpg",
       "ticketUrl": null,
       "ticketStatus": "tba",
       "published": true,
@@ -87,7 +87,7 @@
       "venue": "Auditorio demo (fixture)",
       "lat": 28.1335,
       "lng": -15.4382,
-      "image": "/media/gallery/frantana/07.jpg",
+      "image": "/media/gallery/frantana/shot-03.jpg",
       "ticketUrl": null,
       "ticketStatus": "tba",
       "published": true,
@@ -105,7 +105,7 @@
       "venue": "Plaza demo (fixture)",
       "lat": 28.4134,
       "lng": -16.5486,
-      "image": "/media/gallery/frantana/08.jpg",
+      "image": "/media/gallery/frantana/shot-05.jpg",
       "ticketUrl": null,
       "ticketStatus": "tba",
       "published": true,
@@ -190,83 +190,53 @@
   "gallery": [
     {
       "id": "ig-01",
-      "src": "/media/gallery/frantana/01.jpg",
-      "alt": "Frantana — fotografía oficial desde Instagram",
-      "width": 512,
-      "height": 640,
+      "src": "/media/gallery/frantana/shot-01.jpg",
+      "alt": "Frantana — fotografía oficial",
+      "width": 1800,
+      "height": 2705,
       "published": true,
       "sortOrder": 1,
-      "credit": "@frantana / Instagram"
+      "credit": "@frantana"
     },
     {
       "id": "ig-02",
-      "src": "/media/gallery/frantana/02.jpg",
-      "alt": "Frantana — fotografía oficial desde Instagram",
-      "width": 512,
-      "height": 640,
+      "src": "/media/gallery/frantana/shot-02.jpg",
+      "alt": "Frantana — fotografía oficial",
+      "width": 1800,
+      "height": 2705,
       "published": true,
       "sortOrder": 2,
-      "credit": "@frantana / Instagram"
+      "credit": "@frantana"
     },
     {
       "id": "ig-03",
-      "src": "/media/gallery/frantana/03.jpg",
-      "alt": "Frantana — fotografía oficial desde Instagram",
-      "width": 512,
-      "height": 640,
+      "src": "/media/gallery/frantana/shot-03.jpg",
+      "alt": "Frantana — fotografía oficial",
+      "width": 1800,
+      "height": 2705,
       "published": true,
       "sortOrder": 3,
-      "credit": "@frantana / Instagram"
+      "credit": "@frantana"
     },
     {
       "id": "ig-04",
-      "src": "/media/gallery/frantana/04.jpg",
-      "alt": "Frantana en escena — captura desde Instagram",
-      "width": 360,
-      "height": 640,
+      "src": "/media/gallery/frantana/shot-04.jpg",
+      "alt": "Frantana — fotografía oficial",
+      "width": 1800,
+      "height": 1197,
       "published": true,
       "sortOrder": 4,
-      "credit": "@frantana / Instagram"
+      "credit": "@frantana"
     },
     {
       "id": "ig-05",
-      "src": "/media/gallery/frantana/05.jpg",
-      "alt": "Frantana — fotografía oficial desde Instagram",
-      "width": 608,
-      "height": 640,
+      "src": "/media/gallery/frantana/shot-05.jpg",
+      "alt": "Frantana — fotografía oficial",
+      "width": 1800,
+      "height": 2705,
       "published": true,
       "sortOrder": 5,
-      "credit": "@frantana / Instagram"
-    },
-    {
-      "id": "ig-06",
-      "src": "/media/gallery/frantana/06.jpg",
-      "alt": "Frantana en concierto — captura desde Instagram",
-      "width": 360,
-      "height": 640,
-      "published": true,
-      "sortOrder": 6,
-      "credit": "@frantana / Instagram"
-    },
-    {
-      "id": "ig-07",
-      "src": "/media/gallery/frantana/07.jpg",
-      "alt": "Frantana — cartel / imagen oficial desde Instagram",
-      "width": 640,
-      "height": 640,
-      "published": true,
-      "sortOrder": 7,
-      "credit": "@frantana / Instagram"
-    },
-    {
-      "id": "ig-08",
-      "src": "/media/gallery/frantana/08.jpg",
-      "alt": "Frantana — captura desde Instagram",
-      "width": 360,
-      "height": 640,
-      "published": true,
-      "sortOrder": 8,
-      "credit": "@frantana / Instagram"
+      "credit": "@frantana"
     }
   ],
   "products": [
@@ -277,8 +247,8 @@
       "description": "Camiseta demo de merchandising. Diseño nocturno con tipografía FRANTANA. Producto de demostración — compra aún no activa.",
       "category": "merch",
       "images": [
-        "/media/gallery/frantana/01.jpg",
-        "/media/gallery/frantana/02.jpg"
+        "/media/gallery/frantana/shot-01.jpg",
+        "/media/gallery/frantana/shot-02.jpg"
       ],
       "published": true,
       "featured": true,
@@ -327,8 +297,8 @@
       "description": "Sudadera demo con identidad de isla. Pieza de catálogo para revisar la tienda visualmente.",
       "category": "merch",
       "images": [
-        "/media/gallery/frantana/03.jpg",
-        "/media/gallery/frantana/05.jpg"
+        "/media/gallery/frantana/shot-03.jpg",
+        "/media/gallery/frantana/shot-05.jpg"
       ],
       "published": true,
       "featured": true,
@@ -366,7 +336,7 @@
       "description": "Descarga digital demo del tema. En producción enlazaría a entrega digital tras pago.",
       "category": "digital",
       "images": [
-        "/media/gallery/frantana/06.jpg"
+        "/media/gallery/frantana/shot-01.jpg"
       ],
       "published": true,
       "featured": false,
@@ -393,8 +363,8 @@
       "description": "Póster editorial demo. Impresión de escena — catálogo de prueba sin checkout.",
       "category": "merch",
       "images": [
-        "/media/gallery/frantana/04.jpg",
-        "/media/gallery/frantana/07.jpg"
+        "/media/gallery/frantana/shot-04.jpg",
+        "/media/gallery/frantana/shot-02.jpg"
       ],
       "published": true,
       "featured": false,

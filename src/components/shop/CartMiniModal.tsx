@@ -104,6 +104,7 @@ export function CartMiniModal() {
                         fill
                         sizes="72px"
                         className="object-cover"
+                        style={{ objectPosition: "50% 12%" }}
                       />
                     ) : null}
                   </div>

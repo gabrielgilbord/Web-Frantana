@@ -271,31 +271,35 @@ on conflict (id) do update set
 -- ——— gallery ———
 insert into public.gallery_images (id, src, alt, width, height, published, sort_order, credit)
 values
-  ('ig-01', '/media/gallery/frantana/01.jpg', 'Frantana', 512, 640, true, 1, '@frantana'),
-  ('ig-02', '/media/gallery/frantana/02.jpg', 'Frantana', 512, 640, true, 2, '@frantana'),
-  ('ig-03', '/media/gallery/frantana/03.jpg', 'Frantana', 512, 640, true, 3, '@frantana'),
-  ('ig-04', '/media/gallery/frantana/04.jpg', 'Frantana en escena', 360, 640, true, 4, '@frantana'),
-  ('ig-05', '/media/gallery/frantana/05.jpg', 'Frantana', 608, 640, true, 5, '@frantana'),
-  ('ig-06', '/media/gallery/frantana/06.jpg', 'Frantana en concierto', 360, 640, true, 6, '@frantana'),
-  ('ig-07', '/media/gallery/frantana/07.jpg', 'Frantana', 640, 640, true, 7, '@frantana'),
-  ('ig-08', '/media/gallery/frantana/08.jpg', 'Frantana', 360, 640, true, 8, '@frantana')
-on conflict (id) do update set published = excluded.published, sort_order = excluded.sort_order;
+  ('ig-01', '/media/gallery/frantana/shot-01.jpg', 'Frantana', 1800, 2705, true, 1, '@frantana'),
+  ('ig-02', '/media/gallery/frantana/shot-02.jpg', 'Frantana', 1800, 2705, true, 2, '@frantana'),
+  ('ig-03', '/media/gallery/frantana/shot-03.jpg', 'Frantana', 1800, 2705, true, 3, '@frantana'),
+  ('ig-04', '/media/gallery/frantana/shot-04.jpg', 'Frantana', 1800, 1197, true, 4, '@frantana'),
+  ('ig-05', '/media/gallery/frantana/shot-05.jpg', 'Frantana', 1800, 2705, true, 5, '@frantana')
+on conflict (id) do update set
+  src = excluded.src,
+  alt = excluded.alt,
+  width = excluded.width,
+  height = excluded.height,
+  published = excluded.published,
+  sort_order = excluded.sort_order,
+  credit = excluded.credit;
 
 -- ——— shop ———
 insert into public.products (id, name, slug, description, category, images, published, featured)
 values
   ('prod-camiseta-noche', 'Camiseta Noche Frantana', 'camiseta-noche-frantana',
    'Camiseta demo de merchandising. Diseño nocturno con tipografía FRANTANA.',
-   'merch', array['/media/gallery/frantana/01.jpg','/media/gallery/frantana/02.jpg'], true, true),
+   'merch', array['/media/gallery/frantana/shot-01.jpg','/media/gallery/frantana/shot-02.jpg'], true, true),
   ('prod-hoodie-isla', 'Hoodie Isla', 'hoodie-isla',
    'Sudadera demo con identidad de isla.',
-   'merch', array['/media/gallery/frantana/03.jpg','/media/gallery/frantana/05.jpg'], true, true),
+   'merch', array['/media/gallery/frantana/shot-03.jpg','/media/gallery/frantana/shot-05.jpg'], true, true),
   ('prod-digital-como', 'Como te quiero yo — Digital', 'como-te-quiero-yo-digital',
    'Descarga digital demo del tema.',
-   'digital', array['/media/gallery/frantana/06.jpg'], true, false),
+   'digital', array['/media/gallery/frantana/shot-01.jpg'], true, false),
   ('prod-poster-vivo', 'Póster En Vivo', 'poster-en-vivo',
    'Póster editorial demo.',
-   'merch', array['/media/gallery/frantana/04.jpg','/media/gallery/frantana/07.jpg'], true, false)
+   'merch', array['/media/gallery/frantana/shot-04.jpg','/media/gallery/frantana/shot-02.jpg'], true, false)
 on conflict (id) do update set
   name = excluded.name,
   published = excluded.published,

@@ -15,8 +15,8 @@ type Props = {
 
 export function HomeNarrative({ content, gallery, concerts }: Props) {
   const social = getSocialLinks(content);
-  const portraits = gallery.slice(0, 6);
-  // Real Frantana assets only — no stock "studio" imagery
+  const portraits = gallery.slice(0, 5);
+  // Real Frantana shots (shot-01…05) — no stock imagery
   const presencia = [
     gallery[1] ?? gallery[0],
     gallery[2] ?? gallery[0],
@@ -24,10 +24,10 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
   ].filter(Boolean) as GalleryImage[];
   const directo = [
     gallery[3] ?? gallery[0],
-    gallery[5] ?? gallery[1],
-    gallery[7] ?? gallery[2],
+    gallery[0],
+    gallery[1] ?? gallery[0],
   ].filter(Boolean) as GalleryImage[];
-  const piel = portraits.length >= 4 ? portraits : portraits;
+  const piel = portraits;
 
   return (
     <div className="home-narrative">
@@ -75,12 +75,13 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
           y={48}
         >
           <MediaReveal
-            src={gallery[4]?.src ?? gallery[0]?.src ?? "/media/brand/profile.jpg"}
-            alt={gallery[4]?.alt ?? gallery[0]?.alt ?? "Frantana"}
+            src={gallery[0]?.src ?? "/media/brand/profile.jpg"}
+            alt={gallery[0]?.alt ?? "Frantana"}
             className="absolute inset-0 h-full w-full"
             sizes="(max-width: 900px) 100vw, 42vw"
             parallax
             priority
+            objectPosition="50% 12%"
           />
         </Reveal>
       </section>
@@ -116,6 +117,7 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
                   className="absolute inset-0 h-full w-full"
                   sizes="(max-width: 768px) 50vw, 30vw"
                   parallax={i === 1}
+                  objectPosition="50% 12%"
                 />
               </Reveal>
             ))}
@@ -140,6 +142,7 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
                 className="absolute inset-0 h-full w-full"
                 sizes="(max-width: 768px) 100vw, 60vw"
                 parallax
+                objectPosition="50% 12%"
               />
             </Reveal>
             <div className="chapter__blast-side">
@@ -150,6 +153,7 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
                     alt={directo[1].alt}
                     className="absolute inset-0 h-full w-full min-h-[28svh]"
                     sizes="(max-width: 768px) 100vw, 40vw"
+                    objectPosition="50% 8%"
                   />
                 </Reveal>
               )}
@@ -160,6 +164,7 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
                     alt={directo[2].alt}
                     className="absolute inset-0 h-full w-full min-h-[28svh]"
                     sizes="(max-width: 768px) 100vw, 40vw"
+                    objectPosition="50% 8%"
                   />
                 </Reveal>
               )}
@@ -177,7 +182,7 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
         content={content}
         atmosphereSrcs={[
           ...directo.map((d) => d.src),
-          ...gallery.slice(0, 6).map((g) => g.src),
+          ...gallery.slice(0, 5).map((g) => g.src),
         ].filter(Boolean)}
       />
 
@@ -207,6 +212,7 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
                 fill
                 sizes="(max-width: 768px) 58vw, 22rem"
                 className="object-cover"
+                style={{ objectPosition: "50% 12%" }}
               />
             </Reveal>
           ))}

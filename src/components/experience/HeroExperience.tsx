@@ -560,7 +560,7 @@ export function HeroExperience() {
 
           <div ref={plateRef} className="hero-experience__plate" aria-hidden>
             <img
-              src="/media/gallery/bw-stage-05.jpg"
+              src="/media/gallery/artist-plate-v2.jpg"
               alt=""
               className="media-fill"
             />

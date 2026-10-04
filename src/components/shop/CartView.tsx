@@ -122,6 +122,7 @@ export function CartView() {
                       fill
                       sizes="140px"
                       className="object-cover"
+                      style={{ objectPosition: "50% 12%" }}
                     />
                   ) : null}
                 </Link>

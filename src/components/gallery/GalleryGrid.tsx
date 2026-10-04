@@ -72,6 +72,7 @@ export function GalleryGrid({ images }: { images: GalleryImage[] }) {
                   fill
                   sizes="(max-width:768px) 50vw, 40vw"
                   className="object-cover transition-transform duration-700 ease-[var(--ease-soft)] group-hover:scale-[1.03]"
+                  style={{ objectPosition: "50% 12%" }}
                 />
               </button>
             </Reveal>

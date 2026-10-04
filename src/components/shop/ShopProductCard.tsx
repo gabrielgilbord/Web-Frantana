@@ -42,7 +42,7 @@ export function ShopProductCard({
   const [variantId, setVariantId] = useState(() => defaultVariant(product)?.id ?? "");
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  const primary = product.images[0] ?? "/media/gallery/frantana/01.jpg";
+  const primary = product.images[0] ?? "/media/gallery/frantana/shot-01.jpg";
   const altImage = product.images[1] ?? primary;
   const hasAlt = altImage !== primary;
   const price = lowestPrice(product);

@@ -34,7 +34,7 @@ export default async function ConcertDetailPage({ params }: Props) {
 
   const gallery = await getGallery();
   const fallback =
-    gallery.find((g) => g.published)?.src ?? "/media/gallery/frantana/06.jpg";
+    gallery.find((g) => g.published)?.src ?? "/media/gallery/frantana/shot-01.jpg";
   const heroImage = concert.image || fallback;
 
   return (

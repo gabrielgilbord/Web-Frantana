@@ -36,7 +36,7 @@ export default async function SobrePage() {
 
       <section className="relative">
         <MediaReveal
-          src="/media/gallery/frantana/06.jpg"
+          src="/media/gallery/frantana/shot-01.jpg"
           alt="Frantana — fotografía oficial"
           className="min-h-[55svh] w-full md:min-h-[75svh]"
           sizes="100vw"
@@ -68,12 +68,12 @@ export default async function SobrePage() {
       <section className="section-pad surface-ivory">
         <div className="container-editorial grid gap-5 md:grid-cols-2">
           <MediaReveal
-            src="/media/gallery/frantana/07.jpg"
+            src="/media/gallery/frantana/shot-02.jpg"
             alt="Frantana — imagen oficial"
             className="aspect-[4/5]"
           />
           <MediaReveal
-            src="/media/gallery/frantana/08.jpg"
+            src="/media/gallery/frantana/shot-03.jpg"
             alt="Frantana — captura oficial"
             className="aspect-[4/5] md:mt-16"
           />

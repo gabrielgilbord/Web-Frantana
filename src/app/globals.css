@@ -460,7 +460,7 @@ body:has(.admin-shell)::before {
 }
 
 .hero-experience__plate img {
-  object-position: 50% 40%;
+  object-position: 50% 12%;
   filter: grayscale(0.4) contrast(1.08) brightness(0.72);
 }
 
@@ -1233,7 +1233,7 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
 
 .musica-scene__atmosphere-img {
   object-fit: cover;
-  object-position: 50% 42%;
+  object-position: 50% 12%;
   opacity: 0.28;
   filter: grayscale(0.08) contrast(1.05) brightness(1.05) saturate(0.85);
   transform: scale(1.04);
@@ -1734,6 +1734,30 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
   overflow: hidden;
 }
 
+/* Retratos cuerpo entero: anclar arriba para no cortar la cara */
+.chapter--directo .chapter__blast img,
+.chapter--oficio .chapter__tile img,
+.chapter--firma .chapter__portrait img,
+.chapter--piel .piel-frame img {
+  object-fit: cover;
+  object-position: 50% 12%;
+}
+
+.chapter--directo .chapter__blast-side img {
+  object-position: 50% 8%;
+}
+
+/* Catch-all fotos artista (Next/Image encodea la URL) */
+img[src*="gallery/frantana"],
+img[src*="gallery%2Ffrantana"],
+img[src*="shot-0"],
+img[src*="artist-plate"],
+img[src*="music-atmosphere"],
+img[src*="brand/profile"],
+img[src*="brand%2Fprofile"] {
+  object-position: 50% 12%;
+}
+
 .chapter--directo .chapter__word {
   margin: clamp(2rem, 5vw, 3.5rem) var(--space-gutter) 0;
   font-family: var(--font-display);
@@ -1957,7 +1981,7 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
 
 .tour-agenda__atmosphere-img {
   object-fit: cover;
-  object-position: 50% 28%;
+  object-position: 50% 12%;
   opacity: 0.12;
   filter: grayscale(0.15) contrast(1.02) brightness(1.05) saturate(0.9);
   transition:
@@ -2737,7 +2761,7 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
   }
 
   .musica-scene__atmosphere-img {
-    object-position: 55% 40%;
+    object-position: 50% 12%;
   }
 
   .musica-scene__echo {
@@ -2774,7 +2798,7 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
 
 .concert-detail__atmosphere-img {
   object-fit: cover;
-  object-position: 50% 30%;
+  object-position: 50% 12%;
   opacity: 0.28;
   filter: grayscale(0.25) contrast(1.05);
 }
@@ -3176,7 +3200,7 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
 
 .store-piece__img {
   object-fit: cover;
-  object-position: center 18%;
+  object-position: 50% 12%;
   transition:
     opacity 0.45s var(--ease-soft),
     transform 0.7s var(--ease-soft);
@@ -3885,7 +3909,7 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
 
 .concert-night__hero-img {
   object-fit: cover;
-  object-position: 50% 35%;
+  object-position: 50% 12%;
 }
 
 .concert-night__hero-veil {
@@ -4442,21 +4466,29 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
 
 .booking-hero {
   position: relative;
-  height: clamp(11rem, 28vh, 18rem);
+  height: clamp(16rem, 38vh, 24rem);
   overflow: hidden;
   color: var(--fr-mist);
+  background: #1a1612;
 }
 
 .booking-hero__img {
   object-fit: cover;
-  object-position: 50% 42%;
+  object-position: 50% 20%;
   filter: saturate(1.05) contrast(1.02) brightness(0.92);
-  transform: scale(1.03);
 }
 
 .booking-hero__img--portrait {
-  object-position: 50% 22%;
+  object-position: 50% 18%;
   filter: saturate(1.02) contrast(1.04) brightness(0.88);
+}
+
+/* Banner a sangre: cover sin bandas; foto horizontal, cara en el tercio superior */
+.booking-hero img.booking-hero__img--wide {
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: saturate(1.02) contrast(1.04) brightness(0.9);
+  transform: none;
 }
 
 .booking-hero__veil {
@@ -6744,6 +6776,7 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 12%;
 }
 
 .admin-gallery-card__meta {
