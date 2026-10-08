@@ -21,15 +21,7 @@ export default async function SobrePage() {
             </h1>
           </Reveal>
           <Reveal className="md:col-span-6 md:col-start-7" delay={0.08}>
-            <p
-              className={
-                content.aboutBody.includes("[TEXTO PROVISIONAL]")
-                  ? "provisional"
-                  : "prose-editorial text-lg"
-              }
-            >
-              {content.aboutBody}
-            </p>
+            <p className="prose-editorial text-lg">{content.aboutBody}</p>
           </Reveal>
         </div>
       </section>
@@ -53,15 +45,7 @@ export default async function SobrePage() {
             </h2>
           </Reveal>
           <Reveal className="md:col-span-7 md:col-start-6" delay={0.06}>
-            <p
-              className={
-                content.aboutStoryBody.includes("[TEXTO PROVISIONAL]")
-                  ? "provisional"
-                  : "prose-editorial"
-              }
-            >
-              {content.aboutStoryBody}
-            </p>
+            <p className="prose-editorial">{content.aboutStoryBody}</p>
           </Reveal>
         </div>
       </section>

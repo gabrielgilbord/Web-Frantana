@@ -37,8 +37,8 @@ export function GalleryGrid({ images }: { images: GalleryImage[] }) {
 
   if (!images.length) {
     return (
-      <p className="provisional">
-        [PROVISIONAL] La galería se completará con fotografías oficiales del artista.
+      <p className="prose-editorial mt-2 max-w-md text-fog">
+        Pronto habrá nuevas imágenes aquí.
       </p>
     );
   }
@@ -72,7 +72,10 @@ export function GalleryGrid({ images }: { images: GalleryImage[] }) {
                   fill
                   sizes="(max-width:768px) 50vw, 40vw"
                   className="object-cover transition-transform duration-700 ease-[var(--ease-soft)] group-hover:scale-[1.03]"
-                  style={{ objectPosition: "50% 12%" }}
+                  style={{
+                    objectPosition:
+                      image.width >= image.height ? "50% 35%" : "50% 12%",
+                  }}
                 />
               </button>
             </Reveal>

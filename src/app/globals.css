@@ -1769,10 +1769,10 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
   object-position: 50% 8%;
 }
 
-/* Catch-all fotos artista (Next/Image encodea la URL) */
-img[src*="gallery/frantana"],
-img[src*="gallery%2Ffrantana"],
-img[src*="shot-0"],
+/* Catch-all fotos artista (retratos); excluye banner reservas */
+img[src*="gallery/frantana"]:not(.booking-hero__img),
+img[src*="gallery%2Ffrantana"]:not(.booking-hero__img),
+img[src*="shot-0"]:not(.booking-hero__img),
 img[src*="artist-plate"],
 img[src*="music-atmosphere"],
 img[src*="brand/profile"],
@@ -4488,7 +4488,7 @@ img[src*="brand%2Fprofile"] {
 
 .booking-hero {
   position: relative;
-  height: clamp(16rem, 38vh, 24rem);
+  height: clamp(20rem, 52vh, 34rem);
   overflow: hidden;
   color: var(--fr-mist);
   background: #1a1612;
@@ -4505,10 +4505,10 @@ img[src*="brand%2Fprofile"] {
   filter: saturate(1.02) contrast(1.04) brightness(0.88);
 }
 
-/* Banner a sangre: cover; shot-09 (arena) centra al sujeto */
+/* shot-09 arena: anclar arriba para que se vea la cara */
 .booking-hero img.booking-hero__img--wide {
-  object-fit: cover;
-  object-position: 50% 40%;
+  object-fit: cover !important;
+  object-position: 50% 18% !important;
   filter: saturate(1.02) contrast(1.04) brightness(0.92);
   transform: none;
 }

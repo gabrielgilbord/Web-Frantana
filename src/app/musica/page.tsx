@@ -31,15 +31,7 @@ export default async function MusicaPage() {
             <h1 className="display-title text-[clamp(3rem,12vw,7rem)]">Música</h1>
           </Reveal>
           <Reveal className="md:col-span-5 md:col-start-8" delay={0.06}>
-            <p
-              className={
-                content.musicIntro.includes("[TEXTO PROVISIONAL]")
-                  ? "provisional"
-                  : "prose-editorial"
-              }
-            >
-              {content.musicIntro}
-            </p>
+            <p className="prose-editorial">{content.musicIntro}</p>
           </Reveal>
         </div>
       </section>
@@ -71,10 +63,8 @@ export default async function MusicaPage() {
                 <p className="font-display text-[clamp(1.75rem,4vw,2.75rem)] leading-tight">
                   Escuchar
                 </p>
-                <p className="provisional mt-5 max-w-md">
-                  [PROVISIONAL] Aún no hay embed de Spotify configurado. Añade la
-                  URL de embed oficial desde el panel. No se inventan canciones ni
-                  álbumes.
+                <p className="prose-editorial mt-5 max-w-md text-fog">
+                  Pronto podrás escuchar aquí el perfil oficial de Spotify.
                 </p>
               </div>
             )}
@@ -102,8 +92,8 @@ export default async function MusicaPage() {
                   </Button>
                 ))
               ) : (
-                <p className="provisional">
-                  [PROVISIONAL] Enlaces a plataformas pendientes de configurar.
+                <p className="text-sm text-fog">
+                  Las plataformas se publicarán pronto.
                 </p>
               )}
             </div>

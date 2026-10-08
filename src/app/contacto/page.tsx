@@ -72,15 +72,13 @@ export default async function ContactoPage() {
                 </a>
               </div>
             ) : (
-              <p className="provisional">
-                [PROVISIONAL] Correo pendiente en el panel admin.
+              <p className="text-fog text-sm">
+                El correo de contacto se publicará pronto.
               </p>
             )}
 
-            {!content.contactPhone ? (
-              <p className="contact-page__hint">
-                El teléfono se puede añadir en Admin → Contenido.
-              </p>
+            {content.contactPhone ? (
+              <p className="contact-page__hint">{content.contactPhone}</p>
             ) : null}
 
             <div className="contact-page__cta-block">

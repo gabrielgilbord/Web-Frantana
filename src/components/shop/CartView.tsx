@@ -218,8 +218,7 @@ export function CartView() {
             </button>
           ) : (
             <p className="store-cart__demo" role="status">
-              El carrito está listo. El pago se activará al configurar las claves
-              Stripe.
+              El carrito está listo. El pago online se activará en breve.
             </p>
           )}
 

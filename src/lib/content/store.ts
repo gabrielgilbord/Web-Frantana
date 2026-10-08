@@ -170,7 +170,8 @@ export async function getGallery(options?: {
 }): Promise<GalleryImage[]> {
   if (useSupabaseStore()) {
     const fromDb = await dbGetGallery(options);
-    if (fromDb) return fromDb;
+    // Si la tabla está vacía, cae al seed JSON (fotos oficiales en el repo)
+    if (fromDb && fromDb.length > 0) return fromDb;
   }
   const data = await readRaw();
   const list = options?.includeUnpublished

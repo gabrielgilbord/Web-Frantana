@@ -24,12 +24,12 @@ export default async function ReservasPage() {
           priority
           sizes="100vw"
           className="booking-hero__img booking-hero__img--wide"
-          style={{ objectFit: "cover", objectPosition: "50% 40%" }}
+          style={{ objectFit: "cover", objectPosition: "50% 18%" }}
         />
         <div className="booking-hero__veil" />
         <div className="booking-hero__copy container-editorial">
           <Reveal y={20}>
-            <p className="booking-hero__eyebrow">Booking</p>
+            <p className="booking-hero__eyebrow">Reservas</p>
             <p className="booking-hero__line">Escenario · voz · tu fecha</p>
           </Reveal>
         </div>
@@ -47,11 +47,11 @@ export default async function ReservasPage() {
               fechas privadas ya ocupadas aparecen bloqueadas.
             </p>
             <aside className="booking-page__promise">
-              <p className="booking-page__promise-kicker">A mano</p>
+              <p className="booking-page__promise-kicker">Respuesta personal</p>
               <p className="booking-page__promise-text">
-                Cada reserva la revisa el equipo de Frantana. Tras enviarla
-                tendrás un enlace privado para hablar con nosotros sobre esa
-                solicitud — sin SMTP ni apps externas.
+                Cada solicitud la revisa el equipo de Frantana. Tras enviarla
+                recibirás un enlace privado para seguir la conversación sobre
+                tu fecha.
               </p>
             </aside>
             <ul className="booking-page__pillars" aria-label="Tipos de evento">

@@ -77,7 +77,7 @@ export function ConcertList({
   emptyMessage: string;
 }) {
   if (!concerts.length) {
-    return <p className="provisional mt-6">{emptyMessage}</p>;
+    return <p className="mt-6 max-w-md text-sm leading-relaxed text-fog">{emptyMessage}</p>;
   }
   return (
     <div className="mt-2">
@@ -107,7 +107,7 @@ export function ConcertPreview({ concerts }: { concerts: Concert[] }) {
         </div>
         <ConcertList
           concerts={concerts.slice(0, 4)}
-          emptyMessage="Todavía no hay conciertos publicados. La agenda se actualiza desde el panel — sígueme en Instagram para fechas."
+          emptyMessage="Todavía no hay conciertos publicados. Sígueme en Instagram para las próximas fechas."
         />
       </div>
     </section>

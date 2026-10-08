@@ -18,8 +18,7 @@ export default async function GaleriaPage() {
           <Reveal>
             <h1 className="display-title text-[clamp(3rem,12vw,7rem)]">Galería</h1>
             <p className="prose-editorial mt-6 max-w-xl">
-              Imágenes del artista desde su Instagram oficial. La galería se puede
-              ampliar y ordenar desde el panel de administración.
+              Fotografías oficiales de Frantana.
             </p>
           </Reveal>
           <div className="mt-10">
