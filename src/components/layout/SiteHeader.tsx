@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/components/shop/CartProvider";
@@ -83,12 +84,17 @@ function BagButton({
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [portalReady, setPortalReady] = useState(false);
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
   const isHome = pathname === "/";
   const scrollLockY = useRef(0);
   /** When navigating from the menu, unlock without restoring the previous Y. */
   const navigateFromMenu = useRef(false);
+
+  useEffect(() => {
+    setPortalReady(true);
+  }, []);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -156,115 +162,126 @@ export function SiteHeader() {
 
   if (isAdmin) return null;
 
-  return (
-    <header
+  const drawer = (
+    <div
+      id="mobile-nav"
       className={clsx(
-        "site-header fixed inset-x-0 top-0 z-50",
-        isHome ? "site-header--home text-mist" : "text-ink",
-        menuOpen && "site-header--menu-open"
+        "site-header__drawer md:hidden",
+        isHome && "site-header__drawer--home",
+        menuOpen && "is-open"
       )}
+      aria-hidden={!menuOpen}
     >
-      <div className="container-editorial site-header__inner">
-        <Link
-          href="/"
-          data-nav-brand-slot
-          className={clsx(
-            "site-header__brand font-sans text-[1.15rem] font-medium leading-none tracking-[0.16em] uppercase no-underline md:text-[1.25rem]",
-            isHome && !menuOpen && "site-header__brand--deferred"
-          )}
-          aria-label="Frantana — inicio"
-          tabIndex={isHome && !menuOpen ? -1 : 0}
-          onClick={() => {
-            navigateFromMenu.current = true;
-            setMenuOpen(false);
-          }}
-        >
-          FRANTANA
-        </Link>
-
-        <div className="site-header__actions">
-          <nav data-site-nav className="site-header__nav" aria-label="Principal">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="site-header__link"
-                aria-current={pathname === item.href ? "page" : undefined}
-                onClick={closeMenuForNav}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          {SHOP_PUBLIC && (
-            <BagButton className={clsx(menuOpen && "site-header__bag--hidden-when-menu")} />
-          )}
-
-          <button
-            type="button"
-            className="site-header__menu"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-            onClick={() => setMenuOpen((v) => !v)}
+      <div className="site-header__drawer-atmosphere" aria-hidden />
+      <nav className="site-header__drawer-nav" aria-label="Móvil">
+        {NAV.map((item, index) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={clsx(
+              "site-header__drawer-link",
+              pathname === item.href && "is-current"
+            )}
+            style={{ "--nav-i": index } as CSSProperties}
+            tabIndex={menuOpen ? 0 : -1}
+            aria-current={pathname === item.href ? "page" : undefined}
+            onClick={closeMenuForNav}
           >
-            <span className="sr-only">{menuOpen ? "Cerrar" : "Menú"}</span>
-            <span aria-hidden className="flex w-5 flex-col gap-1.5">
-              <span
-                className={clsx(
-                  "h-px w-full bg-current transition-transform duration-300 ease-[var(--ease-soft)]",
-                  menuOpen && "translate-y-[7px] rotate-45"
-                )}
-              />
-              <span
-                className={clsx(
-                  "h-px w-full bg-current transition-opacity duration-300",
-                  menuOpen && "opacity-0"
-                )}
-              />
-              <span
-                className={clsx(
-                  "h-px w-full bg-current transition-transform duration-300 ease-[var(--ease-soft)]",
-                  menuOpen && "-translate-y-[7px] -rotate-45"
-                )}
-              />
-            </span>
-          </button>
-        </div>
-      </div>
+            {item.label}
+          </Link>
+        ))}
+        {SHOP_PUBLIC && (
+          <BagButton
+            showLabel
+            className="site-header__bag--drawer"
+            onAfterOpen={() => setMenuOpen(false)}
+          />
+        )}
+      </nav>
+    </div>
+  );
 
-      <div
-        id="mobile-nav"
-        className={clsx("site-header__drawer md:hidden", menuOpen && "is-open")}
-        aria-hidden={!menuOpen}
+  return (
+    <>
+      <header
+        className={clsx(
+          "site-header fixed inset-x-0 top-0 z-50",
+          isHome ? "site-header--home text-mist" : "text-ink",
+          menuOpen && "site-header--menu-open"
+        )}
       >
-        <div className="site-header__drawer-atmosphere" aria-hidden />
-        <nav className="site-header__drawer-nav" aria-label="Móvil">
-          {NAV.map((item, index) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={clsx(
-                "site-header__drawer-link",
-                pathname === item.href && "is-current"
-              )}
-              style={{ "--nav-i": index } as CSSProperties}
-              tabIndex={menuOpen ? 0 : -1}
-              aria-current={pathname === item.href ? "page" : undefined}
-              onClick={closeMenuForNav}
+        <div className="container-editorial site-header__inner">
+          <Link
+            href="/"
+            data-nav-brand-slot
+            className={clsx(
+              "site-header__brand font-sans text-[1.15rem] font-medium leading-none tracking-[0.16em] uppercase no-underline md:text-[1.25rem]",
+              isHome && !menuOpen && "site-header__brand--deferred"
+            )}
+            aria-label="Frantana — inicio"
+            tabIndex={isHome && !menuOpen ? -1 : 0}
+            onClick={() => {
+              navigateFromMenu.current = true;
+              setMenuOpen(false);
+            }}
+          >
+            FRANTANA
+          </Link>
+
+          <div className="site-header__actions">
+            <nav data-site-nav className="site-header__nav" aria-label="Principal">
+              {NAV.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="site-header__link"
+                  aria-current={pathname === item.href ? "page" : undefined}
+                  onClick={closeMenuForNav}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+            {SHOP_PUBLIC && (
+              <BagButton
+                className={clsx(menuOpen && "site-header__bag--hidden-when-menu")}
+              />
+            )}
+
+            <button
+              type="button"
+              className="site-header__menu"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav"
+              aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+              onClick={() => setMenuOpen((v) => !v)}
             >
-              {item.label}
-            </Link>
-          ))}
-          {SHOP_PUBLIC && (
-            <BagButton
-              showLabel
-              className="site-header__bag--drawer"
-              onAfterOpen={() => setMenuOpen(false)}
-            />
-          )}
-        </nav>
-      </div>
-    </header>
+              <span className="sr-only">{menuOpen ? "Cerrar" : "Menú"}</span>
+              <span aria-hidden className="flex w-5 flex-col gap-1.5">
+                <span
+                  className={clsx(
+                    "h-px w-full bg-current transition-transform duration-300 ease-[var(--ease-soft)]",
+                    menuOpen && "translate-y-[7px] rotate-45"
+                  )}
+                />
+                <span
+                  className={clsx(
+                    "h-px w-full bg-current transition-opacity duration-300",
+                    menuOpen && "opacity-0"
+                  )}
+                />
+                <span
+                  className={clsx(
+                    "h-px w-full bg-current transition-transform duration-300 ease-[var(--ease-soft)]",
+                    menuOpen && "-translate-y-[7px] -rotate-45"
+                  )}
+                />
+              </span>
+            </button>
+          </div>
+        </div>
+      </header>
+      {portalReady ? createPortal(drawer, document.body) : null}
+    </>
   );
 }

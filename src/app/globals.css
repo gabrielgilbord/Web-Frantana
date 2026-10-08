@@ -702,10 +702,15 @@ html[data-hero-experience="true"] body::before {
   display: none;
 }
 
-/* Menú móvil abierto: capa dominante por encima del hero brand portaled (z-60) */
+/* Menú móvil abierto: barra por encima del drawer (z-70) */
 .site-header--menu-open {
   z-index: 80;
   color: var(--fr-mist);
+  pointer-events: none;
+}
+
+.site-header--menu-open .site-header__inner {
+  pointer-events: auto;
 }
 
 .site-header--menu-open.site-header--home,
@@ -729,25 +734,37 @@ html[data-hero-experience="true"] body::before {
   color: var(--fr-mist);
 }
 
-html.nav-menu-open #fr-portal-root,
+/* Solo el brand del hero, no todo el portal (el drawer móvil vive en body) */
 html.nav-menu-open .hero-experience__brand {
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
 }
 
-html.nav-menu-open {
-  overflow: hidden;
+html.nav-menu-open,
+html.nav-menu-open body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+html.nav-menu-open body {
+  /* Evita que overflow-x del body recorte el drawer fixed en iOS */
+  overflow-x: visible !important;
 }
 
 .site-header__drawer {
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 70;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
   padding:
-    calc(var(--header-h) + 0.5rem)
+    calc(var(--header-h) + env(safe-area-inset-top, 0px) + 0.35rem)
     var(--space-gutter)
     max(1.75rem, env(safe-area-inset-bottom, 0px));
   border: 0;
@@ -759,9 +776,11 @@ html.nav-menu-open {
   transition:
     opacity 0.38s var(--ease-soft),
     visibility 0.38s var(--ease-soft);
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .site-header__drawer.is-open {
@@ -809,11 +828,13 @@ html.nav-menu-open {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  flex: 1;
+  justify-content: flex-start;
+  flex: 0 0 auto;
   gap: 0.15rem;
-  min-height: min(70vh, 32rem);
-  padding-block: 1rem 2rem;
+  min-height: calc(100% - 0.5rem);
+  padding-block: 0.75rem 2.5rem;
+  /* Si cabe, centra en vertical; si no, empieza arriba y scrollea */
+  justify-content: safe center;
 }
 
 .site-header__drawer-link {
@@ -890,13 +911,14 @@ html.nav-menu-open {
   position: static;
 }
 
-.site-header--home .site-header__drawer {
+.site-header__drawer--home,
+.site-header__drawer {
   background: #120f0c;
   border-top-color: transparent;
   color: var(--fr-mist);
 }
 
-.site-header:not(.site-header--home) .site-header__drawer .site-header__drawer-link {
+.site-header__drawer .site-header__drawer-link {
   color: color-mix(in srgb, var(--fr-mist) 88%, transparent);
 }
 
