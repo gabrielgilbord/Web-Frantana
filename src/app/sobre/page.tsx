@@ -36,11 +36,12 @@ export default async function SobrePage() {
 
       <section className="relative">
         <MediaReveal
-          src="/media/gallery/frantana/shot-01.jpg"
-          alt="Frantana — fotografía oficial"
+          src="/media/gallery/frantana/shot-02.jpg"
+          alt="Frantana — brazos cruzados, luz roja"
           className="min-h-[55svh] w-full md:min-h-[75svh]"
           sizes="100vw"
           parallax
+          objectPosition="50% 12%"
         />
       </section>
 
@@ -68,14 +69,16 @@ export default async function SobrePage() {
       <section className="section-pad surface-ivory">
         <div className="container-editorial grid gap-5 md:grid-cols-2">
           <MediaReveal
-            src="/media/gallery/frantana/shot-02.jpg"
-            alt="Frantana — imagen oficial"
+            src="/media/gallery/frantana/shot-06.jpg"
+            alt="Frantana — estudio, sonrisa y bandana amarilla"
             className="aspect-[4/5]"
+            objectPosition="50% 12%"
           />
           <MediaReveal
-            src="/media/gallery/frantana/shot-03.jpg"
-            alt="Frantana — captura oficial"
+            src="/media/gallery/frantana/shot-08.jpg"
+            alt="Frantana — pose de estudio"
             className="aspect-[4/5] md:mt-16"
+            objectPosition="50% 12%"
           />
         </div>
       </section>

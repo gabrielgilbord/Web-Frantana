@@ -15,19 +15,15 @@ type Props = {
 
 export function HomeNarrative({ content, gallery, concerts }: Props) {
   const social = getSocialLinks(content);
-  const portraits = gallery.slice(0, 5);
-  // Real Frantana shots (shot-01…05) — no stock imagery
-  const presencia = [
-    gallery[1] ?? gallery[0],
-    gallery[2] ?? gallery[0],
-    gallery[4] ?? gallery[0],
-  ].filter(Boolean) as GalleryImage[];
-  const directo = [
-    gallery[3] ?? gallery[0],
-    gallery[0],
-    gallery[1] ?? gallery[0],
-  ].filter(Boolean) as GalleryImage[];
-  const piel = portraits;
+  const pick = (...idxs: number[]) =>
+    idxs
+      .map((i) => gallery[i] ?? gallery[0])
+      .filter(Boolean) as GalleryImage[];
+
+  // Curaduría: variedad de poses / looks (shot-01…09)
+  const presencia = pick(5, 6, 7); // shot-06…08 estudio color
+  const directo = pick(1, 7, 5); // shot-02 principal + laterales nuevos
+  const piel = gallery.filter((_, i) => i !== 3 && i !== 8); // verticales para tira
 
   return (
     <div className="home-narrative">
@@ -75,8 +71,8 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
           y={48}
         >
           <MediaReveal
-            src={gallery[0]?.src ?? "/media/brand/profile.jpg"}
-            alt={gallery[0]?.alt ?? "Frantana"}
+            src={gallery[1]?.src ?? gallery[0]?.src ?? "/media/brand/profile.jpg"}
+            alt={gallery[1]?.alt ?? gallery[0]?.alt ?? "Frantana"}
             className="absolute inset-0 h-full w-full"
             sizes="(max-width: 900px) 100vw, 42vw"
             parallax
@@ -182,7 +178,7 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
         content={content}
         atmosphereSrcs={[
           ...directo.map((d) => d.src),
-          ...gallery.slice(0, 5).map((g) => g.src),
+          ...gallery.map((g) => g.src),
         ].filter(Boolean)}
       />
 
@@ -198,7 +194,7 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
           </p>
         </Reveal>
         <div className="piel-strip" role="list">
-          {piel.slice(0, 6).map((img, i) => (
+          {piel.slice(0, 7).map((img, i) => (
             <Reveal
               key={img.id}
               className="piel-frame"

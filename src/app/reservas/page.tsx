@@ -18,13 +18,13 @@ export default async function ReservasPage() {
     <div className="booking-page-shell pt-[var(--header-h)]">
       <section className="booking-hero" aria-hidden>
         <Image
-          src="/media/gallery/frantana/shot-04.jpg"
+          src="/media/gallery/frantana/shot-09.jpg"
           alt=""
           fill
           priority
           sizes="100vw"
           className="booking-hero__img booking-hero__img--wide"
-          style={{ objectFit: "cover", objectPosition: "50% 22%" }}
+          style={{ objectFit: "cover", objectPosition: "50% 40%" }}
         />
         <div className="booking-hero__veil" />
         <div className="booking-hero__copy container-editorial">

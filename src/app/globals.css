@@ -4483,11 +4483,11 @@ img[src*="brand%2Fprofile"] {
   filter: saturate(1.02) contrast(1.04) brightness(0.88);
 }
 
-/* Banner a sangre: cover sin bandas; foto horizontal, cara en el tercio superior */
+/* Banner a sangre: cover; shot-09 (arena) centra al sujeto */
 .booking-hero img.booking-hero__img--wide {
   object-fit: cover;
-  object-position: 50% 22%;
-  filter: saturate(1.02) contrast(1.04) brightness(0.9);
+  object-position: 50% 40%;
+  filter: saturate(1.02) contrast(1.04) brightness(0.92);
   transform: none;
 }
 

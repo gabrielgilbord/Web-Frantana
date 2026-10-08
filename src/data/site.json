@@ -191,7 +191,7 @@
     {
       "id": "ig-01",
       "src": "/media/gallery/frantana/shot-01.jpg",
-      "alt": "Frantana — fotografía oficial",
+      "alt": "Frantana — retrato de estudio",
       "width": 1800,
       "height": 2705,
       "published": true,
@@ -201,7 +201,7 @@
     {
       "id": "ig-02",
       "src": "/media/gallery/frantana/shot-02.jpg",
-      "alt": "Frantana — fotografía oficial",
+      "alt": "Frantana — brazos cruzados, luz roja",
       "width": 1800,
       "height": 2705,
       "published": true,
@@ -221,7 +221,7 @@
     {
       "id": "ig-04",
       "src": "/media/gallery/frantana/shot-04.jpg",
-      "alt": "Frantana — fotografía oficial",
+      "alt": "Frantana — plano horizontal de estudio",
       "width": 1800,
       "height": 1197,
       "published": true,
@@ -237,6 +237,46 @@
       "published": true,
       "sortOrder": 5,
       "credit": "@frantana"
+    },
+    {
+      "id": "ig-06",
+      "src": "/media/gallery/frantana/shot-06.jpg",
+      "alt": "Frantana — estudio, sonrisa y bandana amarilla",
+      "width": 1800,
+      "height": 2705,
+      "published": true,
+      "sortOrder": 6,
+      "credit": "@frantana"
+    },
+    {
+      "id": "ig-07",
+      "src": "/media/gallery/frantana/shot-07.jpg",
+      "alt": "Frantana — estudio con foco en el suelo",
+      "width": 1800,
+      "height": 2705,
+      "published": true,
+      "sortOrder": 7,
+      "credit": "@frantana"
+    },
+    {
+      "id": "ig-08",
+      "src": "/media/gallery/frantana/shot-08.jpg",
+      "alt": "Frantana — pose de estudio, mano en la cadera",
+      "width": 1800,
+      "height": 2705,
+      "published": true,
+      "sortOrder": 8,
+      "credit": "@frantana"
+    },
+    {
+      "id": "ig-09",
+      "src": "/media/gallery/frantana/shot-09.jpg",
+      "alt": "Frantana — retrato en arena blanca, look blanco",
+      "width": 2200,
+      "height": 1464,
+      "published": true,
+      "sortOrder": 9,
+      "credit": "@frantana"
     }
   ],
   "products": [
@@ -247,8 +287,8 @@
       "description": "Camiseta demo de merchandising. Diseño nocturno con tipografía FRANTANA. Producto de demostración — compra aún no activa.",
       "category": "merch",
       "images": [
-        "/media/gallery/frantana/shot-01.jpg",
-        "/media/gallery/frantana/shot-02.jpg"
+        "/media/gallery/frantana/shot-02.jpg",
+        "/media/gallery/frantana/shot-06.jpg"
       ],
       "published": true,
       "featured": true,
@@ -297,8 +337,8 @@
       "description": "Sudadera demo con identidad de isla. Pieza de catálogo para revisar la tienda visualmente.",
       "category": "merch",
       "images": [
-        "/media/gallery/frantana/shot-03.jpg",
-        "/media/gallery/frantana/shot-05.jpg"
+        "/media/gallery/frantana/shot-07.jpg",
+        "/media/gallery/frantana/shot-08.jpg"
       ],
       "published": true,
       "featured": true,
@@ -336,7 +376,7 @@
       "description": "Descarga digital demo del tema. En producción enlazaría a entrega digital tras pago.",
       "category": "digital",
       "images": [
-        "/media/gallery/frantana/shot-01.jpg"
+        "/media/gallery/frantana/shot-09.jpg"
       ],
       "published": true,
       "featured": false,
@@ -363,8 +403,8 @@
       "description": "Póster editorial demo. Impresión de escena — catálogo de prueba sin checkout.",
       "category": "merch",
       "images": [
-        "/media/gallery/frantana/shot-04.jpg",
-        "/media/gallery/frantana/shot-02.jpg"
+        "/media/gallery/frantana/shot-01.jpg",
+        "/media/gallery/frantana/shot-05.jpg"
       ],
       "published": true,
       "featured": false,

@@ -46,12 +46,13 @@ export default async function MusicaPage() {
 
       <section className="relative">
         <MediaReveal
-          src="/media/gallery/frantana/shot-01.jpg"
-          alt="Frantana en concierto"
+          src="/media/gallery/frantana/shot-07.jpg"
+          alt="Frantana — fotografía oficial"
           className="min-h-[48svh] w-full md:min-h-[62svh]"
           sizes="100vw"
           parallax
           priority
+          objectPosition="50% 12%"
         />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(23,20,17,0.15)_0%,rgba(23,20,17,0.55)_100%)]" />
       </section>
@@ -113,14 +114,16 @@ export default async function MusicaPage() {
       <section className="section-pad surface-ivory">
         <div className="container-editorial grid gap-5 md:grid-cols-12">
           <MediaReveal
-            src="/media/gallery/frantana/shot-02.jpg"
-            alt="Frantana — fotografía oficial"
+            src="/media/gallery/frantana/shot-09.jpg"
+            alt="Frantana — look blanco en arena"
             className="aspect-[5/4] md:col-span-7"
+            objectPosition="50% 40%"
           />
           <MediaReveal
-            src="/media/gallery/frantana/shot-05.jpg"
-            alt="Frantana — fotografía oficial"
+            src="/media/gallery/frantana/shot-06.jpg"
+            alt="Frantana — estudio"
             className="aspect-[4/5] md:col-span-4 md:col-start-9 md:mt-20"
+            objectPosition="50% 12%"
           />
         </div>
       </section>
