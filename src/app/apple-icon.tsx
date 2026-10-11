@@ -1,9 +1,15 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-/** Apple touch icon — misma marca, más detalle. */
+const wordmarkSrc = `data:image/png;base64,${readFileSync(
+  join(process.cwd(), "public/media/brand/frantana-wordmark.png")
+).toString("base64")}`;
+
+/** Apple touch icon: wordmark Frantana en negro sobre blanco. */
 export default function AppleIcon() {
   return new ImageResponse(
     (
@@ -14,36 +20,18 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(145deg, #1a1612 0%, #14110e 55%, #2a2218 100%)",
+          background: "#ffffff",
           borderRadius: 36,
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 132,
-            height: 132,
-            borderRadius: 28,
-            border: "1.5px solid rgba(196, 165, 116, 0.35)",
-            background: "rgba(20, 17, 14, 0.5)",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 92,
-              fontWeight: 600,
-              color: "#c4a574",
-              fontFamily: "Georgia, 'Times New Roman', serif",
-              lineHeight: 1,
-              marginTop: -6,
-              letterSpacing: -4,
-            }}
-          >
-            F
-          </div>
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={wordmarkSrc}
+          alt=""
+          width={150}
+          height={44}
+          style={{ objectFit: "contain" }}
+        />
       </div>
     ),
     { ...size }

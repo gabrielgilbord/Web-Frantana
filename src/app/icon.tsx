@@ -1,9 +1,15 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
-/** Favicon F — noche + ember, tipografía editorial. */
+const wordmarkSrc = `data:image/png;base64,${readFileSync(
+  join(process.cwd(), "public/media/brand/frantana-wordmark.png")
+).toString("base64")}`;
+
+/** Favicon: wordmark Frantana en negro sobre blanco. */
 export default function Icon() {
   return new ImageResponse(
     (
@@ -14,23 +20,17 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#14110e",
-          borderRadius: 6,
+          background: "#ffffff",
         }}
       >
-        <div
-          style={{
-            fontSize: 22,
-            fontWeight: 600,
-            color: "#c4a574",
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            lineHeight: 1,
-            marginTop: -1,
-            letterSpacing: -1,
-          }}
-        >
-          F
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={wordmarkSrc}
+          alt=""
+          width={28}
+          height={8}
+          style={{ objectFit: "contain" }}
+        />
       </div>
     ),
     { ...size }
