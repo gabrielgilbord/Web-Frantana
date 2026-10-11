@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Outfit } from "next/font/google";
+import localFont from "next/font/local";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CartProvider } from "@/components/shop/CartProvider";
@@ -8,18 +8,23 @@ import { buildMetadata, musicGroupJsonLd } from "@/lib/seo/metadata";
 import { getContent } from "@/lib/content/store";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
+/** Fuentes empaquetadas: evita fallos intermitentes de next/font/google + Turbopack en Vercel. */
+const cormorant = localFont({
+  src: "./fonts/cormorant-latin.woff2",
+  weight: "300 700",
+  style: "normal",
   variable: "--font-cormorant",
-  subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
+  adjustFontFallback: "Times New Roman",
 });
 
-const outfit = Outfit({
+const outfit = localFont({
+  src: "./fonts/outfit-latin.woff2",
+  weight: "300 700",
+  style: "normal",
   variable: "--font-outfit",
-  subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
+  adjustFontFallback: "Arial",
 });
 
 export const metadata: Metadata = buildMetadata();
