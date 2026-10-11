@@ -1,5 +1,11 @@
 import dynamic from "next/dynamic";
-import { getConcerts, getContent, getGallery, splitConcerts } from "@/lib/content/store";
+import {
+  getConcerts,
+  getContent,
+  getGallery,
+  getNewsPosts,
+  splitConcerts,
+} from "@/lib/content/store";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { HomeNarrative } from "@/components/experience/HomeNarrative";
 
@@ -31,10 +37,11 @@ export const metadata = buildMetadata({
  * Fase D aún no.
  */
 export default async function HomePage() {
-  const [content, gallery, concerts] = await Promise.all([
+  const [content, gallery, concerts, newsPosts] = await Promise.all([
     getContent(),
     getGallery(),
     getConcerts(),
+    getNewsPosts({ limit: 3 }),
   ]);
   const { upcoming } = splitConcerts(concerts);
 
@@ -45,6 +52,7 @@ export default async function HomePage() {
         content={content}
         gallery={gallery}
         concerts={upcoming}
+        newsPosts={newsPosts}
       />
     </>
   );

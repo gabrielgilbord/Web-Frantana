@@ -17,6 +17,7 @@ const NAV_LINKS = [
   { href: "/admin", label: "Inicio", match: "exact" as const },
   { href: "/admin/conciertos", label: "Conciertos", match: "prefix" as const },
   { href: "/admin/reservas", label: "Reservas", match: "prefix" as const },
+  { href: "/admin/novedades", label: "Novedades", match: "prefix" as const },
   { href: "/admin/contenido", label: "Contenido", match: "prefix" as const },
   { href: "/admin/galeria", label: "Galería", match: "prefix" as const },
   { href: "/admin/tienda", label: "Tienda", match: "prefix" as const },

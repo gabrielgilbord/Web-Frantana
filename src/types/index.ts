@@ -130,7 +130,13 @@ export type Order = {
   updatedAt: string;
 };
 
-export type BookingStatus = "new" | "read" | "replied" | "archived";
+export type BookingStatus =
+  | "new"
+  | "read"
+  | "replied"
+  | "confirmed"
+  | "rejected"
+  | "archived";
 
 export type BookingEventType =
   | "privado"
@@ -174,6 +180,26 @@ export type ContactInquiry = {
   createdAt: string;
 };
 
+export type NewsCategory =
+  | "lanzamiento"
+  | "promocion"
+  | "noticia"
+  | "otro";
+
+export type NewsPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  coverImage: string | null;
+  category: NewsCategory;
+  published: boolean;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type SiteData = {
   content: SiteContent;
   concerts: Concert[];
@@ -182,4 +208,5 @@ export type SiteData = {
   orders: Order[];
   bookings?: BookingRequest[];
   contactInquiries?: ContactInquiry[];
+  newsPosts?: NewsPost[];
 };

@@ -69,7 +69,7 @@
       "venue": "Telde",
       "lat": 27.9985,
       "lng": -15.4187,
-      "image": "/media/gallery/frantana/shot-02.jpg",
+      "image": "/media/gallery/frantana/shot-05.jpg",
       "ticketUrl": null,
       "ticketStatus": "tba",
       "published": false,
@@ -199,23 +199,13 @@
       "credit": "@frantana"
     },
     {
-      "id": "ig-02",
-      "src": "/media/gallery/frantana/shot-02.jpg",
-      "alt": "Frantana — brazos cruzados, luz roja",
-      "width": 1800,
-      "height": 2705,
-      "published": true,
-      "sortOrder": 2,
-      "credit": "@frantana"
-    },
-    {
       "id": "ig-03",
       "src": "/media/gallery/frantana/shot-03.jpg",
       "alt": "Frantana — fotografía oficial",
       "width": 1800,
       "height": 2705,
       "published": true,
-      "sortOrder": 3,
+      "sortOrder": 2,
       "credit": "@frantana"
     },
     {
@@ -287,7 +277,7 @@
       "description": "Camiseta Noche Frantana. Diseño nocturno con tipografía FRANTANA.",
       "category": "merch",
       "images": [
-        "/media/gallery/frantana/shot-02.jpg",
+        "/media/gallery/frantana/shot-03.jpg",
         "/media/gallery/frantana/shot-06.jpg"
       ],
       "published": true,
@@ -450,6 +440,35 @@
       "status": "new",
       "createdAt": "2026-10-01T16:00:00.000Z",
       "updatedAt": "2026-10-01T16:00:00.000Z"
+    }
+  ],
+  "contactInquiries": [],
+  "newsPosts": [
+    {
+      "id": "news-seed-01",
+      "slug": "vuelta-al-escenario",
+      "title": "Vuelta al escenario",
+      "excerpt": "Nuevas fechas en Canarias y un directo más íntimo. El tablón se enciende otra vez.",
+      "body": "Después de un tiempo de estudio y ensayos, Frantana vuelve a la calle con un formato pensado para sentir la voz de cerca.\n\nHabrá fechas en Gran Canaria y más avisos en este tablón. Si quieres una noche privada o un evento, la puerta de **Reservas** sigue abierta.\n\nGracias por seguir el pulso.",
+      "coverImage": "/media/gallery/frantana/shot-04.jpg",
+      "category": "lanzamiento",
+      "published": false,
+      "publishedAt": null,
+      "createdAt": "2026-10-01T18:00:00.000Z",
+      "updatedAt": "2026-10-11T12:56:02.177Z"
+    },
+    {
+      "id": "news-seed-02",
+      "slug": "sesiones-acusticas",
+      "title": "Sesiones acústicas",
+      "excerpt": "Un ciclo corto, sin artificio: guitarra, voz y la sala a media luz.",
+      "body": "Estamos preparando un ciclo de **sesiones acústicas** para quienes prefieren el detalle al volumen.\n\nPronto publicaremos ciudades y aforo. Mientras, guarda este espacio: aquí saldrá todo primero.",
+      "coverImage": "/media/gallery/frantana/shot-01.jpg",
+      "category": "noticia",
+      "published": true,
+      "publishedAt": "2026-09-20T12:00:00.000Z",
+      "createdAt": "2026-09-20T12:00:00.000Z",
+      "updatedAt": "2026-09-20T12:00:00.000Z"
     }
   ]
 }

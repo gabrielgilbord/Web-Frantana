@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { MOTION } from "@/lib/motion/tokens";
 
 /**
@@ -502,14 +503,14 @@ export function HeroExperience() {
         className="hero-experience__brand-layer hero-experience__brand-layer--display"
         aria-hidden
       >
-        FRANTANA
+        <BrandLogo decorative className="brand-logo--hero-display" />
       </span>
       <span
         ref={brandMarkRef}
         className="hero-experience__brand-layer hero-experience__brand-layer--mark"
         aria-hidden
       >
-        FRANTANA
+        <BrandLogo decorative className="brand-logo--hero-mark" />
       </span>
     </a>
   );

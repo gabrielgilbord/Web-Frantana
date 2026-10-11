@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { Button } from "@/components/ui/Button";
 
 function subscribeReducedMotion(cb: () => void) {
@@ -122,7 +123,9 @@ export function HeroCinematic({ subtitle }: HeroProps) {
 
       <div className="hero-plane__content">
         <div className="mx-auto w-full max-w-[78rem]">
-          <h1 className="hero-brand hero-anim hero-anim-2">FRANTANA</h1>
+          <h1 className="hero-brand hero-anim hero-anim-2">
+            <BrandLogo decorative className="brand-logo--hero-display" />
+          </h1>
           <p className="hero-sub hero-anim hero-anim-3">{subtitle}</p>
           <div className="hero-actions hero-anim hero-anim-4">
             <Button href="/musica" variant="on-dark" size="sm">

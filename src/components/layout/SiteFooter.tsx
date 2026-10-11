@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { SiteContent } from "@/types";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { SocialIcons } from "@/components/ui/SocialIcons";
 import { getSocialLinks } from "@/lib/social";
 
@@ -11,6 +12,7 @@ const NAV = [
   { href: "/sobre", label: "Sobre" },
   { href: "/musica", label: "Música" },
   { href: "/conciertos", label: "Conciertos" },
+  { href: "/novedades", label: "Novedades" },
   { href: "/tienda", label: "Tienda" },
   { href: "/galeria", label: "Galería" },
   { href: "/reservas", label: "Reservas" },
@@ -28,18 +30,20 @@ export function SiteFooter({ content }: { content: SiteContent }) {
     <footer className="site-footer">
       <div className="site-footer__media" aria-hidden>
         <Image
-          src="/media/editorial/gran-canaria.jpg"
+          src="/media/gallery/frantana/shot-09.jpg"
           alt=""
           fill
           sizes="100vw"
           className="site-footer__media-img"
-          style={{ objectFit: "cover", objectPosition: "50% 38%" }}
+          style={{ objectFit: "cover", objectPosition: "50% 22%" }}
         />
         <div className="site-footer__overlay" />
       </div>
 
       <div className="site-footer__stage">
-        <p className="site-footer__brand">FRANTANA</p>
+        <p className="site-footer__brand">
+          <BrandLogo decorative className="brand-logo--footer" />
+        </p>
         <p className="site-footer__pillars" aria-hidden>
           Música · Show · Directo
         </p>

@@ -28,8 +28,8 @@ export default async function SobrePage() {
 
       <section className="relative">
         <MediaReveal
-          src="/media/gallery/frantana/shot-02.jpg"
-          alt="Frantana — brazos cruzados, luz roja"
+          src="/media/gallery/frantana/shot-05.jpg"
+          alt="Frantana — fotografía oficial"
           className="min-h-[55svh] w-full md:min-h-[75svh]"
           sizes="100vw"
           parallax

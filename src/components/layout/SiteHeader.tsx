@@ -5,12 +5,14 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { useCart } from "@/components/shop/CartProvider";
 
 const NAV = [
   { href: "/sobre", label: "Sobre mí" },
   { href: "/musica", label: "Música" },
   { href: "/conciertos", label: "Conciertos" },
+  { href: "/novedades", label: "Novedades" },
   { href: "/reservas", label: "Reservas" },
   { href: "/tienda", label: "Tienda" },
   { href: "/galeria", label: "Galería" },
@@ -215,7 +217,7 @@ export function SiteHeader() {
             href="/"
             data-nav-brand-slot
             className={clsx(
-              "site-header__brand font-sans text-[1.15rem] font-medium leading-none tracking-[0.16em] uppercase no-underline md:text-[1.25rem]",
+              "site-header__brand no-underline",
               isHome && !menuOpen && "site-header__brand--deferred"
             )}
             aria-label="Frantana — inicio"
@@ -225,7 +227,7 @@ export function SiteHeader() {
               setMenuOpen(false);
             }}
           >
-            FRANTANA
+            <BrandLogo decorative className="brand-logo--nav" />
           </Link>
 
           <div className="site-header__actions">

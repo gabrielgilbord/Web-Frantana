@@ -116,7 +116,7 @@ create table if not exists public.bookings (
   message text not null,
   messages jsonb not null default '[]'::jsonb,
   status text not null default 'new'
-    check (status in ('new','read','replied','archived')),
+    check (status in ('new','read','replied','confirmed','rejected','archived')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -272,14 +272,13 @@ on conflict (id) do update set
 insert into public.gallery_images (id, src, alt, width, height, published, sort_order, credit)
 values
   ('ig-01', '/media/gallery/frantana/shot-01.jpg', 'Frantana — retrato de estudio', 1800, 2705, true, 1, '@frantana'),
-  ('ig-02', '/media/gallery/frantana/shot-02.jpg', 'Frantana — brazos cruzados, luz roja', 1800, 2705, true, 2, '@frantana'),
-  ('ig-03', '/media/gallery/frantana/shot-03.jpg', 'Frantana — fotografía oficial', 1800, 2705, true, 3, '@frantana'),
-  ('ig-04', '/media/gallery/frantana/shot-04.jpg', 'Frantana — plano horizontal de estudio', 1800, 1197, true, 4, '@frantana'),
-  ('ig-05', '/media/gallery/frantana/shot-05.jpg', 'Frantana — fotografía oficial', 1800, 2705, true, 5, '@frantana'),
-  ('ig-06', '/media/gallery/frantana/shot-06.jpg', 'Frantana — estudio, sonrisa y bandana amarilla', 1800, 2705, true, 6, '@frantana'),
-  ('ig-07', '/media/gallery/frantana/shot-07.jpg', 'Frantana — estudio con foco en el suelo', 1800, 2705, true, 7, '@frantana'),
-  ('ig-08', '/media/gallery/frantana/shot-08.jpg', 'Frantana — pose de estudio, mano en la cadera', 1800, 2705, true, 8, '@frantana'),
-  ('ig-09', '/media/gallery/frantana/shot-09.jpg', 'Frantana — retrato en arena blanca, look blanco', 2200, 1464, true, 9, '@frantana')
+  ('ig-03', '/media/gallery/frantana/shot-03.jpg', 'Frantana — fotografía oficial', 1800, 2705, true, 2, '@frantana'),
+  ('ig-04', '/media/gallery/frantana/shot-04.jpg', 'Frantana — plano horizontal de estudio', 1800, 1197, true, 3, '@frantana'),
+  ('ig-05', '/media/gallery/frantana/shot-05.jpg', 'Frantana — fotografía oficial', 1800, 2705, true, 4, '@frantana'),
+  ('ig-06', '/media/gallery/frantana/shot-06.jpg', 'Frantana — estudio, sonrisa y bandana amarilla', 1800, 2705, true, 5, '@frantana'),
+  ('ig-07', '/media/gallery/frantana/shot-07.jpg', 'Frantana — estudio con foco en el suelo', 1800, 2705, true, 6, '@frantana'),
+  ('ig-08', '/media/gallery/frantana/shot-08.jpg', 'Frantana — pose de estudio, mano en la cadera', 1800, 2705, true, 7, '@frantana'),
+  ('ig-09', '/media/gallery/frantana/shot-09.jpg', 'Frantana — retrato en arena blanca, look blanco', 2200, 1464, true, 8, '@frantana')
 on conflict (id) do update set
   src = excluded.src,
   alt = excluded.alt,
@@ -289,12 +288,14 @@ on conflict (id) do update set
   sort_order = excluded.sort_order,
   credit = excluded.credit;
 
+delete from public.gallery_images where id = 'ig-02' or src like '%shot-02%';
+
 -- ——— shop ———
 insert into public.products (id, name, slug, description, category, images, published, featured)
 values
   ('prod-camiseta-noche', 'Camiseta Noche Frantana', 'camiseta-noche-frantana',
    'Camiseta demo de merchandising. Diseño nocturno con tipografía FRANTANA.',
-   'merch', array['/media/gallery/frantana/shot-01.jpg','/media/gallery/frantana/shot-02.jpg'], true, true),
+   'merch', array['/media/gallery/frantana/shot-03.jpg','/media/gallery/frantana/shot-06.jpg'], true, true),
   ('prod-hoodie-isla', 'Hoodie Isla', 'hoodie-isla',
    'Sudadera demo con identidad de isla.',
    'merch', array['/media/gallery/frantana/shot-03.jpg','/media/gallery/frantana/shot-05.jpg'], true, true),
@@ -303,7 +304,7 @@ values
    'digital', array['/media/gallery/frantana/shot-01.jpg'], true, false),
   ('prod-poster-vivo', 'Póster En Vivo', 'poster-en-vivo',
    'Póster editorial demo.',
-   'merch', array['/media/gallery/frantana/shot-04.jpg','/media/gallery/frantana/shot-02.jpg'], true, false)
+   'merch', array['/media/gallery/frantana/shot-04.jpg','/media/gallery/frantana/shot-05.jpg'], true, false)
 on conflict (id) do update set
   name = excluded.name,
   published = excluded.published,

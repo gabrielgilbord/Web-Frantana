@@ -4,26 +4,36 @@ import { Reveal } from "@/components/motion/Reveal";
 import { MediaReveal } from "@/components/motion/MediaReveal";
 import { AgendaChapter } from "@/components/experience/AgendaChapter";
 import { MusicaChapter } from "@/components/experience/MusicaChapter";
+import { NovedadesChapter } from "@/components/news/NovedadesChapter";
 import { getSocialLinks } from "@/lib/social";
-import type { Concert, GalleryImage, SiteContent } from "@/types";
+import type { Concert, GalleryImage, NewsPost, SiteContent } from "@/types";
 
 type Props = {
   content: SiteContent;
   gallery: GalleryImage[];
   concerts: Concert[];
+  newsPosts: NewsPost[];
 };
 
-export function HomeNarrative({ content, gallery, concerts }: Props) {
+export function HomeNarrative({
+  content,
+  gallery,
+  concerts,
+  newsPosts,
+}: Props) {
   const social = getSocialLinks(content);
-  const pick = (...idxs: number[]) =>
-    idxs
-      .map((i) => gallery[i] ?? gallery[0])
+
+  // Curaduría por archivo (sin shot-02 fondo azul)
+  const bySrc = (...names: string[]) =>
+    names
+      .map((n) => gallery.find((g) => g.src.includes(n)))
       .filter(Boolean) as GalleryImage[];
 
-  // Curaduría: variedad de poses / looks (shot-01…09)
-  const presencia = pick(5, 6, 7); // shot-06…08 estudio color
-  const directo = pick(1, 7, 5); // shot-02 principal + laterales nuevos
-  const piel = gallery.filter((_, i) => i !== 3 && i !== 8); // verticales para tira
+  const presencia = bySrc("shot-06", "shot-07", "shot-08");
+  const directo = bySrc("shot-05", "shot-08", "shot-06");
+  const piel = gallery.filter(
+    (g) => !g.src.includes("shot-04") && !g.src.includes("shot-09")
+  );
 
   return (
     <div className="home-narrative">
@@ -31,12 +41,13 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
       <section className="chapter chapter--canaria" aria-labelledby="ch-01">
         <div className="chapter__media chapter__media--canaria" aria-hidden>
           <MediaReveal
-            src="/media/editorial/gran-canaria.jpg"
+            src="/media/gallery/frantana/shot-09.jpg"
             alt=""
             className="absolute inset-0 h-full w-full chapter__media-img"
             sizes="100vw"
             parallax
             priority
+            objectPosition="50% 28%"
           />
           <div className="chapter__media-veil" />
         </div>
@@ -182,11 +193,14 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
         ].filter(Boolean)}
       />
 
-      {/* 07 — LA PIEL */}
-      <section className="chapter chapter--piel" aria-labelledby="ch-07">
+      {/* 07 — NOVEDADES */}
+      <NovedadesChapter posts={newsPosts} />
+
+      {/* 08 — LA PIEL */}
+      <section className="chapter chapter--piel" aria-labelledby="ch-08">
         <Reveal className="chapter__intro" y={28}>
-          <p className="chapter__index">07 — La piel</p>
-          <h2 id="ch-07" className="chapter__title">
+          <p className="chapter__index">08 — La piel</p>
+          <h2 id="ch-08" className="chapter__title">
             Identidad, noche, Canarias
           </h2>
           <p className="chapter__body">
@@ -249,11 +263,11 @@ export function HomeNarrative({ content, gallery, concerts }: Props) {
         </Reveal>
       </section>
 
-      {/* 08 — LA LLAMADA */}
-      <section className="chapter chapter--llamada" aria-labelledby="ch-08">
+      {/* 09 — LA LLAMADA */}
+      <section className="chapter chapter--llamada" aria-labelledby="ch-09">
         <Reveal y={36}>
-          <p className="chapter__index">08 — La llamada</p>
-          <h2 id="ch-08" className="chapter__title">
+          <p className="chapter__index">09 — La llamada</p>
+          <h2 id="ch-09" className="chapter__title">
             ¿Nos vemos en el próximo escenario?
           </h2>
           <p className="chapter__body" style={{ marginInline: "auto" }}>

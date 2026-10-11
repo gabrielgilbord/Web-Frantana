@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getAdminSession } from "@/lib/auth/session";
 import { addBookingMessage } from "@/lib/content/store";
+import { getNotifyEmail, isSmtpConfigured, sendEmail } from "@/lib/email/smtp";
+import { getSiteUrl } from "@/lib/email/site-url";
+import {
+  bookingArtistMessageEmail,
+  bookingRequesterMessageEmail,
+} from "@/lib/email/templates";
 
 const schema = z.object({
   body: z.string().trim().min(1).max(2000),
@@ -37,7 +43,25 @@ export async function POST(req: Request) {
     if (!booking) {
       return NextResponse.json({ error: "No encontrado" }, { status: 404 });
     }
-    return NextResponse.json({ booking });
+
+    let warning: string | undefined;
+    if (isSmtpConfigured()) {
+      const trackUrl = `${getSiteUrl()}/reservas/seguimiento/${booking.accessToken}`;
+      const mail = bookingRequesterMessageEmail(booking, text, trackUrl);
+      try {
+        await sendEmail({
+          to: booking.email,
+          subject: mail.subject,
+          text: mail.text,
+          html: mail.html,
+        });
+      } catch (e) {
+        console.error("[booking/message] client notify failed", e);
+        warning = "Mensaje guardado, pero no se pudo avisar al cliente por correo.";
+      }
+    }
+
+    return NextResponse.json({ booking, warning });
   }
 
   if (!token) {
@@ -53,7 +77,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No encontrado" }, { status: 404 });
   }
 
-  // Public response: strip nothing critical; token already known
+  let warning: string | undefined;
+  if (isSmtpConfigured()) {
+    const adminUrl = `${getSiteUrl()}/admin/reservas`;
+    const mail = bookingArtistMessageEmail(booking, text, adminUrl);
+    try {
+      await sendEmail({
+        to: getNotifyEmail(),
+        subject: mail.subject,
+        text: mail.text,
+        html: mail.html,
+        replyTo: booking.email,
+      });
+    } catch (e) {
+      console.error("[booking/message] artist notify failed", e);
+      warning = "Mensaje enviado, pero el aviso al artista falló.";
+    }
+  }
+
   return NextResponse.json({
     booking: {
       id: booking.id,
@@ -61,5 +102,6 @@ export async function POST(req: Request) {
       messages: booking.messages,
       updatedAt: booking.updatedAt,
     },
+    warning,
   });
 }

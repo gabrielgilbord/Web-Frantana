@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createContactInquiry, getContent } from "@/lib/content/store";
+import { createContactInquiry } from "@/lib/content/store";
+import { getNotifyEmail, isSmtpConfigured, sendEmail } from "@/lib/email/smtp";
+import { contactArtistEmail } from "@/lib/email/templates";
 
 const schema = z.object({
   name: z.string().trim().min(2).max(120),
@@ -9,12 +11,6 @@ const schema = z.object({
   subject: z.enum(["contratacion", "prensa", "otro"]),
   message: z.string().trim().min(10).max(2000),
 });
-
-const SUBJECT_LABEL: Record<string, string> = {
-  contratacion: "Contratación / evento",
-  prensa: "Prensa",
-  otro: "Otro",
-};
 
 function emptyToNull(v: string | null | undefined) {
   if (!v || !v.trim()) return null;
@@ -29,17 +25,26 @@ async function deliverEmail(options: {
   subject: string;
   message: string;
 }) {
-  const resendKey = process.env.RESEND_API_KEY?.trim();
-  const mailSubject = `[Frantana web] ${SUBJECT_LABEL[options.subject] ?? options.subject} — ${options.fromName}`;
-  const text = [
-    `Nombre: ${options.fromName}`,
-    `Email: ${options.fromEmail}`,
-    `Teléfono: ${options.phone ?? "—"}`,
-    `Asunto: ${SUBJECT_LABEL[options.subject] ?? options.subject}`,
-    "",
-    options.message,
-  ].join("\n");
+  const payload = contactArtistEmail({
+    name: options.fromName,
+    email: options.fromEmail,
+    phone: options.phone,
+    subject: options.subject,
+    message: options.message,
+  });
 
+  if (isSmtpConfigured()) {
+    await sendEmail({
+      to: options.to,
+      subject: payload.subject,
+      text: payload.text,
+      html: payload.html,
+      replyTo: options.fromEmail,
+    });
+    return "smtp" as const;
+  }
+
+  const resendKey = process.env.RESEND_API_KEY?.trim();
   if (resendKey) {
     const from =
       process.env.RESEND_FROM_EMAIL?.trim() ||
@@ -54,8 +59,9 @@ async function deliverEmail(options: {
         from,
         to: [options.to],
         reply_to: options.fromEmail,
-        subject: mailSubject,
-        text,
+        subject: payload.subject,
+        text: payload.text,
+        html: payload.html,
       }),
     });
     if (!res.ok) {
@@ -65,30 +71,9 @@ async function deliverEmail(options: {
     return "resend" as const;
   }
 
-  // Fallback sin SMTP propio: FormSubmit (primera vez pide confirmar el correo destino)
-  const res = await fetch(`https://formsubmit.co/ajax/${options.to}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      name: options.fromName,
-      email: options.fromEmail,
-      phone: options.phone ?? "",
-      subject: SUBJECT_LABEL[options.subject] ?? options.subject,
-      message: options.message,
-      _subject: mailSubject,
-      _template: "table",
-      _captcha: "false",
-      _replyto: options.fromEmail,
-    }),
-  });
-  if (!res.ok) {
-    const err = await res.text().catch(() => "");
-    throw new Error(`FormSubmit: ${err || res.status}`);
-  }
-  return "formsubmit" as const;
+  throw new Error(
+    "Ningún canal de correo configurado (SMTP_USER/SMTP_PASS o RESEND_API_KEY)"
+  );
 }
 
 export async function POST(req: Request) {
@@ -107,14 +92,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const content = await getContent();
-  const to = content.contactEmail?.trim();
-  if (!to) {
-    return NextResponse.json(
-      { error: "El correo de contacto no está configurado aún." },
-      { status: 503 }
-    );
-  }
+  const to = getNotifyEmail();
 
   const phone = emptyToNull(parsed.data.phone);
   const inquiry = await createContactInquiry({
@@ -136,12 +114,11 @@ export async function POST(req: Request) {
     });
   } catch (e) {
     console.error("[contact] email delivery failed", e);
-    // Inquiry already saved — still useful for admin; warn client lightly
     return NextResponse.json(
       {
         inquiry,
         warning:
-          "Mensaje guardado. Si es la primera vez, confirma el aviso en tu bandeja (FormSubmit) o configura RESEND_API_KEY.",
+          "Mensaje guardado, pero el correo no se pudo enviar. Revisa la configuración SMTP.",
       },
       { status: 201 }
     );

@@ -5,6 +5,7 @@ import type {
   Concert,
   ContactInquiry,
   GalleryImage,
+  NewsPost,
   OccupancyDay,
   Order,
   Product,
@@ -12,24 +13,29 @@ import type {
   SiteData,
 } from "@/types";
 import { localTodayISO } from "@/lib/concerts/date";
+import { isNewsLive } from "@/lib/news/schedule";
 import {
   normalizeConcert,
   occupancyFromConcerts,
 } from "@/lib/content/occupancy";
 import {
   dbDeleteConcert,
+  dbDeleteNewsPost,
   dbDeleteProduct,
   dbGetBookingByToken,
   dbGetBookings,
   dbGetConcerts,
   dbGetContent,
   dbGetGallery,
+  dbGetNewsPostBySlug,
+  dbGetNewsPosts,
   dbGetOccupancy,
   dbGetOccupancyPublic,
   dbGetOrders,
   dbGetProducts,
   dbUpsertBooking,
   dbUpsertConcert,
+  dbUpsertNewsPost,
   dbUpsertOrder,
   dbUpsertProduct,
   useSupabaseStore,
@@ -481,12 +487,15 @@ export async function addBookingMessage(options: {
   const next: BookingRequest = {
     ...current,
     messages: [...current.messages, msg],
-    status:
-      options.from === "admin"
-        ? "replied"
-        : current.status === "archived"
-          ? current.status
-          : "read",
+    status: (() => {
+      const locked =
+        current.status === "archived" ||
+        current.status === "confirmed" ||
+        current.status === "rejected";
+      if (locked) return current.status;
+      if (options.from === "admin") return "replied";
+      return "read";
+    })(),
     updatedAt: now,
   };
 
@@ -514,4 +523,83 @@ export async function createContactInquiry(
   data.contactInquiries.unshift(inquiry);
   await writeRaw(data);
   return inquiry;
+}
+
+function sortNews(posts: NewsPost[]) {
+  return [...posts].sort((a, b) => {
+    const da = a.publishedAt || a.createdAt;
+    const db = b.publishedAt || b.createdAt;
+    return db.localeCompare(da);
+  });
+}
+
+export async function getNewsPosts(options?: {
+  includeUnpublished?: boolean;
+  limit?: number;
+}): Promise<NewsPost[]> {
+  if (useSupabaseStore()) {
+    const fromDb = await dbGetNewsPosts(options);
+    if (fromDb) {
+      const list = sortNews(
+        options?.includeUnpublished
+          ? fromDb
+          : fromDb.filter((p) => isNewsLive(p))
+      );
+      return options?.limit ? list.slice(0, options.limit) : list;
+    }
+  }
+  const data = await readRaw();
+  const raw = data.newsPosts ?? [];
+  const list = sortNews(
+    options?.includeUnpublished ? raw : raw.filter((p) => isNewsLive(p))
+  );
+  return options?.limit ? list.slice(0, options.limit) : list;
+}
+
+export async function getNewsPostBySlug(
+  slug: string,
+  options?: { includeUnpublished?: boolean }
+): Promise<NewsPost | null> {
+  if (useSupabaseStore()) {
+    const fromDb = await dbGetNewsPostBySlug(slug);
+    if (fromDb) {
+      if (!options?.includeUnpublished && !isNewsLive(fromDb)) return null;
+      return fromDb;
+    }
+  }
+  const posts = await getNewsPosts({
+    includeUnpublished: options?.includeUnpublished,
+  });
+  return posts.find((p) => p.slug === slug) ?? null;
+}
+
+export async function upsertNewsPost(post: NewsPost): Promise<NewsPost> {
+  const next: NewsPost = {
+    ...post,
+    updatedAt: new Date().toISOString(),
+    publishedAt: post.published
+      ? post.publishedAt || new Date().toISOString()
+      : post.publishedAt,
+  };
+  if (useSupabaseStore()) {
+    const saved = await dbUpsertNewsPost(next);
+    if (saved) return saved;
+  }
+  const data = await readRaw();
+  if (!data.newsPosts) data.newsPosts = [];
+  const idx = data.newsPosts.findIndex((p) => p.id === next.id);
+  if (idx >= 0) data.newsPosts[idx] = next;
+  else data.newsPosts.unshift(next);
+  await writeRaw(data);
+  return next;
+}
+
+export async function deleteNewsPost(id: string): Promise<void> {
+  if (useSupabaseStore()) {
+    const ok = await dbDeleteNewsPost(id);
+    if (ok) return;
+  }
+  const data = await readRaw();
+  data.newsPosts = (data.newsPosts ?? []).filter((p) => p.id !== id);
+  await writeRaw(data);
 }

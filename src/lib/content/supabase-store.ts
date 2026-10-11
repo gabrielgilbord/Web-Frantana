@@ -9,6 +9,7 @@ import type {
   BookingRequest,
   Concert,
   GalleryImage,
+  NewsPost,
   OccupancyDay,
   Order,
   Product,
@@ -480,4 +481,113 @@ export async function dbUpsertOrder(order: Order): Promise<Order | null> {
     return null;
   }
   return order;
+}
+
+type NewsRow = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  cover_image: string | null;
+  category: NewsPost["category"];
+  published: boolean;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+function rowToNews(r: NewsRow): NewsPost {
+  return {
+    id: r.id,
+    slug: r.slug,
+    title: r.title,
+    excerpt: r.excerpt,
+    body: r.body,
+    coverImage: r.cover_image,
+    category: r.category,
+    published: r.published,
+    publishedAt: r.published_at,
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+  };
+}
+
+export async function dbGetNewsPosts(options?: {
+  includeUnpublished?: boolean;
+}): Promise<NewsPost[] | null> {
+  const sb = createAdminClient();
+  if (!sb) return null;
+  let q = sb.from("news_posts").select("*").order("published_at", {
+    ascending: false,
+    nullsFirst: false,
+  });
+  if (!options?.includeUnpublished) {
+    q = q
+      .eq("published", true)
+      .or(`published_at.is.null,published_at.lte.${new Date().toISOString()}`);
+  }
+  const { data, error } = await q;
+  if (error) {
+    console.error("[supabase] getNewsPosts", error.message);
+    return null;
+  }
+  return (data as NewsRow[]).map(rowToNews);
+}
+
+export async function dbGetNewsPostBySlug(
+  slug: string
+): Promise<NewsPost | null> {
+  const sb = createAdminClient();
+  if (!sb) return null;
+  const { data, error } = await sb
+    .from("news_posts")
+    .select("*")
+    .eq("slug", slug)
+    .maybeSingle();
+  if (error || !data) return null;
+  return rowToNews(data as NewsRow);
+}
+
+export async function dbUpsertNewsPost(
+  post: NewsPost
+): Promise<NewsPost | null> {
+  const sb = createAdminClient();
+  if (!sb) return null;
+  const { data, error } = await sb
+    .from("news_posts")
+    .upsert(
+      {
+        id: post.id,
+        slug: post.slug,
+        title: post.title,
+        excerpt: post.excerpt,
+        body: post.body,
+        cover_image: post.coverImage,
+        category: post.category,
+        published: post.published,
+        published_at: post.publishedAt,
+        created_at: post.createdAt,
+        updated_at: post.updatedAt,
+      },
+      { onConflict: "id" }
+    )
+    .select("*")
+    .single();
+  if (error) {
+    console.error("[supabase] upsertNewsPost", error.message);
+    return null;
+  }
+  return rowToNews(data as NewsRow);
+}
+
+export async function dbDeleteNewsPost(id: string): Promise<boolean> {
+  const sb = createAdminClient();
+  if (!sb) return false;
+  const { error } = await sb.from("news_posts").delete().eq("id", id);
+  if (error) {
+    console.error("[supabase] deleteNewsPost", error.message);
+    return false;
+  }
+  return true;
 }

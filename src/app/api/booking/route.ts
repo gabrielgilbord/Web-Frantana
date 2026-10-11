@@ -7,6 +7,15 @@ import {
   getOccupancy,
   updateBookingStatus,
 } from "@/lib/content/store";
+import { getNotifyEmail, isSmtpConfigured, sendEmail } from "@/lib/email/smtp";
+import { getSiteUrl } from "@/lib/email/site-url";
+import {
+  bookingArtistNewEmail,
+  bookingRequesterConfirmedEmail,
+  bookingRequesterReceivedEmail,
+  bookingRequesterRejectedEmail,
+} from "@/lib/email/templates";
+import type { BookingStatus } from "@/types";
 
 const createSchema = z.object({
   name: z.string().trim().min(2).max(120),
@@ -25,14 +34,27 @@ const createSchema = z.object({
   message: z.string().trim().min(10).max(2000),
 });
 
+const BOOKING_STATUSES = [
+  "new",
+  "read",
+  "replied",
+  "confirmed",
+  "rejected",
+  "archived",
+] as const;
+
 const statusSchema = z.object({
   id: z.string().min(1),
-  status: z.enum(["new", "read", "replied", "archived"]),
+  status: z.enum(BOOKING_STATUSES),
 });
 
 function emptyToNull(v: string | null | undefined) {
   if (!v || !v.trim()) return null;
   return v.trim();
+}
+
+function trackUrlFor(token: string) {
+  return `${getSiteUrl()}/reservas/seguimiento/${token}`;
 }
 
 export async function GET() {
@@ -80,6 +102,40 @@ export async function POST(req: Request) {
     message: parsed.data.message,
   });
 
+  if (isSmtpConfigured()) {
+    const trackUrl = trackUrlFor(booking.accessToken);
+    const artistMail = bookingArtistNewEmail(booking, trackUrl);
+    const requesterMail = bookingRequesterReceivedEmail(booking, trackUrl);
+
+    try {
+      await Promise.all([
+        sendEmail({
+          to: getNotifyEmail(),
+          subject: artistMail.subject,
+          text: artistMail.text,
+          html: artistMail.html,
+          replyTo: booking.email,
+        }),
+        sendEmail({
+          to: booking.email,
+          subject: requesterMail.subject,
+          text: requesterMail.text,
+          html: requesterMail.html,
+        }),
+      ]);
+    } catch (e) {
+      console.error("[booking] email delivery failed", e);
+      return NextResponse.json(
+        {
+          booking,
+          warning:
+            "Reserva guardada, pero el correo de aviso no se pudo enviar. Revisa SMTP.",
+        },
+        { status: 201 }
+      );
+    }
+  }
+
   return NextResponse.json({ booking }, { status: 201 });
 }
 
@@ -101,9 +157,49 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
   }
 
-  const booking = await updateBookingStatus(parsed.data.id, parsed.data.status);
+  const previous = (await getBookings()).find((b) => b.id === parsed.data.id);
+  if (!previous) {
+    return NextResponse.json({ error: "No encontrado" }, { status: 404 });
+  }
+
+  const nextStatus = parsed.data.status as BookingStatus;
+  const booking = await updateBookingStatus(parsed.data.id, nextStatus);
   if (!booking) {
     return NextResponse.json({ error: "No encontrado" }, { status: 404 });
   }
+
+  const statusChanged = previous.status !== nextStatus;
+  const shouldNotify =
+    statusChanged &&
+    (nextStatus === "confirmed" || nextStatus === "rejected") &&
+    isSmtpConfigured();
+
+  if (shouldNotify) {
+    const trackUrl = trackUrlFor(booking.accessToken);
+    const mail =
+      nextStatus === "confirmed"
+        ? bookingRequesterConfirmedEmail(booking, trackUrl)
+        : bookingRequesterRejectedEmail(booking, trackUrl);
+
+    try {
+      await sendEmail({
+        to: booking.email,
+        subject: mail.subject,
+        text: mail.text,
+        html: mail.html,
+      });
+    } catch (e) {
+      console.error("[booking] status email failed", e);
+      return NextResponse.json(
+        {
+          booking,
+          warning:
+            "Estado actualizado, pero no se pudo notificar al solicitante por correo.",
+        },
+        { status: 200 }
+      );
+    }
+  }
+
   return NextResponse.json({ booking });
 }
