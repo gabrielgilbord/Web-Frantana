@@ -5,8 +5,10 @@ import { ShopExperience } from "@/components/shop/ShopExperience";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Tienda",
-  description: "Merchandising y música de Frantana.",
+  path: "/tienda",
+  title: "Tienda oficial",
+  description:
+    "Tienda oficial de Frantana: merchandising, música y piezas del artista canario.",
 });
 
 export default async function TiendaPage() {

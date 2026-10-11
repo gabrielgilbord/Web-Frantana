@@ -6,9 +6,21 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { getOccupancy } from "@/lib/content/store";
 
 export const metadata = buildMetadata({
-  title: "Reservas",
+  path: "/reservas",
+  title: {
+    absolute: "Reservas Frantana | Contrata al cantante para tu evento",
+  },
   description:
-    "Consulta disponibilidad y solicita a Frantana para tu evento: bodas, privados, corporativos y fiestas.",
+    "Solicita a Frantana para bodas, eventos privados, corporativos y fiestas en Canarias. Consulta disponibilidad y envía tu petición.",
+  keywords: [
+    "contratar cantante Canarias",
+    "cantante para bodas Canarias",
+    "música en vivo eventos",
+    "reservas Frantana",
+    "animación musical Canarias",
+  ],
+  image: "/media/gallery/frantana/shot-09.jpg",
+  imageAlt: "Frantana en actuación — contrataciones y reservas",
 });
 
 export default async function ReservasPage() {
@@ -19,7 +31,7 @@ export default async function ReservasPage() {
       <section className="booking-hero" aria-hidden>
         <Image
           src="/media/gallery/frantana/shot-09.jpg"
-          alt=""
+          alt="Frantana en actuación — reservas y contrataciones en Canarias"
           fill
           priority
           sizes="100vw"

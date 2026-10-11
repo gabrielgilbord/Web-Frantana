@@ -7,8 +7,18 @@ import { SpotifyEmbed } from "@/components/ui/SpotifyEmbed";
 import { FaSpotify } from "react-icons/fa6";
 
 export const metadata = buildMetadata({
-  title: "Música",
-  description: "Escucha la música de Frantana en plataformas oficiales.",
+  path: "/musica",
+  title: {
+    absolute: "Música de Frantana | Spotify, Apple Music y YouTube",
+  },
+  description:
+    "Escucha la música de Frantana en Spotify, Apple Music y YouTube. Temas oficiales del cantante y compositor canario.",
+  keywords: [
+    "música Frantana",
+    "Frantana Spotify",
+    "canciones Frantana",
+    "música canaria",
+  ],
 });
 
 export default async function MusicaPage() {

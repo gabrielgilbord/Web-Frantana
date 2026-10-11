@@ -6,9 +6,18 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import Link from "next/link";
 
 export const metadata = buildMetadata({
-  title: "Contacto",
+  path: "/contacto",
+  title: {
+    absolute: "Contacto Frantana | Contrataciones y prensa",
+  },
   description:
-    "Contacto y contrataciones de Frantana. Teléfono, correo y mensaje directo.",
+    "Contacta con Frantana para prensa, colaboraciones o contrataciones. Teléfono, correo y formulario directo.",
+  keywords: [
+    "contacto Frantana",
+    "contratar Frantana",
+    "booking Frantana",
+    "contratar cantante Canarias",
+  ],
 });
 
 export default async function ContactoPage() {

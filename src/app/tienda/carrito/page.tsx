@@ -3,8 +3,10 @@ import { CartView } from "@/components/shop/CartView";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
+  path: "/tienda/carrito",
   title: "Carrito",
-  description: "Tu selección en la tienda FRANTANA.",
+  description: "Tu selección en la tienda oficial de Frantana.",
+  noIndex: true,
 });
 
 export default function CarritoPage() {

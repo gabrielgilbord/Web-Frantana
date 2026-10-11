@@ -5,8 +5,10 @@ import { getStripe } from "@/lib/shop/stripe";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
+  path: "/tienda/pedido/exito",
   title: "Pedido confirmado",
-  description: "Gracias por formar parte de FRANTANA.",
+  description: "Gracias por tu compra en la tienda oficial de Frantana.",
+  noIndex: true,
 });
 
 type Props = { searchParams: Promise<{ session_id?: string }> };

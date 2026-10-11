@@ -5,9 +5,15 @@ import { NEWS_CATEGORY_LABEL } from "@/lib/news/render";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Novedades — Frantana",
+  path: "/novedades",
+  title: "Novedades y noticias",
   description:
-    "Lanzamientos, promociones y notas del tablón de Frantana. El pulso reciente del artista.",
+    "Novedades de Frantana: lanzamientos, fechas especiales, promociones y notas del artista canario.",
+  keywords: [
+    "noticias Frantana",
+    "novedades Frantana",
+    "lanzamientos Frantana",
+  ],
 });
 
 function formatDate(iso: string | null) {

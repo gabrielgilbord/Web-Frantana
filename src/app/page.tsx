@@ -27,9 +27,21 @@ const HeroExperience = dynamic(
 );
 
 export const metadata = buildMetadata({
-  title: "Frantana",
+  path: "/",
+  title: {
+    absolute:
+      "Frantana | Cantante y compositor canario — Música, conciertos y contrataciones",
+  },
   description:
-    "Frantana — cantante y compositor canario. Música, conciertos y novedades.",
+    "Frantana, cantante y compositor canario: música oficial, agenda de conciertos en Canarias y España, novedades y contrataciones para eventos.",
+  keywords: [
+    "Frantana",
+    "cantante canario",
+    "compositor canario",
+    "música canaria",
+    "conciertos Canarias",
+    "contratar cantante Canarias",
+  ],
 });
 
 /**

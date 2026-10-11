@@ -4,8 +4,18 @@ import { Reveal } from "@/components/motion/Reveal";
 import { MediaReveal } from "@/components/motion/MediaReveal";
 
 export const metadata = buildMetadata({
-  title: "Sobre Frantana",
-  description: "Biografía y presentación de Frantana.",
+  path: "/sobre",
+  title: {
+    absolute: "Sobre Frantana | Biografía del cantante y compositor canario",
+  },
+  description:
+    "Conoce a Frantana: biografía, historia y trayectoria del cantante y compositor canario. Música con raíz y escenario.",
+  keywords: [
+    "biografía Frantana",
+    "cantante canario",
+    "quién es Frantana",
+    "artista Canarias",
+  ],
 });
 
 export default async function SobrePage() {

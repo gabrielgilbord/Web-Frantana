@@ -4,8 +4,10 @@ import { Reveal } from "@/components/motion/Reveal";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
-  title: "Galería",
-  description: "Galería fotográfica editorial de Frantana.",
+  path: "/galeria",
+  title: "Galería fotográfica",
+  description:
+    "Galería oficial de Frantana: fotos de escenario, estudio y atmósfera del artista canario.",
 });
 
 export default async function GaleriaPage() {

@@ -4,7 +4,13 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CartProvider } from "@/components/shop/CartProvider";
 import { CartMiniModal } from "@/components/shop/CartMiniModal";
-import { buildMetadata, musicGroupJsonLd } from "@/lib/seo/metadata";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  buildMetadata,
+  musicGroupJsonLd,
+  personJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo/metadata";
 import { getContent } from "@/lib/content/store";
 import "./globals.css";
 
@@ -35,17 +41,26 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const content = await getContent();
-  const jsonLd = musicGroupJsonLd({
-    spotifyUrl: content.spotifyArtistUrl ?? content.social.spotify,
-    social: [
-      content.social.instagram,
-      content.social.facebook,
-      content.social.spotify ?? content.spotifyArtistUrl,
-      content.social.youtube,
-      content.social.tiktok,
-      content.social.appleMusic,
-    ],
-  });
+  const graph = [
+    websiteJsonLd(),
+    musicGroupJsonLd({
+      description:
+        content.seoDescription ||
+        (content.aboutBody ? content.aboutBody.slice(0, 280) : undefined),
+      spotifyUrl: content.spotifyArtistUrl ?? content.social.spotify,
+      email: content.contactEmail,
+      phone: content.contactPhone,
+      social: [
+        content.social.instagram,
+        content.social.facebook,
+        content.social.spotify ?? content.spotifyArtistUrl,
+        content.social.youtube,
+        content.social.tiktok,
+        content.social.appleMusic,
+      ],
+    }),
+    personJsonLd(content),
+  ];
 
   return (
     <html
@@ -58,10 +73,7 @@ export default async function RootLayout({
           Saltar al contenido
         </a>
         <div id="fr-portal-root" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <JsonLd data={graph} />
         <CartProvider>
           <SiteHeader />
           <CartMiniModal />

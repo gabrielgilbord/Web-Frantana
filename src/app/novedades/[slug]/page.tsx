@@ -1,9 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getNewsPostBySlug, getNewsPosts } from "@/lib/content/store";
 import { NEWS_CATEGORY_LABEL, renderNewsBody } from "@/lib/news/render";
-import { buildMetadata } from "@/lib/seo/metadata";
+import {
+  breadcrumbJsonLd,
+  buildMetadata,
+  newsArticleJsonLd,
+} from "@/lib/seo/metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -15,17 +20,34 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const post = await getNewsPostBySlug(slug);
-  if (!post) return buildMetadata({ title: "Novedad — Frantana" });
+  if (!post) {
+    return buildMetadata({
+      path: "/novedades",
+      title: "Novedad",
+      noIndex: true,
+    });
+  }
+  const path = `/novedades/${post.slug}`;
   const image = post.coverImage || "/media/hero/hero-poster.jpg";
+  const description =
+    post.excerpt ||
+    `${post.title} — novedad de Frantana, cantante y compositor canario.`;
+
   return buildMetadata({
-    title: `${post.title} — Frantana`,
-    description: post.excerpt || post.title,
-    alternates: { canonical: `/novedades/${post.slug}` },
+    path,
+    title: { absolute: `${post.title} · Frantana` },
+    description,
+    image,
+    imageAlt: post.title,
     openGraph: {
+      type: "article",
       title: post.title,
-      description: post.excerpt || post.title,
-      url: `/novedades/${post.slug}`,
+      description,
+      url: path,
       images: [{ url: image, alt: post.title }],
+      publishedTime: post.publishedAt ?? post.createdAt,
+      modifiedTime: post.updatedAt,
+      authors: ["Frantana"],
     },
   });
 }
@@ -45,9 +67,20 @@ export default async function NovedadDetailPage({ params }: Props) {
   if (!post) notFound();
 
   const html = renderNewsBody(post.body);
+  const path = `/novedades/${post.slug}`;
 
   return (
     <article className="novedad-article">
+      <JsonLd
+        data={[
+          newsArticleJsonLd(post),
+          breadcrumbJsonLd([
+            { name: "Inicio", path: "/" },
+            { name: "Novedades", path: "/novedades" },
+            { name: post.title, path },
+          ]),
+        ]}
+      />
       <header className="novedad-article__head">
         <Link href="/novedades" className="novedad-article__back">
           ← Novedades
@@ -65,7 +98,7 @@ export default async function NovedadDetailPage({ params }: Props) {
         <div className="novedad-article__hero">
           <Image
             src={post.coverImage}
-            alt=""
+            alt={post.title}
             fill
             priority
             sizes="100vw"

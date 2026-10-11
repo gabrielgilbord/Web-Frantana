@@ -4,8 +4,10 @@ import { BookingTrackClient } from "@/components/booking/BookingTrackClient";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
+  path: "/reservas/seguimiento",
   title: "Seguimiento de reserva",
   description: "Consulta y responde a tu solicitud de contratación con Frantana.",
+  noIndex: true,
 });
 
 type Props = { params: Promise<{ token: string }> };
