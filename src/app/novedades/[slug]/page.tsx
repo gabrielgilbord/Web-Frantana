@@ -2,12 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { ShareNewsBar } from "@/components/news/ShareNewsBar";
 import { getNewsPostBySlug, getNewsPosts } from "@/lib/content/store";
 import { NEWS_CATEGORY_LABEL, renderNewsBody } from "@/lib/news/render";
 import {
   breadcrumbJsonLd,
   buildMetadata,
   newsArticleJsonLd,
+  SITE_URL,
 } from "@/lib/seo/metadata";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -68,6 +70,7 @@ export default async function NovedadDetailPage({ params }: Props) {
 
   const html = renderNewsBody(post.body);
   const path = `/novedades/${post.slug}`;
+  const shareUrl = `${SITE_URL}${path}`;
 
   return (
     <article className="novedad-article">
@@ -111,6 +114,14 @@ export default async function NovedadDetailPage({ params }: Props) {
         className="novedad-article__body"
         dangerouslySetInnerHTML={{ __html: html }}
       />
+
+      <div className="novedad-article__share">
+        <ShareNewsBar
+          title={post.title}
+          url={shareUrl}
+          excerpt={post.excerpt}
+        />
+      </div>
 
       <footer className="novedad-article__foot">
         <Link href="/novedades" className="chapter__ghost">
