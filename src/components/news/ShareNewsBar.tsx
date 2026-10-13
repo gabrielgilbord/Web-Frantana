@@ -18,17 +18,27 @@ type Props = {
 
 type Feedback = { kind: "ok" | "hint"; text: string } | null;
 
+function isAndroid() {
+  return /Android/i.test(navigator.userAgent);
+}
+
+function isAppleMobile() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
 export function ShareNewsBar({ title, url, excerpt }: Props) {
   const [canNativeShare, setCanNativeShare] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
 
   useEffect(() => {
-    setCanNativeShare(typeof navigator !== "undefined" && Boolean(navigator.share));
+    setCanNativeShare(
+      typeof navigator !== "undefined" && typeof navigator.share === "function"
+    );
   }, []);
 
   useEffect(() => {
     if (!feedback) return;
-    const t = window.setTimeout(() => setFeedback(null), 4200);
+    const t = window.setTimeout(() => setFeedback(null), 4500);
     return () => window.clearTimeout(t);
   }, [feedback]);
 
@@ -40,13 +50,18 @@ export function ShareNewsBar({ title, url, excerpt }: Props) {
     setFeedback({ kind, text: msg });
   }
 
-  async function copyLink() {
+  async function copyLink(silent = false) {
     try {
       await navigator.clipboard.writeText(url);
-      flash("ok", "Enlace copiado");
+      if (!silent) flash("ok", "Enlace copiado");
       return true;
     } catch {
-      flash("hint", "No se pudo copiar. Selecciona y copia la URL del navegador.");
+      if (!silent) {
+        flash(
+          "hint",
+          "No se pudo copiar. Selecciona y copia la URL del navegador."
+        );
+      }
       return false;
     }
   }
@@ -61,26 +76,107 @@ export function ShareNewsBar({ title, url, excerpt }: Props) {
   }
 
   function shareWhatsApp() {
-    const href = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(href, "_blank", "noopener,noreferrer");
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(text)}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
   }
 
   function shareFacebook() {
-    const href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-    window.open(href, "_blank", "noopener,noreferrer,width=600,height=640");
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+      "_blank",
+      "noopener,noreferrer,width=600,height=640"
+    );
   }
 
   function shareX() {
-    const href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
-    window.open(href, "_blank", "noopener,noreferrer,width=600,height=640");
+    window.open(
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+      "_blank",
+      "noopener,noreferrer,width=600,height=640"
+    );
   }
 
+  /**
+   * Instagram no tiene sharer web oficial.
+   * En móvil: abre la app en el selector de compartir (historia / publicación / chat).
+   * En escritorio: copia el enlace y abre Instagram.
+   */
   async function shareInstagram() {
-    const ok = await copyLink();
-    if (!ok) return;
+    await copyLink(true);
+
+    // 1) Deep link al sharesheet de Instagram (iOS y algunas builds Android)
+    const sharesheet = `instagram://sharesheet?text=${encodeURIComponent(text)}`;
+
+    // 2) Android: intent directo a la app de Instagram
+    if (isAndroid()) {
+      const intent = [
+        "intent://#Intent",
+        "action=android.intent.action.SEND",
+        "type=text/plain",
+        `S.android.intent.extra.TEXT=${encodeURIComponent(text)}`,
+        "package=com.instagram.android",
+        `S.browser_fallback_url=${encodeURIComponent(sharesheet)}`,
+        "end",
+      ].join(";");
+
+      window.location.href = intent;
+      flash(
+        "hint",
+        "Si no se abre, ten Instagram instalado y elige historia o publicación."
+      );
+      return;
+    }
+
+    if (isAppleMobile()) {
+      const leftAt = Date.now();
+      window.location.href = sharesheet;
+
+      window.setTimeout(() => {
+        // Si seguimos en la página, la app no capturó el deep link
+        if (document.visibilityState !== "visible") return;
+        if (Date.now() - leftAt < 900) return;
+
+        if (typeof navigator.share === "function") {
+          void navigator
+            .share({ title, text: excerpt || title, url })
+            .catch((err) => {
+              if (err instanceof DOMException && err.name === "AbortError") {
+                return;
+              }
+              flash(
+                "hint",
+                "Enlace copiado. Abre Instagram y elige historia o publicación."
+              );
+            });
+          return;
+        }
+
+        flash(
+          "hint",
+          "Enlace copiado. Abre Instagram y elige historia o publicación."
+        );
+      }, 1100);
+      return;
+    }
+
+    // Móvil genérico con Web Share (abre el menú; elige Instagram ahí)
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title, text: excerpt || title, url });
+        return;
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+      }
+    }
+
+    // Escritorio / fallback
+    window.open("https://www.instagram.com/", "_blank", "noopener,noreferrer");
     flash(
       "hint",
-      "Enlace copiado. Ábrelo en Instagram y pégalo en una historia o publicación."
+      "Enlace copiado. En Instagram pégalo en una historia o publicación."
     );
   }
 
@@ -132,8 +228,8 @@ export function ShareNewsBar({ title, url, excerpt }: Props) {
               type="button"
               className="share-news__btn"
               onClick={shareInstagram}
-              aria-label="Compartir en Instagram"
-              title="Copiar enlace para historia o publicación de Instagram"
+              aria-label="Abrir Instagram para compartir"
+              title="Abrir Instagram y elegir historia o publicación"
             >
               <FaInstagram aria-hidden />
               <span>Instagram</span>
@@ -155,7 +251,7 @@ export function ShareNewsBar({ title, url, excerpt }: Props) {
             <button
               type="button"
               className="share-news__btn"
-              onClick={copyLink}
+              onClick={() => void copyLink(false)}
               aria-label="Copiar enlace"
               title="Copiar enlace"
             >
@@ -178,7 +274,8 @@ export function ShareNewsBar({ title, url, excerpt }: Props) {
         </p>
       ) : (
         <p className="share-news__note">
-          En el móvil, «Más» abre el menú del sistema (historias, estados, chats…).
+          Instagram abre la app para elegir historia, publicación o chat. En
+          ordenador se copia el enlace.
         </p>
       )}
     </aside>
