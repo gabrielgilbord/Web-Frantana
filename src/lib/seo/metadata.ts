@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { getPublicSiteUrl } from "@/lib/email/site-url";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://frantana.es";
+/** Siempre https://frantana.es si el env apunta a localhost. */
+const SITE_URL = getPublicSiteUrl();
 const SITE_NAME = "Frantana";
 const DEFAULT_OG = "/media/hero/hero-poster.jpg";
 const DEFAULT_DESCRIPTION =

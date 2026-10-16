@@ -71,10 +71,15 @@ export function HomeNarrative({
           <h2 id="ch-02" className="chapter__title">
             Quién es Frantana
           </h2>
-          <p className="chapter__body">{content.aboutBody}</p>
-          <p className="chapter__body" style={{ marginTop: "1rem" }}>
-            {content.aboutStoryBody}
-          </p>
+          {content.aboutBody.split(/\n\n+/).map((para, i) => (
+            <p
+              key={`firma-${i}`}
+              className="chapter__body"
+              style={i > 0 ? { marginTop: "1rem" } : undefined}
+            >
+              {para}
+            </p>
+          ))}
         </Reveal>
         <Reveal
           className="order-1 md:order-2 chapter__portrait relative overflow-hidden"
@@ -103,11 +108,7 @@ export function HomeNarrative({
           <h2 id="ch-04" className="chapter__title">
             En escena
           </h2>
-          <p className="chapter__body">
-            Años de escenario y público real. Ha recorrido varios grupos y
-            colabora con varias agrupaciones. La escena es el centro: show, voz
-            y conexión.
-          </p>
+          <p className="chapter__body">{content.aboutStoryBody}</p>
         </Reveal>
         {presencia.length > 0 && (
           <div className="chapter__rail">

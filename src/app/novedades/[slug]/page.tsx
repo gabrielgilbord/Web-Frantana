@@ -9,8 +9,8 @@ import {
   breadcrumbJsonLd,
   buildMetadata,
   newsArticleJsonLd,
-  SITE_URL,
 } from "@/lib/seo/metadata";
+import { getPublicSiteUrl } from "@/lib/email/site-url";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -70,7 +70,7 @@ export default async function NovedadDetailPage({ params }: Props) {
 
   const html = renderNewsBody(post.body);
   const path = `/novedades/${post.slug}`;
-  const shareUrl = `${SITE_URL}${path}`;
+  const shareUrl = `${getPublicSiteUrl()}${path}`;
 
   return (
     <article className="novedad-article">

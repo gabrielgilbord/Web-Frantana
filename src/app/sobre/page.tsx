@@ -31,7 +31,13 @@ export default async function SobrePage() {
             </h1>
           </Reveal>
           <Reveal className="md:col-span-6 md:col-start-7" delay={0.08}>
-            <p className="prose-editorial text-lg">{content.aboutBody}</p>
+            <div className="grid gap-4">
+              {content.aboutBody.split(/\n\n+/).map((para, i) => (
+                <p key={`sobre-bio-${i}`} className="prose-editorial text-lg">
+                  {para}
+                </p>
+              ))}
+            </div>
           </Reveal>
         </div>
       </section>

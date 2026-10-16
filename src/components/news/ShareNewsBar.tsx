@@ -26,7 +26,26 @@ function isAppleMobile() {
   return /iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
-export function ShareNewsBar({ title, url, excerpt }: Props) {
+function toPublicShareUrl(raw: string) {
+  try {
+    const u = new URL(raw);
+    if (
+      u.hostname === "localhost" ||
+      u.hostname === "127.0.0.1" ||
+      u.protocol === "http:"
+    ) {
+      return `https://frantana.es${u.pathname}${u.search}${u.hash}`;
+    }
+    return raw;
+  } catch {
+    return raw.startsWith("/")
+      ? `https://frantana.es${raw}`
+      : raw;
+  }
+}
+
+export function ShareNewsBar({ title, url: urlProp, excerpt }: Props) {
+  const url = toPublicShareUrl(urlProp);
   const [canNativeShare, setCanNativeShare] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
 
