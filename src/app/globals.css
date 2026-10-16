@@ -1266,6 +1266,13 @@ html[data-hero-experience="true"][data-hero-progress="1"] .site-header--home:not
   background: var(--fr-cream);
 }
 
+.chapter--firma .chapter__title {
+  font-size: clamp(1.85rem, 4.8vw, 3.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  max-width: 18ch;
+}
+
 @media (min-width: 900px) {
   .chapter--firma {
     grid-template-columns: 1.1fr 0.9fr;

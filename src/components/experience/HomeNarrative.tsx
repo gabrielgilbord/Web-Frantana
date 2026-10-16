@@ -69,7 +69,7 @@ export function HomeNarrative({
         <Reveal className="order-2 md:order-1" y={36}>
           <p className="chapter__index">02 — La firma</p>
           <h2 id="ch-02" className="chapter__title">
-            Quién es Frantana
+            {content.heroSubtitle}
           </h2>
           {content.aboutBody.split(/\n\n+/).map((para, i) => (
             <p
