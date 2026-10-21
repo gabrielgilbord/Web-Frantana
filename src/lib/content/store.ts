@@ -26,7 +26,9 @@ import {
   dbGetBookings,
   dbGetConcerts,
   dbGetContent,
+  dbDeleteGalleryImage,
   dbGetGallery,
+  dbUpsertGalleryImage,
   dbGetNewsPostBySlug,
   dbGetNewsPosts,
   dbGetOccupancy,
@@ -187,6 +189,13 @@ export async function getGallery(options?: {
 }
 
 export async function upsertGalleryImage(image: GalleryImage) {
+  if (useSupabaseStore()) {
+    const saved = await dbUpsertGalleryImage(image);
+    if (saved) return saved;
+    throw new Error(
+      "No se pudo guardar la foto en la base de datos (gallery_images)."
+    );
+  }
   const data = await readRaw();
   const idx = data.gallery.findIndex((g) => g.id === image.id);
   if (idx >= 0) data.gallery[idx] = image;
@@ -196,6 +205,11 @@ export async function upsertGalleryImage(image: GalleryImage) {
 }
 
 export async function deleteGalleryImage(id: string) {
+  if (useSupabaseStore()) {
+    const ok = await dbDeleteGalleryImage(id);
+    if (ok) return;
+    throw new Error("No se pudo eliminar la foto en la base de datos.");
+  }
   const data = await readRaw();
   data.gallery = data.gallery.filter((g) => g.id !== id);
   await writeRaw(data);
@@ -584,20 +598,30 @@ export async function upsertNewsPost(post: NewsPost): Promise<NewsPost> {
   if (useSupabaseStore()) {
     const saved = await dbUpsertNewsPost(next);
     if (saved) return saved;
+    throw new Error(
+      "No se pudo guardar la novedad en la base de datos. ¿Existe la tabla news_posts? Aplica supabase/migrations/004_news_posts.sql."
+    );
   }
-  const data = await readRaw();
-  if (!data.newsPosts) data.newsPosts = [];
-  const idx = data.newsPosts.findIndex((p) => p.id === next.id);
-  if (idx >= 0) data.newsPosts[idx] = next;
-  else data.newsPosts.unshift(next);
-  await writeRaw(data);
-  return next;
+  try {
+    const data = await readRaw();
+    if (!data.newsPosts) data.newsPosts = [];
+    const idx = data.newsPosts.findIndex((p) => p.id === next.id);
+    if (idx >= 0) data.newsPosts[idx] = next;
+    else data.newsPosts.unshift(next);
+    await writeRaw(data);
+    return next;
+  } catch {
+    throw new Error(
+      "No se pudo guardar la novedad. En producción configura SUPABASE_SERVICE_ROLE_KEY."
+    );
+  }
 }
 
 export async function deleteNewsPost(id: string): Promise<void> {
   if (useSupabaseStore()) {
     const ok = await dbDeleteNewsPost(id);
     if (ok) return;
+    throw new Error("No se pudo eliminar la novedad en la base de datos.");
   }
   const data = await readRaw();
   data.newsPosts = (data.newsPosts ?? []).filter((p) => p.id !== id);

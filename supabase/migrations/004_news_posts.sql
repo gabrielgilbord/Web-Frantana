@@ -23,7 +23,10 @@ drop policy if exists "Public read published news" on public.news_posts;
 create policy "Public read published news"
   on public.news_posts for select
   to anon, authenticated
-  using (published = true);
+  using (
+    published = true
+    and (published_at is null or published_at <= now())
+  );
 
 drop policy if exists "Admin write news" on public.news_posts;
 create policy "Admin write news"

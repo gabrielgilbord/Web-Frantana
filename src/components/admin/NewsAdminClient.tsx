@@ -93,40 +93,35 @@ export function NewsAdminClient({
     setMode("edit");
   }
 
-  function setPublishNow() {
-    setForm((f) => ({
-      ...f,
-      published: true,
-      publishAtLocal: toDatetimeLocalValue(new Date().toISOString()),
-    }));
-  }
-
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
+  async function savePost(overrides?: {
+    published?: boolean;
+    publishAtLocal?: string;
+  }) {
     setSaving(true);
     setError(null);
     setMessage(null);
     try {
+      const next = { ...form, ...overrides };
       const existing = editingId
         ? posts.find((p) => p.id === editingId)
         : null;
-      const publishedAt = form.published
-        ? fromDatetimeLocalValue(form.publishAtLocal) ||
+      const publishedAt = next.published
+        ? fromDatetimeLocalValue(next.publishAtLocal) ||
           new Date().toISOString()
-        : fromDatetimeLocalValue(form.publishAtLocal);
+        : fromDatetimeLocalValue(next.publishAtLocal);
 
       const res = await fetch("/api/news", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: editingId ?? undefined,
-          title: form.title,
-          slug: form.slug || slugifyNews(form.title),
-          excerpt: form.excerpt,
-          body: form.body,
-          coverImage: form.coverImage || null,
-          category: form.category,
-          published: form.published,
+          title: next.title,
+          slug: next.slug || slugifyNews(next.title),
+          excerpt: next.excerpt,
+          body: next.body,
+          coverImage: next.coverImage || null,
+          category: next.category,
+          published: next.published,
           publishedAt,
           createdAt: existing?.createdAt,
         }),
@@ -136,6 +131,7 @@ export function NewsAdminClient({
         setError(data.error ?? "No se pudo guardar");
         return;
       }
+      if (overrides) setForm(next);
       const state = newsPublishState(data.post as NewsPost);
       setMessage(
         state === "scheduled"
@@ -149,6 +145,18 @@ export function NewsAdminClient({
     } finally {
       setSaving(false);
     }
+  }
+
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    await savePost();
+  }
+
+  async function publishNow() {
+    await savePost({
+      published: true,
+      publishAtLocal: toDatetimeLocalValue(new Date().toISOString()),
+    });
   }
 
   async function remove(id: string) {
@@ -337,9 +345,10 @@ export function NewsAdminClient({
             <button
               type="button"
               className="admin-btn admin-btn--ghost"
-              onClick={setPublishNow}
+              disabled={saving || !form.title.trim() || !form.body.trim()}
+              onClick={() => void publishNow()}
             >
-              Publicar ahora
+              {saving ? "Publicando…" : "Publicar ahora"}
             </button>
           </fieldset>
 
@@ -350,7 +359,16 @@ export function NewsAdminClient({
             className="admin-btn admin-btn--ember"
             disabled={saving}
           >
-            {saving ? "Guardando…" : "Guardar"}
+            {saving
+              ? "Guardando…"
+              : form.published
+                ? newsPublishState({
+                      published: form.published,
+                      publishedAt: fromDatetimeLocalValue(form.publishAtLocal),
+                    }) === "scheduled"
+                  ? "Guardar programación"
+                  : "Guardar y publicar"
+                : "Guardar borrador"}
           </button>
         </form>
       </div>

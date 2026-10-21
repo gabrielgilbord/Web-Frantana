@@ -423,7 +423,10 @@ export async function dbGetGallery(options?: {
   let q = sb.from("gallery_images").select("*").order("sort_order");
   if (!options?.includeUnpublished) q = q.eq("published", true);
   const { data, error } = await q;
-  if (error) return null;
+  if (error) {
+    console.error("[supabase] getGallery", error.message);
+    return null;
+  }
   return (data as Array<Record<string, unknown>>).map((r) => ({
     id: String(r.id),
     src: String(r.src),
@@ -434,6 +437,42 @@ export async function dbGetGallery(options?: {
     sortOrder: Number(r.sort_order),
     credit: (r.credit as string) ?? null,
   }));
+}
+
+export async function dbUpsertGalleryImage(
+  image: GalleryImage
+): Promise<GalleryImage | null> {
+  const sb = createAdminClient();
+  if (!sb) return null;
+  const { error } = await sb.from("gallery_images").upsert(
+    {
+      id: image.id,
+      src: image.src,
+      alt: image.alt,
+      width: image.width,
+      height: image.height,
+      published: image.published,
+      sort_order: image.sortOrder,
+      credit: image.credit,
+    },
+    { onConflict: "id" }
+  );
+  if (error) {
+    console.error("[supabase] upsertGallery", error.message);
+    return null;
+  }
+  return image;
+}
+
+export async function dbDeleteGalleryImage(id: string): Promise<boolean> {
+  const sb = createAdminClient();
+  if (!sb) return false;
+  const { error } = await sb.from("gallery_images").delete().eq("id", id);
+  if (error) {
+    console.error("[supabase] deleteGallery", error.message);
+    return false;
+  }
+  return true;
 }
 
 export async function dbGetOrders(): Promise<Order[] | null> {

@@ -14,10 +14,8 @@ import { getPublicSiteUrl } from "@/lib/email/site-url";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  const posts = await getNewsPosts();
-  return posts.map((p) => ({ slug: p.slug }));
-}
+/** Soft-schedule + admin publishes must appear without waiting for a rebuild. */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;

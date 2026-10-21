@@ -56,7 +56,11 @@ export function GalleryAdminClient({
     });
     setUploading(false);
     if (!saveRes.ok) {
-      setError("Subida ok, pero falló el registro");
+      const saveData = await saveRes.json().catch(() => ({}));
+      setError(
+        (saveData as { error?: string }).error ??
+          "Subida ok, pero falló el registro en galería"
+      );
       return;
     }
     setAlt("");

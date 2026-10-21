@@ -3,6 +3,8 @@ import { GalleryGrid } from "@/components/gallery/GalleryGrid";
 import { Reveal } from "@/components/motion/Reveal";
 import { buildMetadata } from "@/lib/seo/metadata";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = buildMetadata({
   path: "/galeria",
   title: "Galería fotográfica",

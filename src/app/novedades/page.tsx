@@ -4,6 +4,9 @@ import { getNewsPosts } from "@/lib/content/store";
 import { NEWS_CATEGORY_LABEL } from "@/lib/news/render";
 import { buildMetadata } from "@/lib/seo/metadata";
 
+/** Soft-schedule + admin publishes must appear without waiting for a rebuild. */
+export const dynamic = "force-dynamic";
+
 export const metadata = buildMetadata({
   path: "/novedades",
   title: "Novedades y noticias",

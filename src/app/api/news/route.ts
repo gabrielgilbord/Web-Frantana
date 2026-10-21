@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getAdminSession } from "@/lib/auth/session";
@@ -21,6 +22,12 @@ const schema = z.object({
   publishedAt: z.string().nullable().optional(),
   createdAt: z.string().optional(),
 });
+
+function revalidateNews(slug?: string) {
+  revalidatePath("/");
+  revalidatePath("/novedades");
+  if (slug) revalidatePath(`/novedades/${slug}`);
+}
 
 export async function GET() {
   const session = await getAdminSession();
@@ -65,6 +72,7 @@ export async function POST(req: Request) {
       updatedAt: now,
     });
 
+    revalidateNews(post.slug);
     return NextResponse.json({ post });
   } catch (e) {
     return NextResponse.json(
@@ -84,5 +92,6 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: "Falta id" }, { status: 400 });
   }
   await deleteNewsPost(id);
+  revalidateNews();
   return NextResponse.json({ ok: true });
 }

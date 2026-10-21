@@ -1,12 +1,13 @@
+import { randomUUID } from "crypto";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { getAdminSession } from "@/lib/auth/session";
 import {
   deleteGalleryImage,
   getGallery,
   upsertGalleryImage,
 } from "@/lib/content/store";
-import { z } from "zod";
-import { randomUUID } from "crypto";
 
 const schema = z.object({
   id: z.string().optional(),
@@ -18,6 +19,11 @@ const schema = z.object({
   sortOrder: z.number().int().default(0),
   credit: z.string().nullable().optional(),
 });
+
+function revalidateGallery() {
+  revalidatePath("/");
+  revalidatePath("/galeria");
+}
 
 export async function GET() {
   const session = await getAdminSession();
@@ -46,6 +52,7 @@ export async function POST(request: Request) {
       sortOrder: parsed.sortOrder,
       credit: parsed.credit ?? null,
     });
+    revalidateGallery();
     return NextResponse.json({ image });
   } catch (e) {
     return NextResponse.json(
@@ -65,5 +72,6 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Falta id" }, { status: 400 });
   }
   await deleteGalleryImage(id);
+  revalidateGallery();
   return NextResponse.json({ ok: true });
 }
