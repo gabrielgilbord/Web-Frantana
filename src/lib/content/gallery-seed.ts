@@ -6,7 +6,6 @@ import {
   dbUpsertGalleryImage,
   useSupabaseStore,
 } from "@/lib/content/supabase-store";
-import { createAdminClient } from "@/lib/supabase/admin";
 
 const DATA_PATH = path.join(process.cwd(), "src/data/site.json");
 
@@ -126,66 +125,8 @@ async function readSeedGallery(): Promise<GalleryImage[]> {
   return GALLERY_SEED;
 }
 
-export type SeedGalleryResult = {
-  ok: boolean;
-  upserted: number;
-  total: number;
-  ids: string[];
-  error?: string;
-};
-
-/** Upsert forzado de todas las fotos seed en gallery_images (service role). */
-export async function seedGalleryToSupabase(): Promise<SeedGalleryResult> {
-  const sb = createAdminClient();
-  if (!sb) {
-    return {
-      ok: false,
-      upserted: 0,
-      total: GALLERY_SEED.length,
-      ids: [],
-      error:
-        "Falta SUPABASE_SERVICE_ROLE_KEY (o SUPABASE_SECRET_KEY) en el entorno.",
-    };
-  }
-
-  const seed = await readSeedGallery();
-  const rows = seed.map((image) => ({
-    id: image.id,
-    src: image.src,
-    alt: image.alt,
-    width: image.width,
-    height: image.height,
-    published: image.published,
-    sort_order: image.sortOrder,
-    credit: image.credit,
-  }));
-
-  const { data, error } = await sb
-    .from("gallery_images")
-    .upsert(rows, { onConflict: "id" })
-    .select("id");
-
-  if (error) {
-    return {
-      ok: false,
-      upserted: 0,
-      total: seed.length,
-      ids: [],
-      error: error.message,
-    };
-  }
-
-  const ids = (data ?? []).map((r) => String((r as { id: string }).id));
-  return {
-    ok: true,
-    upserted: ids.length || seed.length,
-    total: seed.length,
-    ids: ids.length ? ids : seed.map((s) => s.id),
-  };
-}
-
 /**
- * Inserta en gallery_images las fotos del seed que aún no existan.
+ * Inserta en gallery_images las fotos oficiales del JSON que aún no existan.
  * Evita que la primera subida deje la galería solo con esa foto.
  */
 export async function ensureGallerySeedInDb(): Promise<void> {
@@ -194,10 +135,6 @@ export async function ensureGallerySeedInDb(): Promise<void> {
     seedPromise = (async () => {
       const existing = await dbGetGallery({ includeUnpublished: true });
       if (existing === null) return;
-      if (existing.length === 0) {
-        await seedGalleryToSupabase();
-        return;
-      }
       const have = new Set(existing.map((g) => g.id));
       const haveSrc = new Set(existing.map((g) => g.src));
       const seed = await readSeedGallery();
