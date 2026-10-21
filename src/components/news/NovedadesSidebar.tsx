@@ -1,58 +1,51 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { NewsPost } from "@/types";
 import { NEWS_CATEGORY_LABEL } from "@/lib/news/render";
-import { formatNewsDate } from "@/lib/news/date";
 
 export function NovedadesSidebar({
   posts,
   currentSlug,
+  title = "También en el tablón",
 }: {
   posts: NewsPost[];
   currentSlug?: string;
+  title?: string;
 }) {
-  const recent = posts.filter((p) => p.slug !== currentSlug).slice(0, 5);
-  const byCat = posts.reduce<Record<string, number>>((acc, p) => {
-    acc[p.category] = (acc[p.category] ?? 0) + 1;
-    return acc;
-  }, {});
+  const items = posts.filter((p) => p.slug !== currentSlug).slice(0, 6);
+
+  if (items.length === 0) return null;
 
   return (
-    <aside className="az-news-side">
-      <div className="az-news-side__block">
-        <h3 className="az-news-side__title">Categorías</h3>
-        <ul className="az-news-side__cats">
-          {Object.entries(byCat).map(([cat, n]) => (
-            <li key={cat}>
-              <span>{NEWS_CATEGORY_LABEL[cat] ?? cat}</span>
-              <span className="az-news-side__count">{n}</span>
-            </li>
-          ))}
-          {Object.keys(byCat).length === 0 ? (
-            <li>
-              <span>Sin categorías aún</span>
-            </li>
-          ) : null}
-        </ul>
-      </div>
-
-      <div className="az-news-side__block">
-        <h3 className="az-news-side__title">Recientes</h3>
-        <ul className="az-news-side__recent">
-          {recent.map((p) => (
-            <li key={p.id}>
-              <Link href={`/novedades/${p.slug}`}>
-                <span className="az-news-side__recent-title">{p.title}</span>
-                <time dateTime={p.publishedAt ?? p.createdAt}>
-                  {formatNewsDate(p.publishedAt ?? p.createdAt)}
-                </time>
-              </Link>
-            </li>
-          ))}
-          {recent.length === 0 ? (
-            <li className="az-news-side__empty">No hay más entradas.</li>
-          ) : null}
-        </ul>
-      </div>
+    <aside className="az-news-rail" aria-label={title}>
+      <h2 className="az-news-rail__heading">{title}</h2>
+      <ul className="az-news-rail__list">
+        {items.map((p) => (
+          <li key={p.id}>
+            <Link href={`/novedades/${p.slug}`} className="az-news-rail__item">
+              <span className="az-news-rail__thumb">
+                {p.coverImage ? (
+                  <Image
+                    src={p.coverImage}
+                    alt=""
+                    fill
+                    sizes="120px"
+                    className="az-news-rail__img"
+                  />
+                ) : (
+                  <span className="az-news-rail__fallback" />
+                )}
+              </span>
+              <span className="az-news-rail__copy">
+                <span className="az-news-rail__cat">
+                  {NEWS_CATEGORY_LABEL[p.category]}
+                </span>
+                <span className="az-news-rail__title">{p.title}</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </aside>
   );
 }

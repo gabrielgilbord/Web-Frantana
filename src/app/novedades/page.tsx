@@ -22,6 +22,8 @@ export const metadata = buildMetadata({
 
 export default async function NovedadesPage() {
   const posts = await getNewsPosts();
+  const featured = posts[0];
+  const rest = posts.slice(1);
 
   return (
     <main className="az-news">
@@ -33,15 +35,56 @@ export default async function NovedadesPage() {
         </p>
       </header>
 
-      <div className="az-news__layout">
-        <div className="az-news__main">
-          {posts.length === 0 ? (
-            <p className="az-news__empty">
-              Pronto habrá noticias aquí. Mientras, sigue a Frantana en redes.
-            </p>
-          ) : (
-            <div className="az-news-list">
-              {posts.map((post, i) => {
+      {posts.length === 0 ? (
+        <p className="az-news__empty">
+          Pronto habrá noticias aquí. Mientras, sigue a Frantana en redes.
+        </p>
+      ) : (
+        <>
+          <div className="az-news__layout az-news__layout--hero">
+            <div className="az-news__main">
+              {featured ? (
+                <article className="az-news-feature">
+                  <Link
+                    href={`/novedades/${featured.slug}`}
+                    className="az-news-feature__media"
+                  >
+                    {featured.coverImage ? (
+                      <Image
+                        src={featured.coverImage}
+                        alt=""
+                        fill
+                        priority
+                        sizes="(max-width: 960px) 100vw, 65vw"
+                        className="az-news-feature__img"
+                      />
+                    ) : (
+                      <div className="az-news-feature__fallback" />
+                    )}
+                    <span className="az-news-feature__veil" aria-hidden />
+                    <span className="az-news-feature__overlay">
+                      <span className="az-news-feature__cat">
+                        {NEWS_CATEGORY_LABEL[featured.category]}
+                      </span>
+                      <h2 className="az-news-feature__title">
+                        {featured.title}
+                      </h2>
+                      {featured.excerpt ? (
+                        <p className="az-news-feature__excerpt">
+                          {featured.excerpt}
+                        </p>
+                      ) : null}
+                    </span>
+                  </Link>
+                </article>
+              ) : null}
+            </div>
+            <NovedadesSidebar posts={rest} title="Más noticias" />
+          </div>
+
+          {rest.length > 5 ? (
+            <div className="az-news-list az-news-list--below">
+              {rest.slice(5).map((post, i) => {
                 const dateIso = post.publishedAt ?? post.createdAt;
                 const { day, month } = newsDateParts(dateIso);
                 return (
@@ -57,7 +100,7 @@ export default async function NovedadesPage() {
                           fill
                           sizes="(max-width: 900px) 100vw, 60vw"
                           className="az-news-item__img"
-                          priority={i < 2}
+                          priority={i < 1}
                         />
                       ) : (
                         <div className="az-news-item__fallback" />
@@ -98,10 +141,9 @@ export default async function NovedadesPage() {
                 );
               })}
             </div>
-          )}
-        </div>
-        <NovedadesSidebar posts={posts} />
-      </div>
+          ) : null}
+        </>
+      )}
     </main>
   );
 }
