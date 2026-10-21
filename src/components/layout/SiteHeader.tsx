@@ -84,12 +84,18 @@ function BagButton({
   );
 }
 
-export function SiteHeader() {
+export function SiteHeader({
+  initialPathname = "",
+}: {
+  /** Path del request (SSR). usePathname() en el layout a veces no es "/" en home. */
+  initialPathname?: string;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [portalReady, setPortalReady] = useState(false);
   const pathname = usePathname();
-  const isAdmin = pathname.startsWith("/admin");
-  const isHome = pathname === "/";
+  const path = pathname || initialPathname || "";
+  const isAdmin = path.startsWith("/admin");
+  const isHome = path === "/" || path === "";
   const scrollLockY = useRef(0);
   /** When navigating from the menu, unlock without restoring the previous Y. */
   const navigateFromMenu = useRef(false);
@@ -100,12 +106,12 @@ export function SiteHeader() {
 
   useEffect(() => {
     setMenuOpen(false);
-  }, [pathname]);
+  }, [path]);
 
   useEffect(() => {
     // Always land at the top of the new page (mobile menu + desktop links).
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [path]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("nav-menu-open", menuOpen);
@@ -182,11 +188,11 @@ export function SiteHeader() {
             href={item.href}
             className={clsx(
               "site-header__drawer-link",
-              pathname === item.href && "is-current"
+              path === item.href && "is-current"
             )}
             style={{ "--nav-i": index } as CSSProperties}
             tabIndex={menuOpen ? 0 : -1}
-            aria-current={pathname === item.href ? "page" : undefined}
+            aria-current={path === item.href ? "page" : undefined}
             onClick={closeMenuForNav}
           >
             {item.label}
@@ -237,7 +243,7 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   className="site-header__link"
-                  aria-current={pathname === item.href ? "page" : undefined}
+                  aria-current={path === item.href ? "page" : undefined}
                   onClick={closeMenuForNav}
                 >
                   {item.label}

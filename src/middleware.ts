@@ -4,6 +4,9 @@ import { updateSession } from "@/lib/supabase/middleware";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", pathname);
+
   // Block any accidental public shop surface while disabled
   if (pathname === "/tienda" || pathname.startsWith("/tienda/")) {
     const enabled =
@@ -21,17 +24,21 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/api/auth")
   ) {
     const { response } = await updateSession(request);
+    response.headers.set("x-pathname", pathname);
     return response;
   }
 
-  return NextResponse.next();
+  return NextResponse.next({
+    request: { headers: requestHeaders },
+  });
 }
 
 export const config = {
   matcher: [
-    "/tienda",
-    "/tienda/:path*",
-    "/admin/:path*",
-    "/api/auth/:path*",
+    /*
+     * Todas las rutas de página (para x-pathname del header home).
+     * Excluye estáticos / media.
+     */
+    "/((?!_next/static|_next/image|favicon.ico|media/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|mp4|woff2)$).*)",
   ],
 };

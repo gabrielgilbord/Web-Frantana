@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { headers } from "next/headers";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CartProvider } from "@/components/shop/CartProvider";
@@ -40,6 +41,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerList = await headers();
+  const initialPathname = headerList.get("x-pathname") ?? "";
   const content = await getContent();
   const graph = [
     websiteJsonLd(),
@@ -75,7 +78,7 @@ export default async function RootLayout({
         <div id="fr-portal-root" />
         <JsonLd data={graph} />
         <CartProvider>
-          <SiteHeader />
+          <SiteHeader initialPathname={initialPathname} />
           <CartMiniModal />
           <main id="contenido" className="flex-1">
             {children}
