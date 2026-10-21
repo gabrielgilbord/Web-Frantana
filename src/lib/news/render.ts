@@ -1,27 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
-
-const ALLOWED_TAGS = [
-  "p",
-  "br",
-  "strong",
-  "b",
-  "em",
-  "i",
-  "u",
-  "s",
-  "a",
-  "ul",
-  "ol",
-  "li",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "blockquote",
-  "hr",
-];
-
-const ALLOWED_ATTR = ["href", "target", "rel", "class"];
+import { sanitizeNewsHtml } from "@/lib/news/sanitize-html";
 
 function looksLikeHtml(body: string) {
   return /<\/?[a-z][\s\S]*>/i.test(body.trim());
@@ -54,10 +31,7 @@ export function renderNewsBody(body: string) {
   const raw = body.trim();
   if (!raw) return "";
   const html = looksLikeHtml(raw) ? raw : renderPlainBody(raw);
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-  });
+  return sanitizeNewsHtml(html);
 }
 
 export const NEWS_CATEGORY_LABEL: Record<string, string> = {
