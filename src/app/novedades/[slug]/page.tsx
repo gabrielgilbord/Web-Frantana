@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ShareNewsBar } from "@/components/news/ShareNewsBar";
-import { getNewsPostBySlug } from "@/lib/content/store";
+import { NovedadesSidebar } from "@/components/news/NovedadesSidebar";
+import { getNewsPostBySlug, getNewsPosts } from "@/lib/content/store";
+import { formatNewsDate } from "@/lib/news/date";
 import { NEWS_CATEGORY_LABEL, renderNewsBody } from "@/lib/news/render";
 import {
   breadcrumbJsonLd,
@@ -14,7 +16,6 @@ import { getPublicSiteUrl } from "@/lib/email/site-url";
 
 type Props = { params: Promise<{ slug: string }> };
 
-/** Soft-schedule + admin publishes must appear without waiting for a rebuild. */
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props) {
@@ -52,18 +53,12 @@ export async function generateMetadata({ params }: Props) {
   });
 }
 
-function formatDate(iso: string | null) {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 export default async function NovedadDetailPage({ params }: Props) {
   const { slug } = await params;
-  const post = await getNewsPostBySlug(slug);
+  const [post, all] = await Promise.all([
+    getNewsPostBySlug(slug),
+    getNewsPosts(),
+  ]);
   if (!post) notFound();
 
   const html = renderNewsBody(post.body);
@@ -71,8 +66,12 @@ export default async function NovedadDetailPage({ params }: Props) {
   const shareUrl = `${getPublicSiteUrl()}${path}`;
   const dateIso = post.publishedAt ?? post.createdAt;
 
+  const idx = all.findIndex((p) => p.id === post.id);
+  const prev = idx >= 0 ? all[idx + 1] : undefined;
+  const next = idx > 0 ? all[idx - 1] : undefined;
+
   return (
-    <article className="novedad-article">
+    <article className="az-news az-news--single">
       <JsonLd
         data={[
           newsArticleJsonLd(post),
@@ -84,60 +83,100 @@ export default async function NovedadDetailPage({ params }: Props) {
         ]}
       />
 
-      <div className="novedad-article__rail">
-        <Link href="/novedades" className="novedad-article__back">
-          ← Novedades
-        </Link>
+      <div className="az-news__layout">
+        <div className="az-news__main">
+          <Link href="/novedades" className="az-news__back">
+            ← Novedades
+          </Link>
 
-        <header className="novedad-article__mast">
-          <p className="novedad-article__meta">
-            <span>{NEWS_CATEGORY_LABEL[post.category]}</span>
-            <span aria-hidden="true">·</span>
-            <time dateTime={dateIso}>{formatDate(dateIso)}</time>
-          </p>
-          <h1>{post.title}</h1>
-          {post.excerpt ? (
-            <p className="novedad-article__lead">{post.excerpt}</p>
-          ) : null}
-        </header>
+          <div className="az-single">
+            {post.coverImage ? (
+              <div className="az-single__feature">
+                <Image
+                  src={post.coverImage}
+                  alt={post.title}
+                  width={1600}
+                  height={1000}
+                  priority
+                  sizes="(max-width: 900px) 100vw, 70vw"
+                  className="az-single__cover"
+                />
+              </div>
+            ) : null}
 
-        {post.coverImage ? (
-          <figure className="novedad-article__figure">
-            <div className="novedad-article__frame">
-              <Image
-                src={post.coverImage}
-                alt={post.title}
-                width={1600}
-                height={2000}
-                priority
-                sizes="(max-width: 900px) 100vw, 52rem"
-                className="novedad-article__cover"
+            <div className="az-single__details">
+              <h1>{post.title}</h1>
+              <ul className="az-single__meta">
+                <li>{NEWS_CATEGORY_LABEL[post.category]}</li>
+                <li>
+                  <time dateTime={dateIso}>{formatNewsDate(dateIso)}</time>
+                </li>
+              </ul>
+              {post.excerpt ? (
+                <p className="az-single__excerpt">{post.excerpt}</p>
+              ) : null}
+              <div
+                className="az-single__body"
+                dangerouslySetInnerHTML={{ __html: html }}
               />
             </div>
-          </figure>
-        ) : null}
+          </div>
 
-        <div
-          className="novedad-article__body"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+          <div className="az-single__share">
+            <ShareNewsBar
+              title={post.title}
+              url={shareUrl}
+              excerpt={post.excerpt}
+            />
+          </div>
 
-        <div className="novedad-article__share">
-          <ShareNewsBar
-            title={post.title}
-            url={shareUrl}
-            excerpt={post.excerpt}
-          />
+          {(prev || next) && (
+            <nav className="az-single__nav" aria-label="Otras novedades">
+              {prev ? (
+                <Link
+                  href={`/novedades/${prev.slug}`}
+                  className="az-single__nav-item az-single__nav-item--prev"
+                >
+                  <span>Anterior</span>
+                  <strong>{prev.title}</strong>
+                </Link>
+              ) : (
+                <span />
+              )}
+              {next ? (
+                <Link
+                  href={`/novedades/${next.slug}`}
+                  className="az-single__nav-item az-single__nav-item--next"
+                >
+                  <span>Siguiente</span>
+                  <strong>{next.title}</strong>
+                </Link>
+              ) : null}
+            </nav>
+          )}
+
+          <div className="az-single__author">
+            <div className="az-single__author-media">
+              <Image
+                src="/media/gallery/frantana/shot-01.jpg"
+                alt="Frantana"
+                width={96}
+                height={96}
+                className="az-single__author-img"
+              />
+            </div>
+            <div className="az-single__author-copy">
+              <p className="az-single__author-kicker">Escrito por</p>
+              <h3>Frantana</h3>
+              <p>
+                Cantante y compositor canario. Escenarios, canciones y presencia
+                en vivo desde Gran Canaria.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <footer className="novedad-article__foot">
-          <Link href="/novedades" className="chapter__ghost">
-            Más novedades →
-          </Link>
-          <Link href="/contacto" className="chapter__ghost">
-            Contacto →
-          </Link>
-        </footer>
+        <NovedadesSidebar posts={all} currentSlug={post.slug} />
       </div>
     </article>
   );

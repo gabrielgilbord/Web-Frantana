@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { NovedadesSidebar } from "@/components/news/NovedadesSidebar";
 import { getNewsPosts } from "@/lib/content/store";
+import { newsDateParts } from "@/lib/news/date";
 import { NEWS_CATEGORY_LABEL } from "@/lib/news/render";
 import { buildMetadata } from "@/lib/seo/metadata";
 
-/** Soft-schedule + admin publishes must appear without waiting for a rebuild. */
 export const dynamic = "force-dynamic";
 
 export const metadata = buildMetadata({
@@ -19,69 +20,88 @@ export const metadata = buildMetadata({
   ],
 });
 
-function formatDate(iso: string | null) {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 export default async function NovedadesPage() {
   const posts = await getNewsPosts();
 
   return (
-    <main className="novedades-page">
-      <header className="novedades-page__mast">
-        <p className="novedades-page__eyebrow">El tablón</p>
-        <h1 className="novedades-page__title">Novedades</h1>
-        <p className="novedades-page__lede">
+    <main className="az-news">
+      <header className="az-news__mast">
+        <p className="az-news__eyebrow">El tablón</p>
+        <h1 className="az-news__title">Novedades</h1>
+        <p className="az-news__lede">
           Lanzamientos, fechas especiales y notas desde el camerino.
         </p>
       </header>
 
-      {posts.length === 0 ? (
-        <p className="novedades-page__empty">
-          Pronto habrá noticias aquí. Mientras, sigue a Frantana en redes.
-        </p>
-      ) : (
-        <ul className="novedades-index">
-          {posts.map((post, i) => (
-            <li key={post.id}>
-              <Link href={`/novedades/${post.slug}`} className="novedades-row">
-                <div className="novedades-row__media">
-                  {post.coverImage ? (
-                    <Image
-                      src={post.coverImage}
-                      alt=""
-                      fill
-                      sizes="(max-width: 900px) 100vw, 48vw"
-                      className="novedades-media-img"
-                      priority={i < 2}
-                    />
-                  ) : (
-                    <div className="novedades-card__fallback" />
-                  )}
-                </div>
-                <div className="novedades-row__copy">
-                  <div className="novedades-row__meta">
-                    <span className="novedades-card__kicker">
-                      {NEWS_CATEGORY_LABEL[post.category]}
-                    </span>
-                    <time dateTime={post.publishedAt ?? post.createdAt}>
-                      {formatDate(post.publishedAt ?? post.createdAt)}
-                    </time>
-                  </div>
-                  <h3>{post.title}</h3>
-                  {post.excerpt ? <p>{post.excerpt}</p> : null}
-                  <span className="novedades-card__cta">Seguir leyendo →</span>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="az-news__layout">
+        <div className="az-news__main">
+          {posts.length === 0 ? (
+            <p className="az-news__empty">
+              Pronto habrá noticias aquí. Mientras, sigue a Frantana en redes.
+            </p>
+          ) : (
+            <div className="az-news-list">
+              {posts.map((post, i) => {
+                const dateIso = post.publishedAt ?? post.createdAt;
+                const { day, month } = newsDateParts(dateIso);
+                return (
+                  <article key={post.id} className="az-news-item">
+                    <Link
+                      href={`/novedades/${post.slug}`}
+                      className="az-news-item__media"
+                    >
+                      {post.coverImage ? (
+                        <Image
+                          src={post.coverImage}
+                          alt=""
+                          fill
+                          sizes="(max-width: 900px) 100vw, 60vw"
+                          className="az-news-item__img"
+                          priority={i < 2}
+                        />
+                      ) : (
+                        <div className="az-news-item__fallback" />
+                      )}
+                      <span className="az-news-item__date" aria-hidden="true">
+                        <strong>{day}</strong>
+                        <span>{month}</span>
+                      </span>
+                    </Link>
+                    <div className="az-news-item__body">
+                      <Link
+                        href={`/novedades/${post.slug}`}
+                        className="az-news-item__title"
+                      >
+                        <h2>{post.title}</h2>
+                      </Link>
+                      {post.excerpt ? <p>{post.excerpt}</p> : null}
+                      <ul className="az-news-item__meta">
+                        <li>{NEWS_CATEGORY_LABEL[post.category]}</li>
+                        <li>
+                          <time dateTime={dateIso}>
+                            {new Date(dateIso).toLocaleDateString("es-ES", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })}
+                          </time>
+                        </li>
+                      </ul>
+                      <Link
+                        href={`/novedades/${post.slug}`}
+                        className="az-news-item__cta"
+                      >
+                        Seguir leyendo →
+                      </Link>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        <NovedadesSidebar posts={posts} />
+      </div>
     </main>
   );
 }
