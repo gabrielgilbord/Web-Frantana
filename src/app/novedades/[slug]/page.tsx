@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ShareNewsBar } from "@/components/news/ShareNewsBar";
-import { getNewsPostBySlug, getNewsPosts } from "@/lib/content/store";
+import { getNewsPostBySlug } from "@/lib/content/store";
 import { NEWS_CATEGORY_LABEL, renderNewsBody } from "@/lib/news/render";
 import {
   breadcrumbJsonLd,
@@ -69,6 +69,7 @@ export default async function NovedadDetailPage({ params }: Props) {
   const html = renderNewsBody(post.body);
   const path = `/novedades/${post.slug}`;
   const shareUrl = `${getPublicSiteUrl()}${path}`;
+  const dateIso = post.publishedAt ?? post.createdAt;
 
   return (
     <article className="novedad-article">
@@ -82,53 +83,62 @@ export default async function NovedadDetailPage({ params }: Props) {
           ]),
         ]}
       />
-      <header className="novedad-article__head">
+
+      <div className="novedad-article__rail">
         <Link href="/novedades" className="novedad-article__back">
           ← Novedades
         </Link>
-        <p className="novedades-card__kicker">
-          {NEWS_CATEGORY_LABEL[post.category]}
-        </p>
-        <h1>{post.title}</h1>
-        <time dateTime={post.publishedAt ?? post.createdAt}>
-          {formatDate(post.publishedAt ?? post.createdAt)}
-        </time>
-      </header>
 
-      {post.coverImage ? (
-        <div className="novedad-article__hero">
-          <Image
-            src={post.coverImage}
-            alt={post.title}
-            fill
-            priority
-            sizes="100vw"
-            className="novedades-media-img"
+        <header className="novedad-article__mast">
+          <p className="novedad-article__meta">
+            <span>{NEWS_CATEGORY_LABEL[post.category]}</span>
+            <span aria-hidden="true">·</span>
+            <time dateTime={dateIso}>{formatDate(dateIso)}</time>
+          </p>
+          <h1>{post.title}</h1>
+          {post.excerpt ? (
+            <p className="novedad-article__lead">{post.excerpt}</p>
+          ) : null}
+        </header>
+
+        {post.coverImage ? (
+          <figure className="novedad-article__figure">
+            <div className="novedad-article__frame">
+              <Image
+                src={post.coverImage}
+                alt={post.title}
+                width={1600}
+                height={2000}
+                priority
+                sizes="(max-width: 900px) 100vw, 52rem"
+                className="novedad-article__cover"
+              />
+            </div>
+          </figure>
+        ) : null}
+
+        <div
+          className="novedad-article__body"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+
+        <div className="novedad-article__share">
+          <ShareNewsBar
+            title={post.title}
+            url={shareUrl}
+            excerpt={post.excerpt}
           />
         </div>
-      ) : null}
 
-      <div
-        className="novedad-article__body"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
-
-      <div className="novedad-article__share">
-        <ShareNewsBar
-          title={post.title}
-          url={shareUrl}
-          excerpt={post.excerpt}
-        />
+        <footer className="novedad-article__foot">
+          <Link href="/novedades" className="chapter__ghost">
+            Más novedades →
+          </Link>
+          <Link href="/contacto" className="chapter__ghost">
+            Contacto →
+          </Link>
+        </footer>
       </div>
-
-      <footer className="novedad-article__foot">
-        <Link href="/novedades" className="chapter__ghost">
-          Más novedades →
-        </Link>
-        <Link href="/contacto" className="chapter__ghost">
-          Contacto →
-        </Link>
-      </footer>
     </article>
   );
 }

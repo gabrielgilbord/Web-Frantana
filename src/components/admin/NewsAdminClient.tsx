@@ -10,6 +10,15 @@ import {
   toDatetimeLocalValue,
 } from "@/lib/news/schedule";
 import { slugifyNews } from "@/lib/news/slug";
+import { NewsBodyEditor } from "@/components/admin/NewsBodyEditor";
+
+function bodyHasContent(html: string) {
+  const text = html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+  return text.length > 0;
+}
 
 const CATEGORIES: NewsCategory[] = [
   "lanzamiento",
@@ -102,6 +111,10 @@ export function NewsAdminClient({
     setMessage(null);
     try {
       const next = { ...form, ...overrides };
+      if (!bodyHasContent(next.body)) {
+        setError("Escribe el cuerpo de la novedad.");
+        return;
+      }
       const existing = editingId
         ? posts.find((p) => p.id === editingId)
         : null;
@@ -264,16 +277,13 @@ export function NewsAdminClient({
               placeholder="Una línea para la home y el listado…"
             />
           </label>
-          <label>
-            Cuerpo
-            <textarea
-              rows={12}
-              required
+          <div className="admin-form__editor">
+            <span className="admin-form__editor-label">Cuerpo</span>
+            <NewsBodyEditor
               value={form.body}
-              onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
-              placeholder="Párrafos separados por línea en blanco. **negrita** permitida."
+              onChange={(body) => setForm((f) => ({ ...f, body }))}
             />
-          </label>
+          </div>
           <label>
             Portada
             <input
@@ -345,7 +355,9 @@ export function NewsAdminClient({
             <button
               type="button"
               className="admin-btn admin-btn--ghost"
-              disabled={saving || !form.title.trim() || !form.body.trim()}
+              disabled={
+                saving || !form.title.trim() || !bodyHasContent(form.body)
+              }
               onClick={() => void publishNow()}
             >
               {saving ? "Publicando…" : "Publicar ahora"}

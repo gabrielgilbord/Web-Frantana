@@ -177,10 +177,18 @@ export async function getGallery(options?: {
   includeUnpublished?: boolean;
 }): Promise<GalleryImage[]> {
   if (useSupabaseStore()) {
+    const { ensureGallerySeedInDb } = await import(
+      "@/lib/content/gallery-seed"
+    );
+    // Siembra fotos oficiales del JSON antes de leer, para que una
+    // subida nueva no deje la tabla solo con esa foto.
+    await ensureGallerySeedInDb();
     const fromDb = await dbGetGallery(options);
-    // Si la tabla está vacía, cae al seed JSON (fotos oficiales en el repo)
-    if (fromDb && fromDb.length > 0) return fromDb;
+    if (fromDb) {
+      return [...fromDb].sort((a, b) => a.sortOrder - b.sortOrder);
+    }
   }
+
   const data = await readRaw();
   const list = options?.includeUnpublished
     ? data.gallery
@@ -190,6 +198,10 @@ export async function getGallery(options?: {
 
 export async function upsertGalleryImage(image: GalleryImage) {
   if (useSupabaseStore()) {
+    const { ensureGallerySeedInDb } = await import(
+      "@/lib/content/gallery-seed"
+    );
+    await ensureGallerySeedInDb();
     const saved = await dbUpsertGalleryImage(image);
     if (saved) return saved;
     throw new Error(

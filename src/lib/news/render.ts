@@ -1,5 +1,34 @@
-/** Texto plano con párrafos y **negrita** → HTML seguro para posts. */
-export function renderNewsBody(body: string) {
+import DOMPurify from "isomorphic-dompurify";
+
+const ALLOWED_TAGS = [
+  "p",
+  "br",
+  "strong",
+  "b",
+  "em",
+  "i",
+  "u",
+  "s",
+  "a",
+  "ul",
+  "ol",
+  "li",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "blockquote",
+  "hr",
+];
+
+const ALLOWED_ATTR = ["href", "target", "rel", "class"];
+
+function looksLikeHtml(body: string) {
+  return /<\/?[a-z][\s\S]*>/i.test(body.trim());
+}
+
+/** Texto plano legado (**negrita**, párrafos) → HTML. */
+function renderPlainBody(body: string) {
   const escape = (s: string) =>
     s
       .replace(/&/g, "&amp;")
@@ -18,6 +47,17 @@ export function renderNewsBody(body: string) {
       return `<p>${lines}</p>`;
     })
     .join("");
+}
+
+/** HTML del editor TipTap (o texto plano legado) → HTML seguro. */
+export function renderNewsBody(body: string) {
+  const raw = body.trim();
+  if (!raw) return "";
+  const html = looksLikeHtml(raw) ? raw : renderPlainBody(raw);
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS,
+    ALLOWED_ATTR,
+  });
 }
 
 export const NEWS_CATEGORY_LABEL: Record<string, string> = {
