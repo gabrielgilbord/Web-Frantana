@@ -184,7 +184,8 @@ export async function getGallery(options?: {
     // subida nueva no deje la tabla solo con esa foto.
     await ensureGallerySeedInDb();
     const fromDb = await dbGetGallery(options);
-    if (fromDb) {
+    // [] es truthy: si la tabla sigue vacía, no ocultar el seed JSON.
+    if (fromDb && fromDb.length > 0) {
       return [...fromDb].sort((a, b) => a.sortOrder - b.sortOrder);
     }
   }
