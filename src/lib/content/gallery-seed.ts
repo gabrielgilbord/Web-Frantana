@@ -10,10 +10,13 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 const DATA_PATH = path.join(process.cwd(), "src/data/site.json");
 
-/** Fotos oficiales (mismo contenido que migrations/005_seed_gallery_images.sql). */
+/**
+ * Fotos oficiales. IDs en UUID porque en prod `gallery_images.id` es uuid
+ * (001_initial); la migración a text (002) puede no estar aplicada.
+ */
 export const GALLERY_SEED: GalleryImage[] = [
   {
-    id: "ig-01",
+    id: "a7f7a001-0001-4000-8000-000000000001",
     src: "/media/gallery/frantana/shot-01.jpg",
     alt: "Frantana — retrato de estudio",
     width: 1800,
@@ -23,7 +26,7 @@ export const GALLERY_SEED: GalleryImage[] = [
     credit: "@frantana",
   },
   {
-    id: "ig-03",
+    id: "a7f7a001-0001-4000-8000-000000000003",
     src: "/media/gallery/frantana/shot-03.jpg",
     alt: "Frantana — fotografía oficial",
     width: 1800,
@@ -33,7 +36,7 @@ export const GALLERY_SEED: GalleryImage[] = [
     credit: "@frantana",
   },
   {
-    id: "ig-04",
+    id: "a7f7a001-0001-4000-8000-000000000004",
     src: "/media/gallery/frantana/shot-04.jpg",
     alt: "Frantana — plano horizontal de estudio",
     width: 1800,
@@ -43,7 +46,7 @@ export const GALLERY_SEED: GalleryImage[] = [
     credit: "@frantana",
   },
   {
-    id: "ig-05",
+    id: "a7f7a001-0001-4000-8000-000000000005",
     src: "/media/gallery/frantana/shot-05.jpg",
     alt: "Frantana — fotografía oficial",
     width: 1800,
@@ -53,7 +56,7 @@ export const GALLERY_SEED: GalleryImage[] = [
     credit: "@frantana",
   },
   {
-    id: "ig-06",
+    id: "a7f7a001-0001-4000-8000-000000000006",
     src: "/media/gallery/frantana/shot-06.jpg",
     alt: "Frantana — estudio, sonrisa y bandana amarilla",
     width: 1800,
@@ -63,7 +66,7 @@ export const GALLERY_SEED: GalleryImage[] = [
     credit: "@frantana",
   },
   {
-    id: "ig-07",
+    id: "a7f7a001-0001-4000-8000-000000000007",
     src: "/media/gallery/frantana/shot-07.jpg",
     alt: "Frantana — estudio con foco en el suelo",
     width: 1800,
@@ -73,7 +76,7 @@ export const GALLERY_SEED: GalleryImage[] = [
     credit: "@frantana",
   },
   {
-    id: "ig-08",
+    id: "a7f7a001-0001-4000-8000-000000000008",
     src: "/media/gallery/frantana/shot-08.jpg",
     alt: "Frantana — pose de estudio, mano en la cadera",
     width: 1800,
@@ -83,7 +86,7 @@ export const GALLERY_SEED: GalleryImage[] = [
     credit: "@frantana",
   },
   {
-    id: "ig-09",
+    id: "a7f7a001-0001-4000-8000-000000000009",
     src: "/media/gallery/frantana/shot-09.jpg",
     alt: "Frantana — retrato en arena blanca, look blanco",
     width: 2200,
@@ -96,11 +99,27 @@ export const GALLERY_SEED: GalleryImage[] = [
 
 let seedPromise: Promise<void> | null = null;
 
+function normalizeSeedRow(image: GalleryImage): GalleryImage {
+  const bySrc = GALLERY_SEED.find((s) => s.src === image.src);
+  if (bySrc) return { ...image, id: bySrc.id };
+  // ids legacy "ig-01" → UUID estable
+  if (/^ig-\d+$/i.test(image.id)) {
+    const n = image.id.replace(/\D/g, "").padStart(3, "0");
+    return {
+      ...image,
+      id: `a7f7a001-0001-4000-8000-000000000${n}`,
+    };
+  }
+  return image;
+}
+
 async function readSeedGallery(): Promise<GalleryImage[]> {
   try {
     const raw = await fs.readFile(DATA_PATH, "utf8");
     const data = JSON.parse(raw) as { gallery?: GalleryImage[] };
-    if (data.gallery?.length) return data.gallery;
+    if (data.gallery?.length) {
+      return data.gallery.map(normalizeSeedRow);
+    }
   } catch {
     /* usar constante */
   }
@@ -180,10 +199,11 @@ export async function ensureGallerySeedInDb(): Promise<void> {
         return;
       }
       const have = new Set(existing.map((g) => g.id));
+      const haveSrc = new Set(existing.map((g) => g.src));
       const seed = await readSeedGallery();
       await Promise.all(
         seed
-          .filter((image) => !have.has(image.id))
+          .filter((image) => !have.has(image.id) && !haveSrc.has(image.src))
           .map((image) => dbUpsertGalleryImage(image))
       );
     })().finally(() => {
