@@ -8785,3 +8785,153 @@ img[src*="brand%2Fprofile"] {
   color: var(--fr-ink);
   font-weight: 600;
 }
+
+/* ——— 404 ——— */
+.not-found {
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--header-h) + 2rem) var(--space-gutter) 3rem;
+  overflow: hidden;
+  color: #faf7f1;
+}
+
+.not-found__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--fr-night);
+}
+
+.not-found__img {
+  object-fit: cover;
+  object-position: center 18%;
+  transform: scale(1.04);
+  filter: saturate(0.88) contrast(1.05);
+}
+
+.not-found__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 70% 55% at 50% 42%,
+      color-mix(in srgb, var(--fr-night) 18%, transparent) 0%,
+      color-mix(in srgb, var(--fr-night) 72%, transparent) 62%,
+      color-mix(in srgb, var(--fr-night) 92%, transparent) 100%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--fr-night) 55%, transparent) 0%,
+      transparent 28%,
+      color-mix(in srgb, var(--fr-night) 45%, transparent) 70%,
+      color-mix(in srgb, var(--fr-night) 88%, transparent) 100%
+    );
+}
+
+.not-found__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: overlay;
+}
+
+.not-found__content {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 34rem);
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.not-found__code {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #faf7f1 55%, var(--fr-ember));
+}
+
+.brand-logo--not-found {
+  height: clamp(2.75rem, 8vw, 4rem);
+  width: auto;
+  margin: 0.35rem 0 0.15rem;
+  color: #faf7f1;
+  filter: drop-shadow(0 8px 28px rgba(0, 0, 0, 0.45));
+}
+
+.not-found__title {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 6vw, 3.35rem);
+  line-height: 1.05;
+  text-wrap: balance;
+  color: #faf7f1;
+  text-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.not-found__lede {
+  margin: 0.15rem 0 0;
+  max-width: 28rem;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, #faf7f1 72%, transparent);
+}
+
+.not-found__actions {
+  margin-top: 1.15rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem 0.85rem;
+}
+
+.not-found__cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.55rem;
+  padding: 0.45rem 1.05rem;
+  border: 1px solid color-mix(in srgb, #faf7f1 28%, transparent);
+  color: #faf7f1;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.not-found__cta:hover {
+  border-color: color-mix(in srgb, var(--fr-ember) 70%, #faf7f1);
+  color: #fff;
+}
+
+.not-found__cta--primary {
+  background: var(--fr-ember);
+  border-color: var(--fr-ember);
+  color: #faf7f1;
+}
+
+.not-found__cta--primary:hover {
+  background: var(--fr-ember-soft);
+  border-color: var(--fr-ember-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .not-found__img {
+    transform: none;
+  }
+}
