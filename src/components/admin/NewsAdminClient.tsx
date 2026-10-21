@@ -129,7 +129,10 @@ export function NewsAdminClient({
         body: JSON.stringify({
           id: editingId ?? undefined,
           title: next.title,
-          slug: next.slug || slugifyNews(next.title),
+          slug:
+            next.slug.trim().length >= 2
+              ? next.slug.trim()
+              : slugifyNews(next.title) || undefined,
           excerpt: next.excerpt,
           body: next.body,
           coverImage: next.coverImage || null,

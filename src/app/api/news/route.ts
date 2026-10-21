@@ -12,7 +12,16 @@ import { slugifyNews } from "@/lib/news/slug";
 
 const schema = z.object({
   id: z.string().optional(),
-  slug: z.string().trim().min(2).max(80).optional(),
+  // "" o slug corto llega del admin; lo tratamos como “sin slug” y se genera del título
+  slug: z.preprocess(
+    (v) => {
+      if (v == null) return undefined;
+      if (typeof v !== "string") return v;
+      const t = v.trim();
+      return t.length >= 2 ? t : undefined;
+    },
+    z.string().trim().min(2).max(80).optional()
+  ),
   title: z.string().trim().min(2).max(160),
   excerpt: z.string().trim().max(400).optional().nullable(),
   body: z.string().trim().min(1).max(20000),
@@ -48,10 +57,11 @@ export async function POST(req: Request) {
     const parsed = schema.parse(await req.json());
     const now = new Date().toISOString();
     const id = parsed.id ?? `news-${randomUUID()}`;
+    const fromTitle = slugifyNews(parsed.title);
     const slug =
-      parsed.slug?.trim() ||
-      slugifyNews(parsed.title) ||
-      `novedad-${id.slice(-6)}`;
+      (parsed.slug && parsed.slug.length >= 2 ? parsed.slug : "") ||
+      (fromTitle.length >= 2 ? fromTitle : "") ||
+      `novedad-${id.replace(/[^a-z0-9]/gi, "").slice(-8) || "nueva"}`;
 
     let publishedAt = parsed.publishedAt ?? null;
     if (parsed.published && !publishedAt) {
@@ -75,6 +85,16 @@ export async function POST(req: Request) {
     revalidateNews(post.slug);
     return NextResponse.json({ post });
   } catch (e) {
+    if (e instanceof z.ZodError) {
+      const first = e.issues[0];
+      const field = first?.path?.join(".") || "datos";
+      return NextResponse.json(
+        {
+          error: `Campo «${field}»: ${first?.message ?? "inválido"}`,
+        },
+        { status: 400 }
+      );
+    }
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Datos inválidos" },
       { status: 400 }
