@@ -82,61 +82,70 @@ export async function POST(req: Request) {
     );
   }
 
-  const occupancy = await getOccupancy();
-  if (occupancy.some((d) => d.date === parsed.data.preferredDate)) {
-    return NextResponse.json(
-      { error: "Esa fecha ya está ocupada. Elige otro día en el calendario." },
-      { status: 409 }
-    );
-  }
-
-  const booking = await createBooking({
-    name: parsed.data.name,
-    email: parsed.data.email,
-    phone: emptyToNull(parsed.data.phone),
-    eventType: parsed.data.eventType,
-    preferredDate: parsed.data.preferredDate,
-    preferredTime: emptyToNull(parsed.data.preferredTime),
-    city: parsed.data.city,
-    venue: emptyToNull(parsed.data.venue),
-    message: parsed.data.message,
-  });
-
-  if (isSmtpConfigured()) {
-    const trackUrl = trackUrlFor(booking.accessToken);
-    const artistMail = bookingArtistNewEmail(booking, trackUrl);
-    const requesterMail = bookingRequesterReceivedEmail(booking, trackUrl);
-
-    try {
-      await Promise.all([
-        sendEmail({
-          to: getNotifyEmail(),
-          subject: artistMail.subject,
-          text: artistMail.text,
-          html: artistMail.html,
-          replyTo: booking.email,
-        }),
-        sendEmail({
-          to: booking.email,
-          subject: requesterMail.subject,
-          text: requesterMail.text,
-          html: requesterMail.html,
-        }),
-      ]);
-    } catch (e) {
-      console.error("[booking] email delivery failed", e);
+  try {
+    const occupancy = await getOccupancy();
+    if (occupancy.some((d) => d.date === parsed.data.preferredDate)) {
       return NextResponse.json(
-        {
-          booking,
-          warning:
-            "Reserva guardada, pero el correo de aviso no se pudo enviar. Revisa SMTP.",
-        },
-        { status: 201 }
+        { error: "Esa fecha ya está ocupada. Elige otro día en el calendario." },
+        { status: 409 }
       );
     }
-  }
 
-  return NextResponse.json({ booking }, { status: 201 });
+    const booking = await createBooking({
+      name: parsed.data.name,
+      email: parsed.data.email,
+      phone: emptyToNull(parsed.data.phone),
+      eventType: parsed.data.eventType,
+      preferredDate: parsed.data.preferredDate,
+      preferredTime: emptyToNull(parsed.data.preferredTime),
+      city: parsed.data.city,
+      venue: emptyToNull(parsed.data.venue),
+      message: parsed.data.message,
+    });
+
+    if (isSmtpConfigured()) {
+      const trackUrl = trackUrlFor(booking.accessToken);
+      const artistMail = bookingArtistNewEmail(booking, trackUrl);
+      const requesterMail = bookingRequesterReceivedEmail(booking, trackUrl);
+
+      try {
+        await Promise.all([
+          sendEmail({
+            to: getNotifyEmail(),
+            subject: artistMail.subject,
+            text: artistMail.text,
+            html: artistMail.html,
+            replyTo: booking.email,
+          }),
+          sendEmail({
+            to: booking.email,
+            subject: requesterMail.subject,
+            text: requesterMail.text,
+            html: requesterMail.html,
+          }),
+        ]);
+      } catch (e) {
+        console.error("[booking] email delivery failed", e);
+        return NextResponse.json(
+          {
+            booking,
+            warning:
+              "Reserva guardada, pero el correo de aviso no se pudo enviar. Revisa SMTP.",
+          },
+          { status: 201 }
+        );
+      }
+    }
+
+    return NextResponse.json({ booking }, { status: 201 });
+  } catch (e) {
+    console.error("[booking] create failed", e);
+    const message =
+      e instanceof Error && e.message
+        ? e.message
+        : "No se pudo guardar la solicitud. Inténtalo de nuevo.";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
 
 export async function PATCH(req: Request) {

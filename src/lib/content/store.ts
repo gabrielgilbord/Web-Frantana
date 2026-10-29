@@ -42,6 +42,12 @@ import {
   dbUpsertProduct,
   useSupabaseStore,
 } from "@/lib/content/supabase-store";
+import {
+  gistGetBookingByToken,
+  gistGetBookings,
+  gistUpsertBooking,
+  isGistBookingsConfigured,
+} from "@/lib/content/bookings-gist-store";
 
 const DATA_PATH = path.join(process.cwd(), "src/data/site.json");
 
@@ -360,7 +366,12 @@ export function splitConcerts(concerts: Concert[]) {
 export async function getBookings(): Promise<BookingRequest[]> {
   if (useSupabaseStore()) {
     const fromDb = await dbGetBookings();
+    // null = error / tabla ausente → probar gist; [] = BD OK sin filas
     if (fromDb) return fromDb.map(normalizeBooking);
+  }
+  if (isGistBookingsConfigured()) {
+    const fromGist = await gistGetBookings();
+    if (fromGist) return fromGist.map(normalizeBooking);
   }
   const data = await readRaw();
   return [...(data.bookings ?? [])]
@@ -375,8 +386,17 @@ export async function getBookingByToken(
     const fromDb = await dbGetBookingByToken(token);
     if (fromDb) return normalizeBooking(fromDb);
   }
-  const bookings = await getBookings();
-  return bookings.find((b) => b.accessToken === token) ?? null;
+  if (isGistBookingsConfigured()) {
+    const fromGist = await gistGetBookingByToken(token);
+    if (fromGist) return normalizeBooking(fromGist);
+  }
+  try {
+    const data = await readRaw();
+    const found = (data.bookings ?? []).find((b) => b.accessToken === token);
+    return found ? normalizeBooking(found) : null;
+  } catch {
+    return null;
+  }
 }
 
 function normalizeBooking(b: BookingRequest): BookingRequest {
@@ -431,48 +451,76 @@ export async function createBooking(
     if (saved) return normalizeBooking(saved);
   }
 
-  const data = await readRaw();
-  if (!data.bookings) data.bookings = [];
-  data.bookings.unshift(booking);
-  await writeRaw(data);
-  return booking;
+  if (isGistBookingsConfigured()) {
+    const saved = await gistUpsertBooking(booking);
+    if (saved) return normalizeBooking(saved);
+  }
+
+  try {
+    const data = await readRaw();
+    if (!data.bookings) data.bookings = [];
+    data.bookings.unshift(booking);
+    await writeRaw(data);
+    return booking;
+  } catch (err) {
+    console.error("[createBooking] local write failed", err);
+    throw new Error(
+      "No se pudo guardar la reserva. Configura BOOKINGS_GIST_ID + GITHUB_BOOKINGS_TOKEN o SUPABASE_SERVICE_ROLE_KEY."
+    );
+  }
+}
+
+async function findBookingForUpdate(options: {
+  id?: string;
+  token?: string;
+}): Promise<BookingRequest | null> {
+  if (options.id) {
+    const all = await getBookings();
+    return all.find((b) => b.id === options.id) ?? null;
+  }
+  if (options.token) {
+    return getBookingByToken(options.token);
+  }
+  return null;
+}
+
+async function persistBooking(
+  booking: BookingRequest
+): Promise<BookingRequest | null> {
+  if (useSupabaseStore()) {
+    const saved = await dbUpsertBooking(booking);
+    if (saved) return normalizeBooking(saved);
+  }
+  if (isGistBookingsConfigured()) {
+    const saved = await gistUpsertBooking(booking);
+    if (saved) return normalizeBooking(saved);
+  }
+  try {
+    const data = await readRaw();
+    if (!data.bookings) data.bookings = [];
+    const idx = data.bookings.findIndex((b) => b.id === booking.id);
+    if (idx >= 0) data.bookings[idx] = booking;
+    else data.bookings.unshift(booking);
+    await writeRaw(data);
+    return booking;
+  } catch (err) {
+    console.error("[persistBooking] local write failed", err);
+    return null;
+  }
 }
 
 export async function updateBookingStatus(
   id: string,
   status: BookingRequest["status"]
 ): Promise<BookingRequest | null> {
-  const data = await readRaw();
-  if (!data.bookings) data.bookings = [];
-  const idx = data.bookings.findIndex((b) => b.id === id);
-  let next: BookingRequest | null = null;
-
-  if (idx >= 0) {
-    const current = normalizeBooking(data.bookings[idx]);
-    next = {
-      ...current,
-      status,
-      updatedAt: new Date().toISOString(),
-    };
-    data.bookings[idx] = next;
-    await writeRaw(data);
-  } else if (useSupabaseStore()) {
-    const all = await dbGetBookings();
-    const found = all?.find((b) => b.id === id);
-    if (!found) return null;
-    next = {
-      ...normalizeBooking(found),
-      status,
-      updatedAt: new Date().toISOString(),
-    };
-  }
-
-  if (!next) return null;
-  if (useSupabaseStore()) {
-    const saved = await dbUpsertBooking(next);
-    if (saved) return normalizeBooking(saved);
-  }
-  return next;
+  const current = await findBookingForUpdate({ id });
+  if (!current) return null;
+  const next: BookingRequest = {
+    ...current,
+    status,
+    updatedAt: new Date().toISOString(),
+  };
+  return persistBooking(next);
 }
 
 export async function addBookingMessage(options: {
@@ -481,28 +529,12 @@ export async function addBookingMessage(options: {
   from: "client" | "admin";
   body: string;
 }): Promise<BookingRequest | null> {
-  let current: BookingRequest | null = null;
-  const data = await readRaw();
-  if (!data.bookings) data.bookings = [];
-  const idx = data.bookings.findIndex((b) =>
-    options.bookingId
-      ? b.id === options.bookingId
-      : b.accessToken === options.token
-  );
-
-  if (idx >= 0) {
-    current = normalizeBooking(data.bookings[idx]);
-  } else if (useSupabaseStore()) {
-    if (options.token) {
-      current = await dbGetBookingByToken(options.token);
-    } else if (options.bookingId) {
-      const all = await dbGetBookings();
-      current = all?.find((b) => b.id === options.bookingId) ?? null;
-    }
-    if (current) current = normalizeBooking(current);
-  }
-
+  const current = await findBookingForUpdate({
+    id: options.bookingId,
+    token: options.token,
+  });
   if (!current) return null;
+
   const now = new Date().toISOString();
   const msg = {
     id: `msg-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
@@ -526,15 +558,7 @@ export async function addBookingMessage(options: {
     updatedAt: now,
   };
 
-  if (idx >= 0) {
-    data.bookings[idx] = next;
-    await writeRaw(data);
-  }
-  if (useSupabaseStore()) {
-    const saved = await dbUpsertBooking(next);
-    if (saved) return normalizeBooking(saved);
-  }
-  return next;
+  return persistBooking(next);
 }
 
 export async function createContactInquiry(
