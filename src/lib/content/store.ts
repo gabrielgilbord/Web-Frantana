@@ -42,12 +42,6 @@ import {
   dbUpsertProduct,
   useSupabaseStore,
 } from "@/lib/content/supabase-store";
-import {
-  gistGetBookingByToken,
-  gistGetBookings,
-  gistUpsertBooking,
-  isGistBookingsConfigured,
-} from "@/lib/content/bookings-gist-store";
 
 const DATA_PATH = path.join(process.cwd(), "src/data/site.json");
 
@@ -366,12 +360,7 @@ export function splitConcerts(concerts: Concert[]) {
 export async function getBookings(): Promise<BookingRequest[]> {
   if (useSupabaseStore()) {
     const fromDb = await dbGetBookings();
-    // null = error / tabla ausente → probar gist; [] = BD OK sin filas
     if (fromDb) return fromDb.map(normalizeBooking);
-  }
-  if (isGistBookingsConfigured()) {
-    const fromGist = await gistGetBookings();
-    if (fromGist) return fromGist.map(normalizeBooking);
   }
   const data = await readRaw();
   return [...(data.bookings ?? [])]
@@ -385,10 +374,6 @@ export async function getBookingByToken(
   if (useSupabaseStore()) {
     const fromDb = await dbGetBookingByToken(token);
     if (fromDb) return normalizeBooking(fromDb);
-  }
-  if (isGistBookingsConfigured()) {
-    const fromGist = await gistGetBookingByToken(token);
-    if (fromGist) return normalizeBooking(fromGist);
   }
   try {
     const data = await readRaw();
@@ -449,11 +434,9 @@ export async function createBooking(
   if (useSupabaseStore()) {
     const saved = await dbUpsertBooking(booking);
     if (saved) return normalizeBooking(saved);
-  }
-
-  if (isGistBookingsConfigured()) {
-    const saved = await gistUpsertBooking(booking);
-    if (saved) return normalizeBooking(saved);
+    throw new Error(
+      "No se pudo guardar la reserva en Supabase. ¿Existe la tabla public.bookings? Aplica supabase/migrations/002_occupancy_bookings.sql y 003_booking_confirm_reject.sql."
+    );
   }
 
   try {
@@ -465,7 +448,7 @@ export async function createBooking(
   } catch (err) {
     console.error("[createBooking] local write failed", err);
     throw new Error(
-      "No se pudo guardar la reserva. Configura BOOKINGS_GIST_ID + GITHUB_BOOKINGS_TOKEN o SUPABASE_SERVICE_ROLE_KEY."
+      "No se pudo guardar la reserva. En producción configura SUPABASE_SERVICE_ROLE_KEY (o SUPABASE_SECRET_KEY) junto a NEXT_PUBLIC_SUPABASE_URL."
     );
   }
 }
@@ -490,10 +473,7 @@ async function persistBooking(
   if (useSupabaseStore()) {
     const saved = await dbUpsertBooking(booking);
     if (saved) return normalizeBooking(saved);
-  }
-  if (isGistBookingsConfigured()) {
-    const saved = await gistUpsertBooking(booking);
-    if (saved) return normalizeBooking(saved);
+    return null;
   }
   try {
     const data = await readRaw();
